@@ -1,0 +1,61 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // PLEASE ADD AND UPDATE DEPENDENCIES USING libs.versions.toml
+    implementation project(':kt-fast-collections')
+    ksp project(':kt-fast-collections-generator')
+    implementation project(':osrd-geom')
+    implementation libs.guava
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlin.logging
+
+    api project(':kt-osrd-sim-infra')
+    api project(":osrd-railjson")
+    api project(":kt-osrd-utils")
+    testImplementation libs.kotlin.test
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation libs.junit.jupiter.api
+
+    // YAML
+    implementation libs.kaml
+}
+
+// to get KSP generated-stuff to be recognised
+kotlin {
+    sourceSets {
+        main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+        test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+    }
+}
+
+// to get speed_limit_tags.yml
+sourceSets {
+    main.resources.srcDirs += '../../assets/static_resources'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += [
+                "-opt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.ExperimentalUnsignedTypes",
+                "-opt-in=kotlin.time.ExperimentalTime",
+                "-opt-in=kotlin.contracts.ExperimentalContracts",
+        ]
+    }
+}

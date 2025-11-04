@@ -1,0 +1,82 @@
+services:
+  postgres:
+    ports: !reset []
+    network_mode: host
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-d", "postgres://osrd:password@localhost:5432/osrd" ]
+
+  valkey:
+    ports: !reset []
+    network_mode: host
+
+  openfga-migrate:
+    ports: !reset []
+    network_mode: host
+    environment:
+      OPENFGA_DATASTORE_URI: "postgres://osrd:password@localhost:5432/osrd?search_path=openfga"
+
+  openfga:
+    ports: !reset []
+    network_mode: host
+    environment:
+      OPENFGA_DATASTORE_URI: "postgres://osrd:password@localhost:5432/osrd?search_path=openfga"
+
+  editoast:
+    ports: !reset []
+    network_mode: host
+    environment:
+      EDITOAST_PORT: 8090
+      ROOT_URL: "http://localhost:4000/api"
+      OSRDYNE_API_URL: "http://localhost:4242"
+      VALKEY_URL: "redis://localhost"
+      DATABASE_URL: "postgres://osrd:password@localhost:5432/osrd"
+      TELEMETRY_ENDPOINT: "http://localhost:4317"
+      OSRD_MQ_URL: "amqp://osrd:password@127.0.0.1:5672/%2f"
+      FGA_API_URL: "http://localhost:8091"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8090/health" ]
+
+  gateway:
+    ports: !reset []
+    network_mode: host
+    volumes:
+      - "./docker/gateway.dev.host.toml:/srv/gateway.toml"
+
+  osrd-images:
+    ports: !reset []
+    network_mode: host
+
+  rabbitmq:
+    ports: !reset []
+    network_mode: host
+
+  core:
+    ports: !reset []
+    network_mode: host
+    environment:
+      CORE_EDITOAST_URL: "http://127.0.0.1:8090"
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://127.0.0.1:4317"
+
+  osrdyne:
+    ports: !reset []
+    network_mode: host
+    environment:
+      OSRDYNE__WORKER_DRIVER__HOST_NETWORKING: "true"
+      OSRDYNE__WORKER_DRIVER__NETWORK: ""
+      OSRDYNE__WORKER_DRIVER__DEFAULT_ENV: >
+        [ "CORE_EDITOAST_URL=http://127.0.0.1:8090", "JAVA_TOOL_OPTIONS=-javaagent:/app/opentelemetry-javaagent.jar", "CORE_MONITOR_TYPE=opentelemetry", "OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=grpc", "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://127.0.0.1:4317", "OTEL_METRICS_EXPORTER=none", "OTEL_LOGS_EXPORTER=none" ]
+      OSRDYNE__AMQP_URI: "amqp://osrd:password@127.0.0.1:5672/%2f"
+      OSRDYNE__MAX_MSG_SIZE: 671088640 # 1024 * 1024 * 128 * 5
+      OSRDYNE__MANAGEMENT_URI: "http://osrd:password@127.0.0.1:15672/"
+      OSRDYNE__OPENTELEMETRY__ENDPOINT: "http://localhost:4317"
+
+  jaeger:
+    ports: !reset []
+    network_mode: host
+
+  wait-healthy:
+    depends_on:
+      editoast: { condition: service_healthy }
+    restart: "no"
+    image: alpine:latest
+    command: "true"

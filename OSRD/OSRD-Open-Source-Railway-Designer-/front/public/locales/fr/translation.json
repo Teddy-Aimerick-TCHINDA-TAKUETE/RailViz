@@ -1,0 +1,834 @@
+{
+  "Editor": {
+    "directions": {
+      "BOTH": "Les deux",
+      "START_TO_STOP": "Départ vers arrivée",
+      "STOP_TO_START": "Arrivée vers départ"
+    },
+    "entities": {
+      "errors-linked": "Anomalies liées"
+    },
+    "infra-errors": {
+      "corrector-modal": {
+        "create-actions": "{{creation_count}} créations d’objets",
+        "delete-actions": "{{deletion_count}} suppressions d’objets",
+        "loading-loader": "Calcul des corrections possibles",
+        "no-fixes-found": "Aucune correction trouvée.",
+        "saving-loader": "Corrections en cours d'application sur l’infrastructure",
+        "text": "Les actions suivantes vont être appliquées pour corriger certaines anomalies d’infrastructure :",
+        "title": "Correcteur automatique d’anomalies",
+        "update-actions": "{{update_count}} modifications d’objets existants"
+      },
+      "error-level": {
+        "all": "Tout",
+        "errors": "Erreurs",
+        "warnings": "Avertissements"
+      },
+      "error-type": {
+        "all": "Tout",
+        "duplicated_group": {
+          "description": "Le type d’aiguille « {{obj_id}} » contient un doublon de configuration « {{original_group_path}} »",
+          "name": "Duplication configuration d’aiguille"
+        },
+        "empty_object": {
+          "description": "L’objet « {{obj_id}} » a le champ « {{field}} » vide",
+          "name": "Objet vide"
+        },
+        "invalid_group": {
+          "description": "L’aiguille « {{obj_id}} » de la route « {{group}} » est dans la configuration « {{switch_type}} » qui n’existe pas",
+          "name": "Position de l'aiguille invalide"
+        },
+        "invalid_reference": {
+          "description": "L’object « {{obj_id}} » référence l’objet « {{reference.obj_id}} » qui n’existe pas",
+          "name": "Référence invalide"
+        },
+        "invalid_route": {
+          "description": "La route « {{obj_id}} » est invalide, le chemin demandé n’est pas consistant",
+          "name": "Itinéraire invalide"
+        },
+        "invalid_switch_ports": {
+          "description": "L’aiguille/le nœud « {{obj_id}} » présente une branche qui n’est pas compatible avec son type d’aiguille/nœud (qui n’existe pas dans son type d’aiguille/nœud)",
+          "name": "Branche d’aiguille ou de nœud invalide"
+        },
+        "missing_buffer_stop": {
+          "description": "L'extrémité « {{endpoint}} » de la voie « {{obj_id}} » n'a pas de heurtoir",
+          "name": "Heurtoir manquant"
+        },
+        "missing_route": {
+          "description": "La voie « {{obj_id}} » n’a aucun itinéraire associé",
+          "name": "Itinéraire manquant"
+        },
+        "node_endpoints_not_unique": {
+          "description": "Une extrémité de voie est utilisée par plusieurs ports du nœud « {{obj_id}} ».",
+          "name": "Extrémité de voie de nœud non unique"
+        },
+        "object_out_of_path": {
+          "description": "L’aiguille/le nœud ou le détecteur « {{obj_id}} » de l’itineraire « {{reference.obj_id}} » n’est pas contenu/contenue dans le chemin correspondant",
+          "name": "Objet en dehors de l'itinéraire"
+        },
+        "odd_buffer_stop_location": {
+          "description": "L'heurtoir « {{obj_id}} » se trouve à une position étrange",
+          "name": "Position d'heurtoir étrange"
+        },
+        "out_of_range": {
+          "description": "L’objet « {{obj_id}} » a le champ « {{field}} » avec une valeur invalide. La valeur doit être comprise dans l'intervalle [{{expected_range}}].",
+          "name": "Valeur invalide"
+        },
+        "overlapping_electrifications": {
+          "description": "La caténaire « {{obj_id}} » se superpose à la caténaire « {{reference.obj_id}} » sur la même voie et au même voltage",
+          "name": "Superposition de caténaires sur la zone"
+        },
+        "overlapping_speed_sections": {
+          "description": "La limite « {{obj_id}} » se superpose à la limite « {{reference.obj_id}} »",
+          "name": "Superposition de limites de vitesse"
+        },
+        "overlapping_switches": {
+          "description": "L’aiguille/le noeud « {{obj_id}} » et l’aiguille/le noeud « {{reference.obj_id}} » connectent les mêmes extrémités des voies",
+          "name": "Superposition d’aiguilles/nœuds"
+        },
+        "unknown_port_name": {
+          "description": "L’aiguille/le noeud « {{obj_id}} » présente la branche « {{port_name}} » qui n’est pas existante",
+          "name": "Nom de branche inconnu"
+        },
+        "unused_port": {
+          "description": "La branche « {{port_name}} » déclarée dans le type d’aiguille/nœud « {{obj_id}} » n’est pas utilisée dans les configurations de ce type",
+          "name": "Branche non utilisée"
+        }
+      },
+      "infra-locked": "Attention, vous ne pourrez pas sauvegarder de modification.",
+      "infra-readonly": "Attention, vous êtes en lecture seule sur cette infra",
+      "label": {
+        "title-with-filter_one": "{{count}} anomalie sur {{total}}",
+        "title-with-filter_other": "{{count}} anomalies sur {{total}}",
+        "title-with-filter_zero": "aucune anomalie sur {{total}}",
+        "title_one": "{{count}} anomalie",
+        "title_other": "{{count}} anomalies",
+        "title_zero": "Aucune anomalie"
+      },
+      "list": {
+        "filter-type": "Type d'anomalie",
+        "goto-error": "Sélectionner et viualiser sur la carte",
+        "total-all_one": "Une erreur ou un avertissement trouvé",
+        "total-all_other": "{{count}} erreurs et avertissements trouvés",
+        "total-all_zero": "Aucune erreur ni avertissement trouvé",
+        "total-errors_one": "Une erreur trouvée",
+        "total-errors_other": "{{count}} erreurs trouvées",
+        "total-errors_zero": "Aucune erreur trouvée",
+        "total-warnings_one": "Un avertissement trouvés",
+        "total-warnings_other": "{{count}} avertissements trouvés",
+        "total-warnings_zero": "Aucun avertissement trouvé"
+      },
+      "modal": {
+        "title": "Anomalies de l'infrastructure {{id}}"
+      }
+    },
+    "item-statuses": {
+      "edited": "en cours d'édition",
+      "selected": "sélectionné"
+    },
+    "layers": {
+      "buffer_stops": "Heurtoirs",
+      "detectors": "Détecteurs",
+      "electrifications": "Électrification",
+      "errors": "Erreurs",
+      "neutral_sections": "BP/CC",
+      "operational_points": "Points remarquables",
+      "platforms": "Quais",
+      "psl-psl_signs": "Limitations permanentes de vitesse",
+      "routes": "Itinéraires",
+      "signals": "Signaux",
+      "sncf_psl": "Limitations permanentes de vitesse",
+      "speed_limits": "Vitesses de ligne",
+      "speed_sections": "Vitesses de ligne",
+      "switches": "Aiguillages",
+      "track_sections": "Sections de voie"
+    },
+    "layers-modal": {
+      "frozen-layer": "nécessaire pour l'outil actif",
+      "layer-selected-items_one": "Un élément sélectionné",
+      "layer-selected-items_other": "{{count}} éléments sélectionnés",
+      "noSpeedLimitByTag": "Aucun code de composition",
+      "selection-warning_one": "Un élément a été désélectionné.",
+      "selection-warning_other": "{{count}} éléments ont été désélectionnés."
+    },
+    "linear-metadata": {
+      "help": "Ce composant vous permet de visualiser et modifier un habillage linéaire. Vous pouvez zoomer dans la visualisation via les boutons prévus à cet effet ou avec la molette de la souris, et vous déplacer via un drag'n'drop. Pour modifier la taille d'un segment, il vous suffit de cliquer dessus, le formulaire d'édition s'affichera en dessous. Vous pouvez aussi cliquer sur une bordure d'un segment, et tout en gardant le doigt appuyé, déplacer la bordure avec la sourie.",
+      "merge-with-left": "Fusionner avec l'élément précédent",
+      "merge-with-right": "Fusionner avec l'élément suivant",
+      "split": "Couper l'élément en deux"
+    },
+    "nav": {
+      "choose-infra": "Choisissez une infrastructure",
+      "infra-error-corrector": "Correcteur automatique d’anomalies",
+      "infra-errors-list": "Gestion et affichage des anomalies",
+      "map-layers": "Paramètres cartographiques",
+      "osrd-layers": "Couches de données",
+      "speed-limits": "Limitations de vitesse par code de composition",
+      "toggle-layers": "Choisir les types d'éléments à afficher"
+    },
+    "obj-types": {
+      "BufferStop": "Heurtoir",
+      "Detector": "Détecteur",
+      "Electrification": "Électrification",
+      "Route": "Itinéraire",
+      "Signal": "Signal",
+      "SpeedSection": "Vitesse limite",
+      "Switch": "Aiguillage",
+      "TrackSection": "Section de voie"
+    },
+    "tools": {
+      "buffer-stop-edition": {
+        "actions": {
+          "confirm-delete-entity": "Êtes-vous sûr(e) de vouloir supprimer le heurtoir ?",
+          "delete-entity": "Supprimer le heurtoir",
+          "new-entity": "Créer un nouveau heurtoir",
+          "reset-entity": "Réinitialiser les données",
+          "save-entity": "Sauvegarder le heurtoir"
+        },
+        "label": "Outil \"Heurtoir\""
+      },
+      "detector-edition": {
+        "actions": {
+          "confirm-delete-entity": "Êtes-vous sûr(e) de vouloir supprimer le détecteur ?",
+          "delete-entity": "Supprimer le détecteur",
+          "new-entity": "Créer un nouveau détecteur",
+          "reset-entity": "Réinitialiser les données",
+          "save-entity": "Sauvegarder le détecteur"
+        },
+        "label": "Outil \"Détecteur\""
+      },
+      "electrification-edition": {
+        "actions": {
+          "confirm-delete-electrification": "Êtes-vous sûr(e) de vouloir supprimer l'électrification ?",
+          "delete-electrification": "Supprimer l'électrification",
+          "new-electrification": "Créer une nouvelle électrification",
+          "reset-electrification": "Annuler les modifications en cours",
+          "save-electrification": "Sauvegarder l'électrification"
+        },
+        "add-new-electrification": "Ajouter une nouvelle électrification",
+        "electrification-default": "Électrification par défaut",
+        "electrifications": "Électrification",
+        "help": {
+          "add-track": "Ajouter la section '{{track.id}}' à l'électrification {{voltage}}",
+          "init": "Cliquez sur une section de voie pour l'associer à l'électrification",
+          "remove-range": "Supprimer la section de l'électrification {{voltage}}"
+        },
+        "label": "Outil \"Électrification\""
+      },
+      "point-edition": {
+        "default-routes-error": "Une erreur est survenue lors du chargement des itinéraires liés.",
+        "help": {
+          "start-dragging": "Cliquez sur l'élément pour commencer à le déplacer.",
+          "stop-dragging-no-line": "L'élément doit être placé sur une section de voie.",
+          "stop-dragging-on-line": "Cliquez pour valider le déplacement de l'élément."
+        },
+        "linked-routes": "Itinéraires liés",
+        "no-linked-route": "Aucun itinéraire lié",
+        "routes-ending-at": "Arrivant à…",
+        "routes-starting-from": "Partant de…"
+      },
+      "range-edition": {
+        "edit-track-range-end": "Modifier le point d'arrivée",
+        "edit-track-range-start": "Modifier le point de départ",
+        "empty-linked-track-section": "Cliquez sur une section de voie pour l'associer",
+        "linked-track-sections": "Sections de voie associées",
+        "only-show-n": "Ne montrer que les {{count}} premières sections de voie",
+        "show-more-ranges_one": "Voir une section de voie de plus",
+        "show-more-ranges_other": "Voir {{count}} sections de voie de plus"
+      },
+      "routes-edition": {
+        "actions": {
+          "delete-route": "Supprimer l'itinéraire",
+          "new-route": "Créer un nouvel itinéraire",
+          "pick-entry_point": "Outil de sélection du point de départ",
+          "pick-entry_point-cancel": "Annuler la sélection du point de départ",
+          "pick-entry_point-update": "Modifier le point de départ sélectionné",
+          "pick-exit_point": "Outil de sélection du point d'arrivée",
+          "pick-exit_point-cancel": "Annuler la sélection du point d'arrivée",
+          "pick-exit_point-update": "Modifier le point d'arrivée sélectionné",
+          "reset-route": "Réinitialiser l'itinéraire",
+          "save-route": "Sauvegarder l'itinéraire"
+        },
+        "alternative-routes": "Créer un itinéraire similaire",
+        "confirm-delete-route": "Êtes-vous sûr(e) de vouloir supprimer cet itinéraire ?",
+        "create-route": "Création d'un nouvel itinéraire",
+        "crossed-detectors_one": "Un détecteur",
+        "crossed-detectors_other": "{{count}} détecteurs",
+        "crossed-detectors_zero": "Aucun détecteur rencontré",
+        "crossed-track-ranges_one": "Une section",
+        "crossed-track-ranges_other": "{{count}} sections",
+        "crossed-track-ranges_zero": "Aucune section",
+        "delete-route": "Supprimer l'itinéraire",
+        "delete-route-success": "L'itinéraire a été supprimé avec succès.",
+        "directions": {
+          "START_TO_STOP": "Sens \"normal\"",
+          "STOP_TO_START": "Sens inverse"
+        },
+        "edit-route": "Édition d'un itinéraire existant",
+        "end": "Arrivée",
+        "endpoint": "Extrémité :",
+        "from": "de",
+        "geometry-error": "Une erreur est survenue lors du calcul du chemin exact de cet itinéraire",
+        "help": {
+          "actions-on-edit-route": "Vous pouvez supprimer l'itinéraire, le modifier, ou en créer un nouveau.",
+          "select-endpoints": "L'itinéraire doit avoir un point de départ et un point d'arrivée.",
+          "select-route": "Sélectionnez un itinéraire.",
+          "select-waypoint": "Sélectionnez un détecteur ou un heurtoir.",
+          "validate-route": "Vous pouvez valider cet itinéraire, ou en sélectionner un autre."
+        },
+        "include-release-detectors": "Transit rigide",
+        "label": "Outil \"Itinéraire\"",
+        "locked-release-detectors": "Une fois cette propriété activée et sauvegardée, celle-ci ne peut plus être désactivée",
+        "no-route-found": "Aucun itinéraire compatible trouvé",
+        "no-waypoint-picked-yet": "Cliquer sur le bouton ci-contre pour sélectionner un détecteur ou un heurtoir sur la carte",
+        "preview-candidate": "Sélectionner",
+        "search-routes": "Rechercher des itinéraires compatibles",
+        "search-routes-alt": "Rechercher des itinéraires alternatifs",
+        "start": "Départ",
+        "start_direction": "Direction au départ :",
+        "swap-endpoints": "Échanger les extrémités",
+        "to": "à",
+        "untitled-track": "Ligne sans nom"
+      },
+      "select-items": {
+        "actions": {
+          "confirm-delete-selection": "Êtes-vous sûr(e) de vouloir supprimer la sélection ?",
+          "delete-selection": "Supprimer la sélection",
+          "edit-info": "Éditer la sélection",
+          "polygon": "Sélection polygone",
+          "rectangle": "Sélection rectangle",
+          "single": "Sélection simple",
+          "split-track-section": "Diviser la section de voie",
+          "unselect-all": "Tout désélectionner"
+        },
+        "errors": {
+          "invalid-url": "URL invalide",
+          "no-heterogenous-edition": "Il n'est pas possible d'éditer plusieurs éléments de différents types en même temps.",
+          "no-multi-edition": "Il n'est pas encore possible d'éditer plusieurs éléments en même temps (TODO).",
+          "unable-to-select": "Sélection impossible"
+        },
+        "focus": "Focus",
+        "help": {
+          "polygon-selection": "Cliquez pour délimiter un polygone. Double-cliquez pour le fermer, et sélectionner tous les éléments à l'intérieur.",
+          "rectangle-selection": "Cliquez deux fois pour délimiter un rectangle. Tous les éléments dans ce rectangle seront alors sélectionnés.",
+          "single-selection": "Cliquez sur un élément pour le sélectionner ou le désélectionner. Vous pouvez sélectionner plusieurs éléments en pressant la touche Contrôle."
+        },
+        "item": "Élément",
+        "label": "Outil \"Sélection\"",
+        "linked-to-line_one": "associé à la section de voie",
+        "linked-to-line_other": "associé aux sections de voie",
+        "linked-to-n-lines_one": "relatif à une section de voie",
+        "linked-to-n-lines_other": "relatif à {{count}} sections de voie",
+        "linked-to-n-lines_zero": "relatif à aucune section de voie",
+        "no-selection": "Aucun élément sélectionné",
+        "of-type": "de type",
+        "selection": "{{count}} élément sélectionné",
+        "selection_plural": "{{count}} éléments sélectionnés",
+        "sources": "Sources",
+        "title": "Sélection",
+        "unselect": "Désélectionner"
+      },
+      "signal-edition": {
+        "actions": {
+          "confirm-delete-entity": "Êtes-vous sûr(e) de vouloir supprimer le signal ?",
+          "delete-entity": "Supprimer le signal",
+          "new-entity": "Créer un nouveau signal",
+          "reset-entity": "Réinitialiser les données",
+          "save-entity": "Sauvegarder le signal"
+        },
+        "label": "Outil \"Signal\""
+      },
+      "speed-edition": {
+        "actions": {
+          "confirm-delete-speed-section": "Êtes-vous sûr(e) de vouloir supprimer la vitesse limite ?",
+          "delete-speed-section": "Supprimer la vitesse limite",
+          "new-speed-section": "Créer une nouvelle vitesse limite",
+          "reset-speed-section": "Annuler les modifications en cours",
+          "save-speed-section": "Sauvegarder la vitesse limite"
+        },
+        "add-new-speed-limit": "Ajouter une nouvelle limitation",
+        "add-new-tag": "Ajouter un nouveau code de composition",
+        "add-sign": "Ajouter un panneau de type {{signType}}",
+        "add-track-range": "Cliquer pour lier à :",
+        "additional-speed-limit": "Limitations de vitesse par code de composition",
+        "any-position": "Toutes",
+        "hovered-sign": "Panneau {{signType}}",
+        "incompatible-switch": "Cette position d’aiguille n’est pas compatible avec la position des autres aiguilles",
+        "label": "Outil \"Vitesse limite\"",
+        "main-speed-limit": "Limitation de vitesse de ligne",
+        "move-range-extremity": "Cliquer pour déplacer l'extrémité :",
+        "new-tag": "Code de composition",
+        "ralen-30-60": "Limitations de vitesse par itinéraire",
+        "remove-track-range": "Cliquer pour détacher de :",
+        "search-routes": "Rechercher des itinéraires compatibles",
+        "select-route": "Sélectionner un itinéraire",
+        "select-switches-to-get-route": "Sélectionner des aiguillages et leur position pour rechercher les itinéraires",
+        "sign-category": "Panneau(x) {{signType}}",
+        "sign-direction": "Direction",
+        "sign-kp": "Point kilométrique",
+        "sign-position": "Position",
+        "sign-remove": "Supprimer le panneau",
+        "sign-select": "Sélectionner",
+        "sign-side": "Côté",
+        "sign-track-id": "Id de section de voie",
+        "sign-type": "Type",
+        "sign-value": "Vitesse",
+        "signs-section-list": "Liste des panneaux de la section",
+        "speed-limits": "Limitations de vitesse",
+        "toggle-psl": "Limitations permanentes de vitesse",
+        "toggle-psl-help": "Cliquez d'abord sur une section de voie pour pouvoir activer cette option"
+      },
+      "switch-edition": {
+        "actions": {
+          "confirm-delete-switch": "Êtes-vous sûr(e) de vouloir supprimer l'aiguillage ?",
+          "delete-switch": "Supprimer l'aiguillage",
+          "new-switch": "Créer un nouvel aiguillage",
+          "pick-track": "Outil de sélection d'une voie sur la carte",
+          "pick-track-cancel": "Annuler la sélection d'une voie",
+          "save-switch": "Sauvegarder l'aiguillage"
+        },
+        "crossing": "Traversée oblique",
+        "double_slip_switch": "Traversée jonction double",
+        "duplicate-errors": "La voie {{track}} est déjà utilisée par le port {{port}}",
+        "endpoint": "Extrémité :",
+        "help": {
+          "no-move": "Les aiguillages ne peuvent pas être déplacés, et sont automatiquement placés sur leur premier port.",
+          "select-track": "Sélectionnez une voie sur la carte"
+        },
+        "label": "Outil \"Aiguillage\"",
+        "link": "Lien",
+        "no-track-picked-yet": "Aucune voie n'a encore été sélectionnée",
+        "point_switch": "Branchement 2 voies",
+        "single_slip_switch": "Traversée jonction simple",
+        "switch-type": "Type d'aiguillage",
+        "switch_type_w_port_count_one": "{{type}} ({{count}} port)",
+        "switch_type_w_port_count_other": "{{type}} ({{count}} ports)",
+        "untitled-track": "Voie sans nom"
+      },
+      "track-edition": {
+        "actions": {
+          "add-at-end": "Ajouter les nouveaux points à la fin",
+          "add-at-start": "Ajouter les nouveaux points au début",
+          "cancel-line": "Retirer le tracé sélectionné",
+          "confirm-delete-line": "Êtes-vous sûr(e) de vouloir supprimer la voie ?",
+          "delete-line": "Supprimer la voie",
+          "mode-add-point": "Ajouter un point",
+          "mode-delete-point": "Supprimer des points",
+          "mode-move-point": "Déplacer les points",
+          "reset-line": "Réinitialiser les données",
+          "save-line": "Sauvegarder la voie",
+          "toggle-anchoring": "Activer / désactiver l'ancrage automatique"
+        },
+        "attached-electrifications": "Électrification",
+        "attached-speed-sections": "Vitesses limites",
+        "default-electrifications-error": "Une erreur est survenue lors du chargement des électrifications liées à cette section de voie.",
+        "default-speed-sections-error": "Une erreur est survenue lors du chargement des vitesses limites liées à cette section de voie.",
+        "help": {
+          "add-anchor-point": "Cliquez pour ajouter un point au bout de la section de voie. Cliquez sur la voie pour ajouter un point intermédiaire.",
+          "add-point": "Cliquez pour ajouter un point au bout de la section de voie.",
+          "delete-point": "Cliquez sur un point pour le supprimer de la section de voie.",
+          "move-point": "Cliquez une première fois sur un point pour commencer à le déplacer.",
+          "move-point-end": "Cliquez pour valider le déplacement du point."
+        },
+        "label": "Outil \"Voie\"",
+        "no-linked-electrification": "Aucune électrification renseignée",
+        "no-linked-speed-section": "Aucune vitesse limite renseignée",
+        "only-show-n": "Ne montrer que les {{count}} premiers résultats",
+        "show-more-ranges_one": "Voir un résultat de plus",
+        "show-more-ranges_other": "Voir {{count}} résultats de plus"
+      },
+      "track-split": {
+        "actions": {
+          "save": "Sauvegarder la division"
+        },
+        "help": {
+          "default": "Cliquer sur le point de division sur la carte, ou renseigner sa position par rapport au début de la section de voie dans le formulaire",
+          "hover": "Cliquer sur le point pour pouvoir le déplacer",
+          "move": "Cliquer pour valider le déplacement, ou appuyer sur 'esc' pour annuler",
+          "split": "Cliquer sur la section de voie pour le diviser à cette localisation"
+        },
+        "label": "Outil de division de section de voie",
+        "offset": {
+          "description": "Distance entre le point et le début de la section de voie (en mètres)",
+          "error": "La position doit être un nombre compris entre 1 et {{max}}",
+          "label": "Position"
+        },
+        "title": "Découpe"
+      }
+    }
+  },
+  "authorization": {
+    "addGrantToUser": "Ajouter des droits à un utilisateur",
+    "grants": {
+      "edit": "écriture",
+      "full": "accès total",
+      "none": "pas d'accès",
+      "read": "lecture"
+    },
+    "permission": "Permission",
+    "permissionDenied": "Vous n'avez pas la permission de réaliser cette action",
+    "searchUser": "Rechercher un utilisateur par son nom",
+    "yourGrant": "Votre accès : {{grant}}"
+  },
+  "common": {
+    "add": "Ajouter",
+    "and": "et",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "collapse": "Réduire",
+    "confirm": "Confirmer",
+    "delete": "Supprimer",
+    "details": "Détails",
+    "duplicate": "Dupliquer",
+    "edit": "Éditer",
+    "error": "Une erreur est survenue",
+    "expand": "Agrandir",
+    "failure": {
+      "save": {
+        "text": "Vos modifications n'ont pas été publiées",
+        "title": "Echec de l'enregistrement des modifications"
+      }
+    },
+    "help": "Aide",
+    "help-display": "Afficher l'aide",
+    "leaveEditionMode": "Vous êtes sur le point de quitter le mode édition, toute modification non sauvegardée sera perdue.",
+    "map-actions": {
+      "help-legend": "Afficher la légende",
+      "reset-north": "Réinitialiser la caméra"
+    },
+    "navigation": {
+      "goBack": "Retour à la page précédente",
+      "goHome": "Retour à la page d'accueil"
+    },
+    "next": "Suivant",
+    "no": "Non",
+    "open": "Ouvrir",
+    "previous": "Précedent",
+    "reset": "Réinitialiser",
+    "save": "Sauvegarder",
+    "saveEdits": "Sauvegarder les modifications",
+    "search": "Rechercher",
+    "selected": "déjà sélectionné",
+    "success": {
+      "save": {
+        "text": "Vos modifications ont été publiées",
+        "title": "Modifications enregistrées"
+      }
+    },
+    "toggleInfraErrors": "Basculer l'affichage des erreurs d'infrastructure",
+    "units": {
+      "day": "j",
+      "hour": "h",
+      "km": "km",
+      "minute": "min"
+    },
+    "validate": "Valider",
+    "yes": "Oui",
+    "zoom-in": "Zoomer",
+    "zoom-out": "Dézoomer",
+    "zoom-reset": "Réinitialiser le zoom"
+  },
+  "editor": "Éditeur d'infrastructure",
+  "infraManagement": {
+    "actions": {
+      "cancel": "Annuler",
+      "check": "Valider",
+      "copy": "Dupliquer",
+      "delete": "Supprimer",
+      "export": "Exporter au format RailJSON",
+      "lock": "Verrouiller",
+      "rename": "Renommer",
+      "unlock": "Déverrouiller",
+      "waiting": "Veuillez patienter"
+    },
+    "addInfra": "Créer une infrastructure",
+    "addInfraJSON": "Créer une infrastructure, à partir d'un fichier RailJSON",
+    "addInfraJSONFile": "Ajouter un fichier RailJSON",
+    "addInfraJSONFileRemove": "Annuler l'import RailJSON",
+    "createInfra": "Création",
+    "deleteConfirm": "Voulez-vous supprimer l'infrastructure ?",
+    "errorMessages": {
+      "noEmptyName": "Veuillez renseigner un nom",
+      "unableToRetrieveInfraList": "Récupération liste d'infra impossible"
+    },
+    "goToEditionMode": "Éditer",
+    "goToStandardMode": "Retour à la sélection",
+    "infraChoice": "Infrastructures",
+    "infraDeleted": "L'infrastructure {{name}} a bien été supprimée.",
+    "infraManagement": "Gestion des infrastructures",
+    "infraName": "Nom de l'infrastructure",
+    "infrasFound_one": "{{count}} infrastructure trouvée",
+    "infrasFound_other": "{{count}} infrastructures trouvées",
+    "infrasFound_zero": "Aucune infrastructure trouvée",
+    "locked": "Verrouillée",
+    "no": "Non",
+    "noInfraSelected": "Aucune infrastructure sélectionnée",
+    "yes": "Oui"
+  },
+  "infrastructure": "Infrastructure",
+  "interval-editor": {
+    "add": "Ajouter",
+    "begin": "Début",
+    "delete": "Supprimer",
+    "end": "Fin",
+    "merge": "Fusionner avec le segment suivant",
+    "split": "Diviser",
+    "translate": "Translater",
+    "value": "Valeur"
+  },
+  "jsonUpload": {
+    "badJSON": "Contenu non valide. Seuls les fichiers RailJSON sont pris en charge (habituellement .json ou .railjson)",
+    "emptyFile": "Le fichier est vide",
+    "uploadError": "Erreur lors du chargement du fichier"
+  },
+  "map": "Cartographie",
+  "mapKey": {
+    "alternatingCurrent": "Alternatif",
+    "directCurrent": "Continu",
+    "electrifications": "Électrification",
+    "keyTitle": "Légende",
+    "lower_pantograph": "Zone « baissez panto »",
+    "neutral_sections": "BP/CC",
+    "speedlimit": "Vitesse",
+    "switch_off": "Coupez Courant"
+  },
+  "mapSearch": {
+    "all": "Tous",
+    "aspects": "Aspects",
+    "line": "Ligne",
+    "line-code": "Code ligne",
+    "main-operational-points-only": "BV seuls",
+    "name": "Nom",
+    "no-aspect-selected": "Aucun aspect sélectionné",
+    "operational-point": "Point remarquable",
+    "placeholder-ch-code": "CH",
+    "placeholder-line": "Nom ou numéro de ligne",
+    "placeholder-name": "Nom, appelation, libellé, code CI",
+    "placeholder-signal": "Nom du signal",
+    "results-count_one": "1 résultat",
+    "results-count_other": "{{ count }} résultats",
+    "results-count_zero": "Aucun résultat",
+    "signal": "Signal",
+    "signal-settings": {
+      "Nf": "Non franchissable",
+      "distant": "Distant",
+      "is_430": "430"
+    },
+    "signal-system": "Système de signalisation",
+    "too-many-results": "Il y a plus de 100 résultats, merci d'affiner votre recherche.",
+    "type": "Type",
+    "unable-to-search-signal": "Recherche du signal impossible"
+  },
+  "mapSettings": {
+    "layers": {
+      "buffer_stops": "Heurtoirs",
+      "detectors": "Détecteurs",
+      "electrifications": "Électrification",
+      "neutral_sections": "BP/CC",
+      "operational_points": "Points remarquables",
+      "platforms": "Quais",
+      "routes": "Cantons",
+      "showIGNBDORTHO": "BD Ortho photo ©IGN",
+      "showIGNCadastre": "Cadastre ©IGN",
+      "showIGNSCAN25": "SCAN PLAN/25/100 ©IGN",
+      "showOSM": "Fond de carte OSM",
+      "showOSM3dBuildings": "Bâtiments 3D",
+      "showOSMtracksections": "Voies OSM",
+      "signals": "Signaux",
+      "smoothTravel": "Transition douce",
+      "sncf_psl": "Limitations permanentes de vitesse",
+      "speed_limits": "Vitesses de ligne",
+      "switches": "Appareils de voie",
+      "tvds": "Circuits de voie"
+    },
+    "mapstyles": {
+      "darkmode": "Sombre",
+      "minimal": "Minimal",
+      "normal": "Normal"
+    },
+    "noSpeedLimitByTag": "Aucun code de composition",
+    "terrain3DExaggeration": "Échelle du relief en 3D",
+    "zone": "Zone"
+  },
+  "nav-bar": {
+    "about": "À propos",
+    "disconnect": "Déconnexion",
+    "help": "Aide",
+    "impersonation": "Se faire passer pour un utilisateur",
+    "informations": {
+      "application": "Application",
+      "collaborations": "Collaborations",
+      "dataSources": "Sources de données",
+      "librairies": "Librairies & licences",
+      "version": "Version"
+    },
+    "languages": "Langues",
+    "safeWord": "Mot clé de sécurité",
+    "safeWordHelp": "Le « mot-clé de sécurité » permet de filtrer de manière transparente la liste des projets avec le mot renseigné, utilisé comme une étiquette. Préférez un mot compliqué dans l'idée que personne ne l'utilise par inadvertance. Ajoutez-le comme une étiquette à un projet ; il sera automatiquement ajouté à la création de projet si le mot est renseigné ici.",
+    "userSettings": "Paramètres utilisateur",
+    "yourSafeWord": "Tapez votre mot"
+  },
+  "operationalStudies": "Études d'exploitation",
+  "rollingStock": {
+    "add": "Ajouter",
+    "addNewRollingStock": "Nouveau matériel roulant",
+    "addNewTractionMode": "Ajouter un nouveau mode de traction",
+    "basePowerClass": "Classe de puissance",
+    "cancelUpdateRollingStock": "Annuler la mise à jour du matériel roulant ?",
+    "categoriesOptions": {
+      "COMMUTER_TRAIN": "Train de banlieue",
+      "FAST_FREIGHT_TRAIN": "Train de fret rapide",
+      "FREIGHT_TRAIN": "Train de fret",
+      "HIGH_SPEED_TRAIN": "Train à grande vitesse",
+      "INTERCITY_TRAIN": "Train interville",
+      "NIGHT_TRAIN": "Train de nuit",
+      "REGIONAL_TRAIN": "Train régional",
+      "TOURISTIC_TRAIN": "Train touristique",
+      "TRAM_TRAIN": "Tram-train",
+      "WORK_TRAIN": "Train de travaux",
+      "choose": "Choisissez une catégorie",
+      "noCategory": "Pas de catégorie"
+    },
+    "chooseRollingStock": "Sélectionnez un matériel roulant pour en afficher les informations",
+    "comfort": "Confort",
+    "comfortAcceleration": "Accélération « confort »",
+    "comfortLevels": "Niveaux de confort",
+    "comfortTypes": {
+      "AIR_CONDITIONING": "Climatisation",
+      "HEATING": "Chauffage",
+      "STANDARD": "Standard"
+    },
+    "confirmAddRollingStock": "Êtes-vous sûr de vouloir ajouter ce matériel roulant ?",
+    "confirmUpdateRollingStock": "Confirmer la mise à jour du matériel roulant",
+    "constGamma": "Décélération horaire",
+    "curves": {
+      "all": "Toutes les courbes",
+      "default": "Courbe par défaut"
+    },
+    "delete": {
+      "comfort": "Êtes-vous sûr de vouloir supprimer ce niveau de confort ? Toutes les courbes associées seront perdues.",
+      "electrical_profile_level": "Êtes-vous sûr de vouloir supprimer ce profil électrique ? Toutes les courbes associées seront perdues.",
+      "power_restriction_code": "Êtes-vous sûr de vouloir supprimer la courbe correspondant à ce code de restriction ?",
+      "tractionMode": "Êtes-vous sûr de vouloir supprimer ce mode de traction ? Toutes les courbes associées seront perdues."
+    },
+    "deleteRollingStock": "Voulez-vous supprimer ce matériel roulant ?",
+    "effort": "Effort (kN)",
+    "electric": "Électrique",
+    "electricalPowerStartupTime": "Temps de reprise de courant",
+    "electricalProfiles": "Profils électriques",
+    "errorMessages": {
+      "invalidConversion": "Conversion invalide",
+      "minMaxRangeError": "La valeur doit être comprise entre {{min}} et {{max}}",
+      "minRangeError": "La valeur doit être supérieure ou égale à {{min}}",
+      "missingConversion": "Cette conversion n'existe pas dans le schéma. La valeur n'a pas été modifiée.",
+      "missingInformation": "Informations manquantes",
+      "ressourcesNotFound": "Ressources introuvables",
+      "rollingStockUsed": "Le Matériel roulant est utilisé dans les scénarios suivants :",
+      "unableToRetrieveRollingStock": "Récupération matériel impossible",
+      "unableToRetrieveRollingStockMessage": "Une erreur est survenue"
+    },
+    "export": "Exporter",
+    "exportRollingStock": "Exporter le matériel roulant",
+    "importRollingStock": "Importer un matériel roulant",
+    "inertiaCoefficient": "Coefficient d'inertie",
+    "length": "Longueur",
+    "listDisabled": "Veuillez quitter l'éditeur pour modifier la sélection",
+    "loadingGauge": "Gabarit",
+    "locked": "Verrouillé",
+    "mass": "Masse",
+    "maxSpeed": "Vitesse maximale",
+    "messages": {
+      "failure": "Opération échouée",
+      "invalidEffortCurves": "Courbes invalides : {{invalidEffortCurves}}. Chaque courbe doit posséder au moins 2 combinaisons de valeurs vitesse / effort (sans doublon sur les valeurs de vitesse). Les combinaisons ayant au moins un champs vide sont ignorées. Une vitesse ne peut pas excéder 600km/h et un effort ne peut pas excéder 1000kN.",
+      "invalidForm": "Formulaire incomplet",
+      "missingEffortCurves": "Veuillez renseigner une courbe effort-vitesse",
+      "missingInformationAutomaticallyFilled_one": "Le champ suivant a été initialisé par défaut : {{invalidFields}}.",
+      "missingInformationAutomaticallyFilled_other": "Les champs suivants ont été initialisés par défaut : {{invalidFields}}.",
+      "missingName": "Veuillez renseigner un nom",
+      "missingPrimaryCategory": "Veuillez renseigner une catégorie principale",
+      "rollingStockAdded": "Le matériel roulant a été ajouté",
+      "rollingStockDeleted": "Le matériel roulant a été supprimé",
+      "rollingStockDuplicateName": "Un matériel roulant du même nom existe déjà.",
+      "rollingStockNotAdded": "Le matériel roulant n'a pas été ajouté",
+      "rollingStockNotDeleted": "Le matériel roulant n'a pas été supprimé",
+      "rollingStockNotUpdated": "Le matériel roulant n'a pas été mis à jour",
+      "rollingStockUpdated": "Le matériel roulant a été mis à jour",
+      "success": "Opération réussie"
+    },
+    "metadata": {
+      "detail": "Détail",
+      "family": "Famille",
+      "grouping": "Regroupement",
+      "name": "Nom",
+      "number": "Numéro",
+      "reference": "Référence",
+      "series": "Série",
+      "subseries": "Sous-série",
+      "type": "Type",
+      "unit": "Unité"
+    },
+    "missingPowerClass_one": "Classe de puissance manquante",
+    "missingPowerClass_other": "Classes de puissance manquantes",
+    "notLocked": "Non verrouillé",
+    "otherCategories": "Autres catégories",
+    "powerRestrictions": "Codes de restriction & classes de puissance",
+    "powerRestrictionsInfos": "Codes de restriction",
+    "primaryCategory": "Catégorie principale",
+    "project": "Projet {{projectName}} :",
+    "raisePantographTime": "Temps de lever panto",
+    "resultFound_one": "1 résultat trouvé",
+    "resultFound_other": "{{count}} résultats trouvés",
+    "resultFound_zero": "Aucun résultat",
+    "rollingResistance": "Résistance à l’avancement",
+    "rollingResistanceA": "Frottements solides (a)",
+    "rollingResistanceB": "Frottements visqueux (b)",
+    "rollingResistanceC": "Résistance aérodynamique (c)",
+    "rollingResistanceFormula": "R(v) = a + bv + cv²",
+    "rollingstockChoice": "Choisissez un matériel roulant",
+    "selectRollingStock": "Sélectionner",
+    "speed": "Vitesse (km/h)",
+    "startupAcceleration": "Accélération au démarrage",
+    "startupTime": "Durée de démarrage",
+    "supportedSignalingSystems": "Signalisations supportées",
+    "tabs": {
+      "rollingStockCurves": "Courbes effort-vitesse",
+      "rollingStockDetails": "Caractéristiques générales"
+    },
+    "thermal": "Thermique",
+    "tractionModes": "Modes de traction",
+    "unspecified": "Non spécifié",
+    "waitingLoader": "Veuillez patienter, chargement de la base de données matériel…"
+  },
+  "rollingStockEditor": "Éditeur de matériel roulant",
+  "stdcm": "Sillons de dernière minute",
+  "subCategory": {
+    "errorMessages": {
+      "unableToRetrieveSubCategory": "Récupération des sous-catégories impossible",
+      "unableToRetrieveSubCategoryMessage": "Une erreur est survenue"
+    }
+  },
+  "timeStopTable": {
+    "arrivalTime": "arrivée demandée",
+    "calculatedArrivalTime": "arrivée calculée",
+    "calculatedDepartureTime": "départ calculé",
+    "calculatedDepartureTimeFull": "départ calculé",
+    "ch": "CH",
+    "dayCounter": "J+{{count}}",
+    "departureTime": "départ demandé",
+    "departureTimeFull": "départ demandé",
+    "diffMargins": "diff. marges (s)",
+    "diffMarginsFull": "différence entre les marges (s)",
+    "name": "CI",
+    "noPathLoaded": "Aucun chemin chargé",
+    "realMargin": "marge réelle (s)",
+    "receptionOnClosedSignal": "r. s. signal fermé",
+    "receptionOnClosedSignalFull": "reception sur signal fermé",
+    "shortSlipDistance": "faible glissement",
+    "stopTime": "temps d'arrêt (s)",
+    "theoreticalMargin": "marge théorique",
+    "theoreticalMarginPlaceholder": "% ou min/100km",
+    "theoreticalMarginSeconds": "marge théorique (s)",
+    "trackName": "voie",
+    "waypoint": "Via {{id}}"
+  }
+}

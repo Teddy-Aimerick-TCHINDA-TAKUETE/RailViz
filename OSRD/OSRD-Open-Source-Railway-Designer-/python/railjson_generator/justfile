@@ -1,0 +1,30 @@
+#!/usr/bin/env just --justfile
+
+# Display available recipes
+help:
+    @just --list --unsorted
+
+# Update (regenerate) tests infras
+run:
+    uv run -m railjson_generator ../../tests/data/infras ../../tests/infra-scripts/*.py
+
+# Install required dependencies
+install:
+    uv sync --all-extras
+
+# Run the tests
+test:
+    uv run pytest
+
+# Format the source code
+format:
+    uv run ruff format
+
+# Verify code lints without applying any fix
+lint:
+    uv run ruff check
+    uv run pyright
+
+# Fix all the lints that can be automatically applied
+fix-lint:
+    uv run ruff check --fix

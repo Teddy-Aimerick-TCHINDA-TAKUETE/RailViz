@@ -1,0 +1,25 @@
+[package]
+name = "database"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[features]
+testing = []
+
+[dependencies]
+diesel.workspace = true
+diesel-async.workspace = true
+diesel_migrations = { version = "2.0.0" }
+futures.workspace = true
+futures-util.workspace = true
+openssl.workspace = true
+opentelemetry-semantic-conventions.workspace = true
+postgis_diesel.workspace = true
+postgres-openssl.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-postgres.workspace = true
+tracing.workspace = true
+url.workspace = true
+uuid.workspace = true

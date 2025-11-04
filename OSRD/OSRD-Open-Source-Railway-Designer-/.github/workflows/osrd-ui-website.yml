@@ -1,0 +1,87 @@
+name: Publish osrd-ui website
+
+on:
+  # Allows to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # Release event to trigger on new releases
+  release:
+    types: [released]
+
+  # Run on PRs, but only preview
+  pull_request:
+    paths:
+      - front/ui/**
+      - front/package-lock.json
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+# Allow only one concurrent deployment. However, do NOT cancel in-progress runs as we want to allow
+# especially production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+# Set environment variables, used multile times in the workflow
+env:
+  artifact_name: "website"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Build
+        run: |
+          cd front
+          npm ci
+          npm run build --workspaces --if-present
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ env.artifact_name }}
+          path: "./front/ui/storybook/storybook-static"
+          include-hidden-files: true
+          retention-days: 1
+
+  deploy:
+    name: Deploy website
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: OpenRailAssociation/web-deployment-action@v1
+        with:
+          artifact_name: ${{ env.artifact_name }}
+          condition_production: ${{ startsWith(github.ref, 'refs/tags/ui-v') }}
+          domain_production: https://ui.osrd.fr
+          domain_preview: ${{ vars.WEB_DOMAIN_PREVIEW }}
+          dir_base: ${{ vars.WEB_DIR_BASE }}
+          dir_production: ui.osrd.fr
+          dir_preview_base: ${{ vars.WEB_DIR_PREVIEW_BASE }}
+          dir_preview_subdir: osrdui-pr-${{ github.event.number }}
+          ssh_host: ${{ vars.WEB_SSH_HOST }}
+          ssh_user: ${{ vars.WEB_SSH_USER }}
+          ssh_key: ${{ secrets.UI_WEBSITE_SSH_KEY }}
+          # Disable link checker and sticky comment, reports only via step summaries
+          linkchecker_enabled: false
+          sticky_comment_enabled: false
+          step_summary_enabled: true
+          gh_deployment: storybook
+        env:
+          HAVE_SSH_KEY: ${{ secrets.UI_WEBSITE_SSH_KEY != '' }}
+        if: ${{ env.HAVE_SSH_KEY == 'true' }}

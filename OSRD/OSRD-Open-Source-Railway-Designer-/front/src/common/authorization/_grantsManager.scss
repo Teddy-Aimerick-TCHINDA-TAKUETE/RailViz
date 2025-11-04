@@ -1,0 +1,100 @@
+.grant-manager {
+  margin: 0 16px 8px;
+  padding: 5px 0 7px;
+  border-bottom: 1px solid var(--grey20);
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    .user-grant {
+      font-size: 0.875rem;
+      color: var(--info60);
+    }
+    .blue-label {
+      color: var(--primary60);
+    }
+    .grey-label {
+      color: var(--grey30);
+    }
+  }
+
+  &-body {
+    // Overrides the default "pointer" cursor style applied to the div.grant-manager-body with role="button"
+    // Necessary because we want to keep the role for accessibility but without the visual cursor effect
+    cursor: default !important;
+  }
+
+  .subject {
+    &-search {
+      display: flex;
+      flex-direction: column;
+      padding-right: 22px;
+      margin-top: 8px;
+      .display-search {
+        align-self: flex-start;
+        border-radius: 4px;
+        padding: 0 12px;
+        color: var(--primary60);
+      }
+      &-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13.6px 0 13.6px 13.6px;
+      }
+      &-combobox {
+        flex-grow: 1;
+        margin-right: 12px;
+        * > #add-user-combobox {
+          height: 32px;
+        }
+      }
+      &-actions {
+        display: flex;
+        justify-content: end;
+      }
+      &-add-button {
+        align-self: flex-end;
+        padding: 0 12px;
+        border-radius: 4px;
+        background-color: var(--ambientB15);
+        color: var(--primary60);
+      }
+    }
+    &-list {
+      border-radius: 6px;
+      margin: 15px 8px 8px;
+      background-color: var(--ambientC10);
+      cursor: default;
+    }
+    &-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 47px;
+      margin-inline: 8px;
+      padding-inline: 7px 4px;
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--grey20);
+      }
+    }
+    &-name {
+      color: var(--black100);
+      &.bold {
+        font-weight: 500;
+      }
+    }
+    &-grant {
+      display: flex;
+      align-items: center;
+
+      * > .ui-select,
+      * > .ui-select:focus {
+        background-color: var(--white100);
+        margin: 0 0 0 8px;
+        width: 136px;
+        height: 32px;
+      }
+    }
+  }
+}

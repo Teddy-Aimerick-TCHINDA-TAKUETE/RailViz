@@ -1,0 +1,834 @@
+{
+  "Editor": {
+    "directions": {
+      "BOTH": "Both",
+      "START_TO_STOP": "Start to stop",
+      "STOP_TO_START": "Stop to start"
+    },
+    "entities": {
+      "errors-linked": "Linked issues"
+    },
+    "infra-errors": {
+      "corrector-modal": {
+        "create-actions": "{{creation_count}} object creations",
+        "delete-actions": "{{deletion_count}} object deletions",
+        "loading-loader": "Computing possible fixes",
+        "no-fixes-found": "No fixes found.",
+        "saving-loader": "Applying fixes to infrastructure",
+        "text": "The following actions will be applied to correct some of the infrastructure's errors:",
+        "title": "Automatic error corrector",
+        "update-actions": "{{update_count}} existing object updates"
+      },
+      "error-level": {
+        "all": "All",
+        "errors": "Errors",
+        "warnings": "Warnings"
+      },
+      "error-type": {
+        "all": "All",
+        "duplicated_group": {
+          "description": "Switch type « {{obj_id}} » contains a duplicate configuration « {{original_group_path}} »",
+          "name": "Duplicated switch pattern"
+        },
+        "empty_object": {
+          "description": "Object « {{obj_id}} » has the field « {{field}} » empty",
+          "name": "Empty object"
+        },
+        "invalid_group": {
+          "description": "The switch « {{obj_id}} » of the route « {{group}} » is in the configuration « {{switch_type}} » which does not exist",
+          "name": "Invalid switch position"
+        },
+        "invalid_reference": {
+          "description": "The object « {{obj_id}} » references the object « {{reference.obj_id}} » which does not exist",
+          "name": "Invalid reference"
+        },
+        "invalid_route": {
+          "description": "Route « {{obj_id}} » is invalid, requested path is not consistent",
+          "name": "Invalid route"
+        },
+        "invalid_switch_ports": {
+          "description": "Switch « {{obj_id}} » has a branch which is not compatible with its type",
+          "name": "Invalid switch pattern"
+        },
+        "missing_buffer_stop": {
+          "description": "Endpoint « {{endpoint}} » of track « {{obj_id}} » has no buffer stop",
+          "name": "Missing buffer stop"
+        },
+        "missing_route": {
+          "description": "Track « {{obj_id}} » has no associated route",
+          "name": "Missing route"
+        },
+        "node_endpoints_not_unique": {
+          "description": "The « {{obj_id}} » node has a track endpoint used by several ports.",
+          "name": "Node endpoints not unique"
+        },
+        "object_out_of_path": {
+          "description": "Object « {{obj_id}} » of track « {{reference.obj_id}} » is not contained in the corresponding path",
+          "name": "Object out of path"
+        },
+        "odd_buffer_stop_location": {
+          "description": "Buffer stop « {{obj_id}} » has a strange position",
+          "name": "Strange buffer stop position"
+        },
+        "out_of_range": {
+          "description": "Object « {{obj_id}} » has the field « {{field}} » with an invalid value. Value must be in the following range [{{expected_range}}].",
+          "name": "Invalid value"
+        },
+        "overlapping_electrifications": {
+          "description": "Electrification « {{obj_id}} » overlaps electrification « {{reference.obj_id}} » on the same track and with the same voltage",
+          "name": "Overlapping of electrification zones"
+        },
+        "overlapping_speed_sections": {
+          "description": "Speed limit « {{obj_id}} » overlaps « {{reference.obj_id}} »",
+          "name": "Overlapping of speed limits"
+        },
+        "overlapping_switches": {
+          "description": "Switches « {{obj_id}} » and « {{reference.obj_id}} » have the same extremeties",
+          "name": "Overlapping of switches"
+        },
+        "unknown_port_name": {
+          "description": "Switch « {{obj_id}} » has the branch « {{port_name}} » which does not exist",
+          "name": "Unknown branch name"
+        },
+        "unused_port": {
+          "description": "Branch « {{port_name}} » of switch type « {{obj_id}} » is nerver used",
+          "name": "Unused branch"
+        }
+      },
+      "infra-locked": "Please note that you will not be able to save any changes.",
+      "infra-readonly": "Please note that you are in read-only mode on this infra",
+      "label": {
+        "title-with-filter_one": "{{count}} issues on {{total}}",
+        "title-with-filter_other": "{{count}} issues on {{total}}",
+        "title-with-filter_zero": "zero issues on {{total}}",
+        "title_one": "{{count}} issue",
+        "title_other": "{{count}} issues",
+        "title_zero": "No issue"
+      },
+      "list": {
+        "filter-type": "Error type",
+        "goto-error": "Select and locate on the map",
+        "total-all_one": "One error or warning found",
+        "total-all_other": "{{count}} errors and warnings found",
+        "total-all_zero": "No errors and warnings found",
+        "total-errors_one": "One error found",
+        "total-errors_other": "{{count}} errors found",
+        "total-errors_zero": "No errors found",
+        "total-warnings_one": "One warning found",
+        "total-warnings_other": "{{count}} warnings found",
+        "total-warnings_zero": "No warnings found"
+      },
+      "modal": {
+        "title": "Infrastructure {{id}} error list"
+      }
+    },
+    "item-statuses": {
+      "edited": "currently edited",
+      "selected": "Selected"
+    },
+    "layers": {
+      "buffer_stops": "Buffer stops",
+      "detectors": "Detectors",
+      "electrifications": "Electrifications",
+      "errors": "Errors",
+      "neutral_sections": "Neutral sections",
+      "operational_points": "Operational points",
+      "platforms": "Platforms",
+      "psl-psl_signs": "Permanent speed limits",
+      "routes": "Routes",
+      "signals": "Signals",
+      "sncf_psl": "Permanent speed limits",
+      "speed_limits": "Speed limits",
+      "speed_sections": "Speed limits",
+      "switches": "Switches",
+      "track_sections": "Track sections"
+    },
+    "layers-modal": {
+      "frozen-layer": "needed for the active tool",
+      "layer-selected-items_one": "One item selected",
+      "layer-selected-items_other": "{{count}} items selected",
+      "noSpeedLimitByTag": "No composition code",
+      "selection-warning_one": "An element has been deselected.",
+      "selection-warning_other": "{{count}} elements have been deselected."
+    },
+    "linear-metadata": {
+      "help": "This component allows you to view and modify a linear layout. You can zoom into the view using the provided buttons or the mouse wheel, and move around using drag'n'drop. To change the size of a segment, simply click on it and the edit form will be displayed below. You can also click on a border of a segment, and while keeping your finger pressed, move the border with the mouse.",
+      "merge-with-left": "Merge with the previous item",
+      "merge-with-right": "Merge with the next item",
+      "split": "Split the item in two"
+    },
+    "nav": {
+      "choose-infra": "Choose an infrastructure",
+      "infra-error-corrector": "Automatic error corrector",
+      "infra-errors-list": "Configure display of issues",
+      "map-layers": "Map settings",
+      "osrd-layers": "Data layers",
+      "speed-limits": "Speed limits",
+      "toggle-layers": "Choose the types of elements to display"
+    },
+    "obj-types": {
+      "BufferStop": "Buffer stop",
+      "Detector": "Detector",
+      "Electrification": "Electrification",
+      "Route": "Route",
+      "Signal": "Signal",
+      "SpeedSection": "Speed limit",
+      "Switch": "Switch",
+      "TrackSection": "Track section"
+    },
+    "tools": {
+      "buffer-stop-edition": {
+        "actions": {
+          "confirm-delete-entity": "Are you sure you want to remove the buffer stop?",
+          "delete-entity": "Delete the buffer stop",
+          "new-entity": "Create a new buffer stop",
+          "reset-entity": "Reset data",
+          "save-entity": "Save the buffer stop"
+        },
+        "label": "Buffer stop tool"
+      },
+      "detector-edition": {
+        "actions": {
+          "confirm-delete-entity": "Are you sure you want to remove the detector?",
+          "delete-entity": "Delete the detector",
+          "new-entity": "Create a new detector",
+          "reset-entity": "Reset data",
+          "save-entity": "Save the detector"
+        },
+        "label": "Detector tool"
+      },
+      "electrification-edition": {
+        "actions": {
+          "confirm-delete-electrification": "Are you sure you want to remove the electrification?",
+          "delete-electrification": "Delete the electrification",
+          "new-electrification": "Create a new electrification",
+          "reset-electrification": "Cancel the current modifications",
+          "save-electrification": "Save the electrification"
+        },
+        "add-new-electrification": "Add new electrification",
+        "electrification-default": "Default electrification",
+        "electrifications": "Electrification",
+        "help": {
+          "add-track": "Link the track section '{{track.id}}' to the electrification {{voltage}}",
+          "init": "Click on a track section to link it to the electrification",
+          "remove-range": "Remove the track section from  the electrification {{voltage}}"
+        },
+        "label": "Electrification tool"
+      },
+      "point-edition": {
+        "default-routes-error": "An error occurred while loading linked routes.",
+        "help": {
+          "start-dragging": "Click on the item to start moving it.",
+          "stop-dragging-no-line": "The element must be placed on a track section.",
+          "stop-dragging-on-line": "Click to confirm the move of the element."
+        },
+        "linked-routes": "Linked routes",
+        "no-linked-route": "No linked routes",
+        "routes-ending-at": "Ending at…",
+        "routes-starting-from": "Starting from…"
+      },
+      "range-edition": {
+        "edit-track-range-end": "Edit arrival point",
+        "edit-track-range-start": "Edit departure point",
+        "empty-linked-track-section": "Click on a track section to link it to the electrification",
+        "linked-track-sections": "Associated track sections",
+        "only-show-n": "Only show the first {{count}} track sections",
+        "show-more-ranges_one": "See an additional track section",
+        "show-more-ranges_other": "See {{count}} additional track sections"
+      },
+      "routes-edition": {
+        "actions": {
+          "delete-route": "Delete the route",
+          "new-route": "Create a new route",
+          "pick-entry_point": "Starting point selection tool",
+          "pick-entry_point-cancel": "Cancel the selection of the starting point",
+          "pick-entry_point-update": "Modify the selected starting point",
+          "pick-exit_point": "Ending point selection tool",
+          "pick-exit_point-cancel": "Undo exit point selection",
+          "pick-exit_point-update": "Modify the selected exit point",
+          "reset-route": "Reset the route",
+          "save-route": "Save the route"
+        },
+        "alternative-routes": "Create a similar route",
+        "confirm-delete-route": "Are you sure to delete this route?",
+        "create-route": "Create a new route",
+        "crossed-detectors_one": "One detector",
+        "crossed-detectors_other": "{{count}} detectors",
+        "crossed-detectors_zero": "No crossed detectors",
+        "crossed-track-ranges_one": "Train block",
+        "crossed-track-ranges_other": "{{count}} track ranges",
+        "crossed-track-ranges_zero": "No block",
+        "delete-route": "Delete the route",
+        "delete-route-success": "The route has been successfully deleted.",
+        "directions": {
+          "START_TO_STOP": "Normal direction",
+          "STOP_TO_START": "Inverse direction"
+        },
+        "edit-route": "Edit an existing route",
+        "end": "Arrival",
+        "endpoint": "Endpoint:",
+        "from": "from",
+        "geometry-error": "An exception occurred during calculation of this route",
+        "help": {
+          "actions-on-edit-route": "You can delete the route, edit it or create a new one.",
+          "select-endpoints": "The route must have a starting and ending point.",
+          "select-route": "Select a route.",
+          "select-waypoint": "Select a detector or a buffer stop.",
+          "validate-route": "You can validate this route, or select another one."
+        },
+        "include-release-detectors": "Rigid transit",
+        "label": "Route tool",
+        "locked-release-detectors": "This property can not be disabled after saving",
+        "no-route-found": "No compatible route found",
+        "no-waypoint-picked-yet": "Click the button to select a detector or a bufferstop on the map",
+        "preview-candidate": "Select",
+        "search-routes": "Search for compatible routes",
+        "search-routes-alt": "Search for alternative routes",
+        "start": "Departure",
+        "start_direction": "Start direction:",
+        "swap-endpoints": "Swap endpoints",
+        "to": "to",
+        "untitled-track": "Untitled track"
+      },
+      "select-items": {
+        "actions": {
+          "confirm-delete-selection": "Are you sure you want to remove the selection?",
+          "delete-selection": "Delete the selection",
+          "edit-info": "Edit the selection",
+          "polygon": "Polygon select",
+          "rectangle": "Rectangle select",
+          "single": "Simple select",
+          "split-track-section": "Split the track section",
+          "unselect-all": "Deselect all"
+        },
+        "errors": {
+          "invalid-url": "Invalid URL",
+          "no-heterogenous-edition": "It's not possible to edit multiple elements of different types at the same time.",
+          "no-multi-edition": "It's not possible yet to edit multiple elements (TODO).",
+          "unable-to-select": "Selection not possible"
+        },
+        "focus": "Focus",
+        "help": {
+          "polygon-selection": "Click to outline a polygon. Double-click to close it, and select all elements inside.",
+          "rectangle-selection": "Double-click to outline a rectangle. All elements in this rectangle will then be selected.",
+          "single-selection": "Click an item to select or deselect it. You can select multiple items by pressing the Control key."
+        },
+        "item": "Item",
+        "label": "Selection tool",
+        "linked-to-line_one": "linked to the track section",
+        "linked-to-line_other": "linked to track sections",
+        "linked-to-n-lines_one": "related with one TS",
+        "linked-to-n-lines_other": "related to {{count}} TS",
+        "linked-to-n-lines_zero": "related with no TS",
+        "no-selection": "No item selected",
+        "of-type": "of type",
+        "selection": "{{count}} item selected",
+        "selection_plural": "{{count}} items selected",
+        "sources": "Sources",
+        "title": "Select",
+        "unselect": "Deselect"
+      },
+      "signal-edition": {
+        "actions": {
+          "confirm-delete-entity": "Are you sure you want to remove the signal?",
+          "delete-entity": "Delete the signal",
+          "new-entity": "Create a new signal",
+          "reset-entity": "Reset data",
+          "save-entity": "Save the signal"
+        },
+        "label": "Signal tool"
+      },
+      "speed-edition": {
+        "actions": {
+          "confirm-delete-speed-section": "Are you sure you want to remove the speed limit?",
+          "delete-speed-section": "Delete the speed limit",
+          "new-speed-section": "Create a new speed limit",
+          "reset-speed-section": "Cancel the current modifications",
+          "save-speed-section": "Save the speed limit"
+        },
+        "add-new-speed-limit": "Add new speed limit",
+        "add-new-tag": "Add a new composition code",
+        "add-sign": "Add a sign from {{signType}} type",
+        "add-track-range": "Click to link to:",
+        "additional-speed-limit": "Additional speed limits",
+        "any-position": "Any",
+        "hovered-sign": "Sign {{signType}}",
+        "incompatible-switch": "This switch position is not compatible with the other switches positions",
+        "label": "Speed section tool",
+        "main-speed-limit": "Default speed limit",
+        "move-range-extremity": "Click to move the end:",
+        "new-tag": "Composition code",
+        "ralen-30-60": "Speed restriction",
+        "remove-track-range": "Click to detatch from:",
+        "search-routes": "Search for compatible routes",
+        "select-route": "Select a route",
+        "select-switches-to-get-route": "Select switches and their position to search for routes",
+        "sign-category": "Sign(s) {{signType}}",
+        "sign-direction": "Direction",
+        "sign-kp": "Kilometric point of the sign",
+        "sign-position": "Position",
+        "sign-remove": "Remove sign",
+        "sign-select": "Select",
+        "sign-side": "Side",
+        "sign-track-id": "Track section id",
+        "sign-type": "Type",
+        "sign-value": "Speed",
+        "signs-section-list": "Section signs list",
+        "speed-limits": "Speed limits",
+        "toggle-psl": "Permanent speed limit",
+        "toggle-psl-help": "Click on a track section first to be able to activate this option"
+      },
+      "switch-edition": {
+        "actions": {
+          "confirm-delete-switch": "Are you sure you want to remove the switch?",
+          "delete-switch": "Delete the switch",
+          "new-switch": "Create a new switch",
+          "pick-track": "Track selection tool on the map",
+          "pick-track-cancel": "Undo track selection",
+          "save-switch": "Save the switch"
+        },
+        "crossing": "Crossing",
+        "double_slip_switch": "Double slip switch",
+        "duplicate-errors": "The track {{track}} is already used by the port {{port}}",
+        "endpoint": "Endpoint:",
+        "help": {
+          "no-move": "Switches cannot be moved, and are automatically placed on their first port.",
+          "select-track": "Select a track on the map"
+        },
+        "label": "Switch tool",
+        "link": "Link",
+        "no-track-picked-yet": "No track selected yet",
+        "point_switch": "Point switch",
+        "single_slip_switch": "Single slip switch",
+        "switch-type": "Switch type",
+        "switch_type_w_port_count_one": "{{type}} ({{count}} port)",
+        "switch_type_w_port_count_other": "{{type}} ({{count}} ports)",
+        "untitled-track": "Untitled track"
+      },
+      "track-edition": {
+        "actions": {
+          "add-at-end": "Add the new points at the end",
+          "add-at-start": "Add the new points at the beginning",
+          "cancel-line": "Remove selected line",
+          "confirm-delete-line": "Are you sure you want to remove the line?",
+          "delete-line": "Delete the line",
+          "mode-add-point": "Add a point",
+          "mode-delete-point": "Delete points",
+          "mode-move-point": "Move points",
+          "reset-line": "Reset data",
+          "save-line": "Save the line",
+          "toggle-anchoring": "Toggle anchoring on/off"
+        },
+        "attached-electrifications": "electrifications",
+        "attached-speed-sections": "Speed limits",
+        "default-electrifications-error": "An error occurred when loading the electrifications linked to this track section.",
+        "default-speed-sections-error": "An exception occurred when loading speed limits related to this track section.",
+        "help": {
+          "add-anchor-point": "Click to add a point at the end of the track section. Click on the track to add an intermediate point.",
+          "add-point": "Click to add a point at the end of the track section.",
+          "delete-point": "Click on a point to remove it from the track section.",
+          "move-point": "Click a point once to start moving it.",
+          "move-point-end": "Click to confirm the move of the point."
+        },
+        "label": "Track tool",
+        "no-linked-electrification": "No electrification data available",
+        "no-linked-speed-section": "No speed limit entered",
+        "only-show-n": "Only show the first {{count}} results",
+        "show-more-ranges_one": "Show one more result",
+        "show-more-ranges_other": "Show {{count}} more results"
+      },
+      "track-split": {
+        "actions": {
+          "save": "Save the split"
+        },
+        "help": {
+          "default": "Click on the split point on the map, or enter its offset from the beginning of the track section in the form",
+          "hover": "Click on the point to be able to move it",
+          "move": "Click to validate the move, or press 'esc' to cancel",
+          "split": "Click on the track section to split it at this location"
+        },
+        "label": "Track tool",
+        "offset": {
+          "description": "Offset of the point in meters to the beginning of the track section",
+          "error": "The offset of the split point to the beginning must be greater than 1 and smaller than {{max}}",
+          "label": "Position"
+        },
+        "title": "Split"
+      }
+    }
+  },
+  "authorization": {
+    "addGrantToUser": "Add grant to user",
+    "grants": {
+      "edit": "write",
+      "full": "full access",
+      "none": "no access",
+      "read": "read"
+    },
+    "permission": "Permission",
+    "permissionDenied": "You don't have permission to perform this action",
+    "searchUser": "Search user by its name",
+    "yourGrant": "Your access : {{grant}}"
+  },
+  "common": {
+    "add": "Add",
+    "and": "and",
+    "cancel": "Cancel",
+    "close": "Close",
+    "collapse": "Collapse",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "details": "Details",
+    "duplicate": "Duplicate",
+    "edit": "Edit",
+    "error": "An error has occurred",
+    "expand": "Expand",
+    "failure": {
+      "save": {
+        "text": "Failed to publish your modifications",
+        "title": "Failed to save modifications"
+      }
+    },
+    "help": "Help",
+    "help-display": "Show help",
+    "leaveEditionMode": "You are about to exit edit mode, any unsaved changes will be lost.",
+    "map-actions": {
+      "help-legend": "Show legend",
+      "reset-north": "Reset camera"
+    },
+    "navigation": {
+      "goBack": "Back to previous page",
+      "goHome": "Go to home page"
+    },
+    "next": "Next",
+    "no": "No",
+    "open": "Open",
+    "previous": "Previous",
+    "reset": "Reset",
+    "save": "Save",
+    "saveEdits": "Save edits",
+    "search": "Search",
+    "selected": "already selected",
+    "success": {
+      "save": {
+        "text": "Your modifications have been published",
+        "title": "Modifications saved"
+      }
+    },
+    "toggleInfraErrors": "Toggler infra errors layer",
+    "units": {
+      "day": "d",
+      "hour": "h",
+      "km": "km",
+      "minute": "min"
+    },
+    "validate": "Save",
+    "yes": "Yes",
+    "zoom-in": "Zoom in",
+    "zoom-out": "Zoom out",
+    "zoom-reset": "Reset zoom"
+  },
+  "editor": "Infrastructure editor",
+  "infraManagement": {
+    "actions": {
+      "cancel": "Cancel",
+      "check": "Validate",
+      "copy": "Clone",
+      "delete": "Delete",
+      "export": "Export to RailJSON",
+      "lock": "Lock",
+      "rename": "Rename",
+      "unlock": "Unlock",
+      "waiting": "Please wait"
+    },
+    "addInfra": "Create an infrastructure",
+    "addInfraJSON": "Create an infrastructure from a RailJSON file",
+    "addInfraJSONFile": "Add a RailJSON file",
+    "addInfraJSONFileRemove": "Cancel RailJSON import",
+    "createInfra": "Create",
+    "deleteConfirm": "Do you wish to delete the infrastructure?",
+    "errorMessages": {
+      "noEmptyName": "Please fill out a name",
+      "unableToRetrieveInfraList": "Impossible to load infrastructure list"
+    },
+    "goToEditionMode": "Edit",
+    "goToStandardMode": "Back to the selection",
+    "infraChoice": "Infrastructures",
+    "infraDeleted": "The {{name}} infrastructure has been deleted.",
+    "infraManagement": "Infrastructures management",
+    "infraName": "Infrastructure name",
+    "infrasFound_one": "{{count}} infrastructure found",
+    "infrasFound_other": "{{count}} infrastructures found",
+    "infrasFound_zero": "No infrastructure found",
+    "locked": "Locked",
+    "no": "No",
+    "noInfraSelected": "No selected infrastructure",
+    "yes": "Yes"
+  },
+  "infrastructure": "Infrastructure",
+  "interval-editor": {
+    "add": "Add",
+    "begin": "Start",
+    "delete": "Delete",
+    "end": "End",
+    "merge": "Merge with next segment",
+    "split": "Split",
+    "translate": "Shift",
+    "value": "value"
+  },
+  "jsonUpload": {
+    "badJSON": "Invalid content. Only RailJSON files are supported (usually .json or .railjson extensions)",
+    "emptyFile": "The file is empty",
+    "uploadError": "Error occurred while upload the file"
+  },
+  "map": "Map viewer",
+  "mapKey": {
+    "alternatingCurrent": "AC",
+    "directCurrent": "DC",
+    "electrifications": "Electrification",
+    "keyTitle": "Legend",
+    "lower_pantograph": "\"Baissez-panto\" zone",
+    "neutral_sections": "Neutral sections",
+    "speedlimit": "Speed",
+    "switch_off": "Switch-off power"
+  },
+  "mapSearch": {
+    "all": "All",
+    "aspects": "States",
+    "line": "Line",
+    "line-code": "Line code",
+    "main-operational-points-only": "Main only",
+    "name": "Name",
+    "no-aspect-selected": "No state selected",
+    "operational-point": "Operational point",
+    "placeholder-ch-code": "CH",
+    "placeholder-line": "Line name or number",
+    "placeholder-name": "Name, label, CI code",
+    "placeholder-signal": "Signal name",
+    "results-count_one": "1 result",
+    "results-count_other": "{{ count }} results",
+    "results-count_zero": "No results",
+    "signal": "Signal",
+    "signal-settings": {
+      "Nf": "Not crossable",
+      "distant": "Far",
+      "is_430": "430"
+    },
+    "signal-system": "Signalling system",
+    "too-many-results": "There are more than 100 results, please refine your search.",
+    "type": "Type",
+    "unable-to-search-signal": "Signal search impossible"
+  },
+  "mapSettings": {
+    "layers": {
+      "buffer_stops": "Buffer stops",
+      "detectors": "Detectors",
+      "electrifications": "Electrification",
+      "neutral_sections": "Neutral sections",
+      "operational_points": "Operational points",
+      "platforms": "Platforms",
+      "routes": "Train blocks",
+      "showIGNBDORTHO": "BD Ortho photo ©IGN",
+      "showIGNCadastre": "Cadastre ©IGN",
+      "showIGNSCAN25": "SCAN PLAN/25/100 ©IGN",
+      "showOSM": "Map background OSM",
+      "showOSM3dBuildings": "3D buildings",
+      "showOSMtracksections": "OSM tracks",
+      "signals": "Signals",
+      "smoothTravel": "Smooth travel",
+      "sncf_psl": "Permanent speed limits",
+      "speed_limits": "Speed limits",
+      "switches": "Switch",
+      "tvds": "Track circuits"
+    },
+    "mapstyles": {
+      "darkmode": "Dark",
+      "minimal": "Minimal",
+      "normal": "Normal"
+    },
+    "noSpeedLimitByTag": "No composition code",
+    "terrain3DExaggeration": "3D relief scale",
+    "zone": "Zone"
+  },
+  "nav-bar": {
+    "about": "About",
+    "disconnect": "Sign out",
+    "help": "Help",
+    "impersonation": "Impersonate user",
+    "informations": {
+      "application": "Application",
+      "collaborations": "Collaborations",
+      "dataSources": "Data sources",
+      "librairies": "Libraries & licenses",
+      "version": "Version"
+    },
+    "languages": "Languages",
+    "safeWord": "Safety keyword",
+    "safeWordHelp": "The \"security keyword\" allows you to transparently filter the list of projects with the word you enter, used as a label. Choose a complicated word so that no-one uses it inadvertently. Add it as a label to a project; it will be automatically added when the project is created if the word is entered here.",
+    "userSettings": "User settings",
+    "yourSafeWord": "Type in your word"
+  },
+  "operationalStudies": "Operational studies",
+  "rollingStock": {
+    "add": "Add",
+    "addNewRollingStock": "New rolling stock",
+    "addNewTractionMode": "Add a new traction mode",
+    "basePowerClass": "Power class",
+    "cancelUpdateRollingStock": "Do you really want to cancel your changes?",
+    "categoriesOptions": {
+      "COMMUTER_TRAIN": "Commuter Train",
+      "FAST_FREIGHT_TRAIN": "Fast Freight Train",
+      "FREIGHT_TRAIN": "Freight Train",
+      "HIGH_SPEED_TRAIN": "High-Speed Train",
+      "INTERCITY_TRAIN": "Intercity Train",
+      "NIGHT_TRAIN": "Night Train",
+      "REGIONAL_TRAIN": "Regional Train",
+      "TOURISTIC_TRAIN": "Touristic Train",
+      "TRAM_TRAIN": "Tram-Train",
+      "WORK_TRAIN": "Work Train",
+      "choose": "Choose a category",
+      "noCategory": "No category"
+    },
+    "chooseRollingStock": "Select a rolling stock to display informations",
+    "comfort": "Comfort",
+    "comfortAcceleration": "Comfort acceleration",
+    "comfortLevels": "Comfort levels",
+    "comfortTypes": {
+      "AIR_CONDITIONING": "Air conditioning",
+      "HEATING": "Heating",
+      "STANDARD": "Standard"
+    },
+    "confirmAddRollingStock": "Are you sure you want to add this rolling stock ?",
+    "confirmUpdateRollingStock": "Please confirm your changes",
+    "constGamma": "Timetable deceleration",
+    "curves": {
+      "all": "All curves",
+      "default": "Default curve"
+    },
+    "delete": {
+      "comfort": "Are you sure you want to delete this comfort level ? All the curves associated to it will be lost.",
+      "electrical_profile_level": "Are you sure you want to delete this electrical profile ? All the curves associated to it will be lost.",
+      "power_restriction_code": "Are you sure you want to delete the curve associated to this power restriction ?",
+      "tractionMode": "Are you sure you want to delete this traction mode ? All the curves associated to it will be lost."
+    },
+    "deleteRollingStock": "Would you like to delete this rolling stock?",
+    "effort": "Effort (kN)",
+    "electric": "Electric",
+    "electricalPowerStartupTime": "Power recovery time",
+    "electricalProfiles": "Electrical Profiles",
+    "errorMessages": {
+      "invalidConversion": "Invalid conversion",
+      "minMaxRangeError": "The value must be between {{min}} and {{max}}",
+      "minRangeError": "The value must be greater than {{min}}",
+      "missingConversion": "This conversion doesn't exist in the schema. Value hasn't been changed.",
+      "missingInformation": "Missing informations",
+      "ressourcesNotFound": "Resources not found",
+      "rollingStockUsed": "This rolling stock is used in the following scenarios:",
+      "unableToRetrieveRollingStock": "Cannot fetch rolling stock",
+      "unableToRetrieveRollingStockMessage": "An error has occurred"
+    },
+    "export": "Export",
+    "exportRollingStock": "Export rolling stock",
+    "importRollingStock": "Import rolling stock",
+    "inertiaCoefficient": "Factor of inertia",
+    "length": "Length",
+    "listDisabled": "Please quit edit mode to access the list",
+    "loadingGauge": "Gauge",
+    "locked": "Locked",
+    "mass": "Mass",
+    "maxSpeed": "Maximum speed",
+    "messages": {
+      "failure": "Operation failed",
+      "invalidEffortCurves": "Invalid curves: {{invalidEffortCurves}}. Each curve must have at least 2 combinations of speed / effort values (with no duplication of speed values). Combinations with at least one empty field are ignored. A speed can't exceed 600km/h and an effort can't exceed 1000kN.",
+      "invalidForm": "Incomplete form",
+      "missingEffortCurves": "Please enter a speed-effort curve",
+      "missingInformationAutomaticallyFilled_one": "The following field was initialized by default: {{invalidFields}}.",
+      "missingInformationAutomaticallyFilled_other": "The following fields were initialized by default: {{invalidFields}}.",
+      "missingName": "Please fill out a name",
+      "missingPrimaryCategory": "Please fill out a primary category",
+      "rollingStockAdded": "Rolling stock added",
+      "rollingStockDeleted": "Rolling stock deleted",
+      "rollingStockDuplicateName": "Rolling stock of the same name already exists.",
+      "rollingStockNotAdded": "Rolling stock not added",
+      "rollingStockNotDeleted": "Rolling stock not deleted",
+      "rollingStockNotUpdated": "Rolling stock not updated",
+      "rollingStockUpdated": "Rolling stock updated",
+      "success": "Group"
+    },
+    "metadata": {
+      "detail": "Detail",
+      "family": "Family",
+      "grouping": "Clustering",
+      "name": "Name",
+      "number": "Number",
+      "reference": "Reference",
+      "series": "Series",
+      "subseries": "Subseries",
+      "type": "Type",
+      "unit": "Unit"
+    },
+    "missingPowerClass_one": "Missing power class",
+    "missingPowerClass_other": "Missing power classes",
+    "notLocked": "Not locked",
+    "otherCategories": "Other categories",
+    "powerRestrictions": "Power restriction & power class",
+    "powerRestrictionsInfos": "Power restriction",
+    "primaryCategory": "Primary category",
+    "project": "Project {{projectName}}:",
+    "raisePantographTime": "Pantograph lift time",
+    "resultFound_one": "1 result found",
+    "resultFound_other": "{{count}} results found",
+    "resultFound_zero": "No results found",
+    "rollingResistance": "Resistance to movement",
+    "rollingResistanceA": "Solid friction (a)",
+    "rollingResistanceB": "Viscosity friction (b)",
+    "rollingResistanceC": "Aerodynamic drag (c)",
+    "rollingResistanceFormula": "R(v) = a + bv + cv²",
+    "rollingstockChoice": "Choose a rolling stock",
+    "selectRollingStock": "Select",
+    "speed": "Velocity (km/h)",
+    "startupAcceleration": "Startup acceleration",
+    "startupTime": "Startup duration",
+    "supportedSignalingSystems": "Supported signaling systems",
+    "tabs": {
+      "rollingStockCurves": "Speed-effort curves",
+      "rollingStockDetails": "General specifications"
+    },
+    "thermal": "Combustion engine",
+    "tractionModes": "Traction modes",
+    "unspecified": "Unspecified",
+    "waitingLoader": "Please wait, rolling stock database loading…"
+  },
+  "rollingStockEditor": "Rolling stock editor",
+  "stdcm": "Short term path request",
+  "subCategory": {
+    "errorMessages": {
+      "unableToRetrieveSubCategory": "Cannot fetch sub-categories",
+      "unableToRetrieveSubCategoryMessage": "An error has occurred"
+    }
+  },
+  "timeStopTable": {
+    "arrivalTime": "requested arrival time",
+    "calculatedArrivalTime": "calculated arrival time",
+    "calculatedDepartureTime": "calculated depart. time",
+    "calculatedDepartureTimeFull": "calculated departure time",
+    "ch": "CH",
+    "dayCounter": "D+{{count}}",
+    "departureTime": "requested depart. time",
+    "departureTimeFull": "requested departure time",
+    "diffMargins": "margins diff. (s)",
+    "diffMarginsFull": "margins difference (s)",
+    "name": "CI",
+    "noPathLoaded": "No path loaded",
+    "realMargin": "real margin (s)",
+    "receptionOnClosedSignal": "r. closed signal",
+    "receptionOnClosedSignalFull": "reception on closed signal",
+    "shortSlipDistance": "short slip distance",
+    "stopTime": "stopping time (s)",
+    "theoreticalMargin": "theoretical margin",
+    "theoreticalMarginPlaceholder": "% or min/100km",
+    "theoreticalMarginSeconds": "theoretical margin (s)",
+    "trackName": "track",
+    "waypoint": "Waypoint {{id}}"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "ApplicableDirections": {
+    "description": "Wird verwendet, um die Anwendungsrichtung bestimmter Objekte zu kennen",
+    "title": "Verwendbare Ausrichtung"
+  },
+  "ApplicableDirectionsTrackRange": {
+    "description": "Ein Gleisbereich mit anwendbaren Richtungen ist ein Gleisbereich mit zugehörigen Richtungen.",
+    "properties": {
+      "applicable_directions": {
+        "description": "Richtung, in der das entsprechende Objekt angewendet wird"
+      },
+      "begin": {
+        "description": "Anfangsversatz (Kilometersprung?) in Metern des entsprechenden Gleisabschnitts",
+        "title": "Anfang"
+      },
+      "end": {
+        "title": "Ende"
+      }
+    }
+  }
+}

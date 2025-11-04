@@ -1,0 +1,22 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "source": {
+    "include": ["./src"],
+    "includePattern": "\\.(jsx|js|ts|tsx)$"
+  },
+  "plugins": ["better-docs/component", "better-docs/typescript"],
+  "opts": {
+    "encoding": "utf8",
+    "destination": "docs/",
+    "recurse": true,
+    "verbose": true,
+    "template": "./node_modules/better-docs"
+  },
+  "templates": {
+    "better-docs": {
+      "name": "SUPER FRONT Documentation"
+    }
+  }
+}

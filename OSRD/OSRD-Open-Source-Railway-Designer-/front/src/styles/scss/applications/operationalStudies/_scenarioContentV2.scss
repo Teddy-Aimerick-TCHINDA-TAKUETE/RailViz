@@ -1,0 +1,72 @@
+.scenario-content-v2 {
+  display: flex;
+  height: calc(100vh - var(--header-height));
+  .right-column,
+  .left-column {
+    width: 488px;
+    min-width: 488px;
+  }
+
+  @media screen and (max-width: 2400px) {
+    .right-column,
+    .left-column {
+      width: 424px;
+      min-width: 424px;
+    }
+  }
+  @media screen and (max-width: 1920px) {
+    .right-column,
+    .left-column {
+      width: 392px;
+      min-width: 392px;
+    }
+  }
+  @media screen and (max-width: 1249px) {
+    .right-column,
+    .left-column {
+      width: 360px;
+      min-width: 360px;
+    }
+  }
+
+  .right-column,
+  .left-column,
+  .center-column {
+    padding: var(--board-vertical-gap) 12px;
+  }
+
+  .left-column {
+    padding-right: 4px;
+
+    .board-wrapper {
+      height: 100%;
+    }
+  }
+
+  .center-column {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+  }
+
+  .right-column {
+    padding-left: 4px;
+
+    .board-wrapper {
+      height: 100%;
+
+      .conflicts-wrapper {
+        display: block;
+        position: relative;
+        width: 100%;
+        transition: 0.2s;
+        max-height: 90vh;
+        overflow-y: auto;
+
+        .scenario-loader {
+          top: 10vw;
+        }
+      }
+    }
+  }
+}

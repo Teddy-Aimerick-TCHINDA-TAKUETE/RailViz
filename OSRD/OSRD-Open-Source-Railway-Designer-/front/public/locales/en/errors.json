@@ -1,0 +1,307 @@
+{
+  "401": "Unauthenticated user",
+  "403": "Access denied",
+  "404": "Resource not found",
+  "500": "Server errors",
+  "502": "Server errors",
+  "503": "Server errors",
+  "504": "The server did not respond.",
+  "core": {
+    "assert_error": "Assert error at {{file_location}}: {{assert_message}}",
+    "missing_last_stdcm_stop": "STDCM requests that don't end with a stop aren't currently supported"
+  },
+  "default": "An error has occurred.",
+  "editoast": {
+    "DatabaseAccessError": "Database access fatal error",
+    "app_health": {
+      "Core": "Core is in error",
+      "Database": "Database is in error",
+      "Openfga": "OpenFGA is in error",
+      "Timeout": "Service has not responded in time",
+      "Valkey": "Valkey is in error"
+    },
+    "attached": {
+      "TrackNotFound": "Track {{track_id}} not found"
+    },
+    "authz": {
+      "AuthError": "Authentication/authorization internal error, try again or contact support",
+      "Authorizer": "Internal error",
+      "Authz": "Authentication/authorization internal error, try again or contact support",
+      "DbError": "Database access fatal error",
+      "Driver": "Authentication/authorization internal error, try again or contact support",
+      "Forbidden": "Access denied",
+      "ForbiddenImpersonation": "Impersonation denied",
+      "GrantsApiMisuse": "Improper API usage",
+      "ImpersonatedUserNotFound": "Unknown impersonated user",
+      "NoSuchUser": "Unknown user",
+      "Unauthorized": "Unauthenticated user",
+      "UnknownResource": "Unkown resource",
+      "UnknownResourceType": "Unkown resource type",
+      "UnknownSubject": "Unkown subject"
+    },
+    "auto_fixes": {
+      "ConflictingFixesOnSameObject": "Conflicting fixes for the same object on the same fix-iteration",
+      "FixTrialFailure": "Failed trying to apply fixes",
+      "MaximumIterationReached": "Reached maximum number of iterations to fix infrastructure without providing every possible fixes",
+      "MissingErrorObject": "Failed to find the error's object"
+    },
+    "cache_operation": {
+      "DuplicateIdsProvided": "{{obj_type}} {{obj_id}} : a duplicate already exists",
+      "ObjectNotFound": "{{obj_type}} {{obj_id}} could not be found everywhere in the infrastructure cache"
+    },
+    "core": {
+      "pathfinding": {
+        "ZeroLengthPath": "Path length cannot be null."
+      }
+    },
+    "coreclient": {
+      "BrokenPipe": "Core connection broken pipe. Should retry.",
+      "CannotExtractResponseBody": "Cannot extract Core response body: {{msg}}",
+      "CoreResponseFormatError": "Cannot parse Core response: {{msg}}",
+      "MqClientError": "Core: MQ client error",
+      "UnparsableErrorOutput": "Core returned an error in an unknown format"
+    },
+    "delimited_area": {
+      "InvalidLocations": "Some locations are invalid"
+    },
+    "document": {
+      "Database": "Internal error (database)",
+      "NotFound": "Document '{{document_key}}' not found"
+    },
+    "electrical_profiles": {
+      "Database": "Internal error (database)",
+      "NotFound": "Electrical Profile Set '{{electrical_profile_set_id}}', could not be found"
+    },
+    "fonts": {
+      "FileNotFound": "File for the requested font not found"
+    },
+    "geometry": {
+      "UnexpectedGeometry": "Expected geometry {{expected}} but got {{actual}}"
+    },
+    "infra": {
+      "Database": "Internal error",
+      "NotFound": "Infrastructure '{{infra_id}}' could not be found",
+      "edition": {
+        "InfraIsLocked": "Infrastructure is locked",
+        "SplitTrackSectionBadOffset": "Distance to split track section '{{tracksection_id}}' in infrastructure '{{infra_id}}' is invalid. It must be between 0 and {{tracksection_length}} meters."
+      },
+      "errors": {
+        "WrongErrorTypeProvided": "Wrong Error type provided"
+      },
+      "lines": {
+        "LineNotFound": "No line with code {{line_code}} found"
+      },
+      "objects": {
+        "DuplicateIdsProvided": "Duplicate object ids provided",
+        "ObjectIdNotFound": "Object '{{object_id}}' not found"
+      },
+      "pathfinding": {
+        "EndingTrackLocationNotFound": "Ending track location was not found",
+        "InvalidNumberOfPaths": "The pathfinding cannot return 5 paths (expected: [1-5])",
+        "StartingTrackLocationNotFound": "Starting track location was not found"
+      }
+    },
+    "infra_cache": {
+      "ObjectNotFound": "{{obj_type}} '{{obj_id}}', could not be found everywhere in the infrastructure cache"
+    },
+    "infra_state": {
+      "FetchError": "Error while fetching the infrastructure loading status"
+    },
+    "layers": {
+      "LayerNotFound": "Layer {{layer_name}} not found.",
+      "ViewNotFound": "View {{view_name}} not found."
+    },
+    "macro_node": {
+      "Database": "Internal error",
+      "NotFound": "Node {{node_id}} not found."
+    },
+    "macro_note": {
+      "Database": "Internal error (database)",
+      "NotFound": "Note '{{note_id}}' not found.",
+      "WrongScenario": "Note '{note_id}' does not belong to scenario '{scenario_id}'"
+    },
+    "model": {
+      "ModelError": "Internal error (database query)"
+    },
+    "operation": {
+      "EmptyId": "Empty string id is forbidden",
+      "InvalidPatch": "A Json Patch error occurred",
+      "ModifyId": "Update operation try to modify object id, which is forbidden",
+      "ObjectNotFound": "Object '{{obj_id}}', could not be found in the infrastructure '{{infra_id}}'"
+    },
+    "operationalPointProjection": {
+      "InvalidNumberOfDistances": "Excpected {{expected}} distances, but got {{found}}",
+      "InvalidNumberOfRefs": "Expected at least two operational points references"
+    },
+    "paced_train": {
+      "BatchNotFound": "'{{count}}' paced train(s) could not be found",
+      "Database": "Internal error (database)",
+      "ExceptionNotFound": "Exception '{{exception_key}}' could not be found",
+      "InfraNotFound": "Infrastructure '{{infra_id}}' could not be found",
+      "NotFound": "Paced train '{{paced_train_id}}' could not be found",
+      "OperationalPointNotFound": "Operational point '{{operational_point_id}}' could not be found",
+      "PathfindingFailed": "Pathfinding failed for paced train '{{paced_train_id}}'",
+      "RollingStockNotFound": "Rolling Stock '{{rolling_stock_name}}' could not be found",
+      "SimulationFailed": "Simulation failed for paced train '{{paced_train_id}}'"
+    },
+    "pathfinding": {
+      "Database": "Internal error (database)",
+      "ElectricalProfilesOverlap": "Electrical Profile overlaps with others",
+      "ElectrificationOverlap": "Electrification '{{electrification_id}}' overlaps with other electrifications",
+      "InfraNotFound": "Infrastructure '{{infra_id}}' does not exist",
+      "NotFound": "Pathfinding {{pathfinding_id}} does not exist",
+      "OperationalPointsNotFound": "Operational points do not exist: {{operational_points}}",
+      "RollingStockNotFound": "Rolling stock with id '{{rolling_stock_id}}' does not exist",
+      "TrackSectionsNotFound": "Track sections do not exist: {{track_sections}}"
+    },
+    "postgres": {
+      "Host": "Invalid host '{{hostname}}'",
+      "Password": "Invalid password",
+      "Port": "Invalid port '{{port}}'",
+      "Username": "Invalid username"
+    },
+    "project": {
+      "Database": "Internal error",
+      "ImageError": "The provided image is not valid",
+      "ImageNotFound": "Image document '{{document_key}}' not found",
+      "NotFound": "Project '{{project_id}}', could not be found"
+    },
+    "railjson": {
+      "UnsupportedVersion": "Unsupported railjson version"
+    },
+    "rollingstocks": {
+      "BasePowerClassEmpty": "Base power class is an empty string",
+      "CannotCreateCompoundImage": "Impossible to copy the separated image on the compound image",
+      "CannotReadImage": "Impossible to read the separated image",
+      "Database": "Internal error (database)",
+      "IsLocked": "Rolling stock '{{rolling_stock_id}}' is locked",
+      "IsUsed": "Rolling stock '{{rolling_stock_id}}' is used",
+      "KeyNotFound": "Rolling stock '{{rolling_stock_key.key}}' could not be found",
+      "LiveryMultipartError": "Invalid multipart request while uploading livery",
+      "NameAlreadyUsed": "Name '{{name}}' already used"
+    },
+    "round_trips": {
+      "Database": "Internal error (database)",
+      "DuplicateTrainIds": "The payload contains duplicate train IDs which is not allowed",
+      "TimetableNotFound": "Timetable '{{timetable_id}}' not found"
+    },
+    "scenario": {
+      "Database": "Internal error (database)",
+      "InfraNotFound": "Infrastructure '{{infra_id}}' not found",
+      "NotFound": "Scenario not found",
+      "TimetableNotFound": "Timetable '{{timetable_id}}' not found"
+    },
+    "search": {
+      "ArgMissing": "Expected argument of type {{expected}} at position {{arg_pos}} is missing",
+      "ArgTypeMismatch": "Expected argument of type {{expected}} at position {{arg_pos}}, but got {{actual}}",
+      "EmptyArray": "Empty arrays are invalid syntax",
+      "IntegerConversion": "Could not convert to i64",
+      "InvalidColumnName": "Invalid column name",
+      "InvalidFunctionIdentifier": "Function identifier must be a string",
+      "InvalidSyntax": "Invalid syntax",
+      "ObjectType": "Object type is invalid",
+      "QueryAst": "Query Boolean type is expected",
+      "RuntimeTypeCheckFail": "Expected type {{expected}}, got value '{{value}}' of type {{actual}} instead",
+      "SearchEngineError": "Internal search engine error",
+      "UndefinedFunction": "Undefined function",
+      "UndefinedOverload": "No suitable overload",
+      "UnexpectedArg": "Unexpected argument of type found",
+      "UnexpectedColumn": "Unexpected column",
+      "UnexpectedErsatz": "Expected value of type {{expected}}, but got ersatz '{{value}}'",
+      "VariadicArgTypeMismatch": "Expected variadic argument of type {{expected}}, but got {{actual}}"
+    },
+    "single_simulation": {
+      "ElectricalProfileSetNotFound": "Electrical Profile Set '{{electrical_profile_set_id}}' could not be found",
+      "PathNotFound": "Path '{{path_id}}' could not be found",
+      "RollingStockNotFound": "Rolling Stock '{{rolling_stock_id}}' could not be found",
+      "WrongCoreResponseFormat": "Received wrong response format from core"
+    },
+    "sprites": {
+      "FileNotFound": "File not found",
+      "UnknownSignalingSystem": "Unknown signaling system"
+    },
+    "stdcm": {
+      "Database": "Internal error (database)",
+      "InfraNotFound": "Infrastructure '{{infra_id}}' does not exist",
+      "InvalidConsistLength": "Invalid consist length {{provided_consist_length}}: it should be greater than '{{expected_min}}'",
+      "InvalidConsistMass": "Invalid consist mass {{provided_consist_mass}}: it should be greater than '{{expected_min}}'",
+      "InvalidPathItems": "Invalid waypoint(s) {{items}}",
+      "RollingStockNotFound": "Rolling stock '{{rolling_stock_id}}' does not exist",
+      "TimetableNotFound": "Timetable '{{timetable_id}}' does not exist",
+      "TowedRollingStockNotFound": "Towed rolling stock {towed_rolling_stock_id} does not exist",
+      "TrainSimulationFail": "Train simulation failed"
+    },
+    "stdcm_search_env": {
+      "Database": "Internal error (database)",
+      "NotFound": "Stdcm search environment '{{env_id}}' could not be found"
+    },
+    "study": {
+      "Database": "Internal error (database)",
+      "NotFound": "Study '{{study_id}}' could not be found",
+      "StartDateAfterEndDate": "The study start date must be before the end date"
+    },
+    "sub_categories": {
+      "CodeAlreadyUsed": "The code of the sub-category '{{code}}' is already used",
+      "Database": "Internal error (database)",
+      "NotFound": "Sub-category '{{code}}' could not be found"
+    },
+    "temporary_speed_limit": {
+      "Database": "Internal error (database)",
+      "NameAlreadyUsed": "A group of temporary speed limits with '{{name}}' already exists"
+    },
+    "timetable": {
+      "Database": "Internal error (database)",
+      "InfraNotFound": "Infrastructure '{{infra_id}}' does not exist",
+      "InfraNotLoaded": "Infrastructure '{{infra_id}}' is not loaded",
+      "NotFound": "Timetable '{{timetable_id}}' could not be found",
+      "ParseError": "Failed to parse train_id: '{{train_id}}'",
+      "similar_trains": {
+        "Database": "Internal error (database)",
+        "InfraNotFound": "Infrastructure '{{infra_id}}' does not exist",
+        "InvalidPath": "Invalid path in schedule",
+        "RollingStockNotFound": "Rolling stock '{{rolling_stock_name}}' does not exist",
+        "SpeedLimitNotFound": "Speed limit tag '{{speed_limit_tag}}' does not exist",
+        "TimetableNotFound": "Timetable '{{timetable_id}}' could not be found"
+      }
+    },
+    "towedrollingstocks": {
+      "Database": "Internal error",
+      "IdNotFound": "Towed rolling stock '{{towed_rolling_stock_id}}' could not be found",
+      "IsLocked": "Towed rolling stock '{{towed_rolling_stock_id}}' is locked"
+    },
+    "train_schedule": {
+      "BatchShouldHaveSameTimetable": "Batch should have the same timetable",
+      "BatchTrainScheduleNotFound": "Some Train Schedules could not be found",
+      "Database": "Internal error (database)",
+      "InfraNotFound": "Infrastructure '{{infra_id}}' could not be found",
+      "NoSimulation": "No simulation given",
+      "NoTrainSchedules": "No train schedules given",
+      "NotFound": "Train Schedule '{{train_schedule_id}}' could not be found",
+      "OperationalPointNotFound": "Operational Point '{{operational_point_id}}' could not be found",
+      "PathNotFound": "Path '{{path_id}}' could not be found",
+      "PathfindingFailed": "Pathfinding failed for train schedule '{{train_schedule_id}}'",
+      "RollingStockNotFound": "Rolling Stock '{{rolling_stock_name}}' could not be found",
+      "SimulationFailed": "Simulation failed for train schedule '{{train_schedule_id}}'",
+      "TimetableNotFound": "Timetable '{{timetable_id}}' could not be found",
+      "UnsimulatedTrainSchedule": "Train Schedule '{{train_schedule_id}}' is not simulated"
+    },
+    "url": {
+      "InvalidUrl": "Invalid url '{{url}}'"
+    },
+    "valkey": {
+      "Url": "Invalid url '{{url}}'"
+    },
+    "work_schedule": {
+      "Database": "Internal error (database)",
+      "NameAlreadyUsed": "A group of work schedules with '{{name}}' already exists",
+      "WorkScheduleGroupNotFound": "No such work schedule group with id '{{id}}'"
+    },
+    "worker_load": {
+      "Database": "Internal error (database)",
+      "FetchStatusError": "Internal error (osrdyne)",
+      "InfraNotFound": "Infrastructure '{{infra_id}}' could not be found",
+      "TimetableNotFound": "Timetable '{{timetable_id}}' could not be found"
+    }
+  },
+  "pageNotFound": "The page you are looking for does not exist."
+}

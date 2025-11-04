@@ -1,0 +1,211 @@
+.stdcm-card {
+  border-radius: 8px;
+  box-shadow:
+    0px 1px 0px rgba(255, 255, 255, 1) inset,
+    0px 4px 7px -3px rgba(24, 68, 239, 0.19),
+    0px 1px 3px rgba(49, 46, 43, 0.2);
+  background-color: rgba(255, 255, 255, 1);
+  height: fit-content;
+  position: relative;
+
+  .stdcm-default-card-icon {
+    color: #1844ef;
+  }
+
+  .stdcm-via-icons {
+    button {
+      display: none;
+    }
+    .icon-bundle {
+      img {
+        width: 45px;
+      }
+    }
+    .icon-index {
+      position: absolute;
+      width: 44.992px;
+      text-align: center;
+      right: 16.32px;
+      top: 5.12px;
+      font-size: 0.7rem;
+    }
+  }
+
+  &.has-tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 12px;
+    border-top: 8px solid transparent;
+    border-top-color: rgba(255, 255, 255, 1);
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    filter: drop-shadow(0px 2px 1px #d0d7e7);
+  }
+
+  .stdcm-card__header {
+    border-radius: 8px 8px 0px 0px;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.75) inset;
+    background-color: rgba(235, 235, 234, 1);
+    color: rgba(0, 0, 0, 1);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0px;
+    text-align: left;
+    line-height: 24px;
+    padding: 7px 16px 0px 16px;
+    height: 40px;
+    span {
+      padding-bottom: 6px;
+    }
+  }
+
+  .stdcm-card__body {
+    padding: 14px 24px 24px;
+
+    &.add-linked-train {
+      width: 450px;
+      padding: 12px;
+    }
+
+    &.linked-train {
+      width: 450px;
+    }
+
+    .stdcm-simulation-params {
+      height: 115px;
+      padding-left: 16px;
+    }
+
+    .location-line {
+      display: flex;
+      gap: 16px;
+      .ci-input {
+        width: 312px;
+      }
+
+      .ch-input {
+        width: 74px;
+      }
+    }
+
+    // Fix osrd-ui styles
+    label {
+      margin-bottom: 0;
+    }
+
+    // cards styles
+    &.consist {
+      padding-left: 24px;
+
+      .error,
+      .info {
+        --field-wrapper-padding-bottom: 5px;
+        .ui-status-message-wrapper-tooltip.tooltip-left {
+          left: -4px;
+        }
+      }
+
+      .towed-rolling-stock,
+      .loading-gauge {
+        margin-top: 14px;
+      }
+
+      .stdcm-consist__properties {
+        display: grid;
+        grid-template-columns: 113px 121px;
+        justify-content: space-between;
+        margin-top: 14px;
+
+        .osrd-config-item {
+          padding-right: 3px;
+        }
+        .weight {
+          width: 119px;
+        }
+
+        .length {
+          width: 127px;
+        }
+
+        * > .ui-label-wrapper > label {
+          margin-bottom: 0;
+        }
+      }
+
+      .speed-limit-by-tag-selector {
+        padding-right: 3px;
+      }
+    }
+
+    &.extremity {
+      padding-bottom: 24px;
+
+      .arrival-type-select {
+        margin-block: 40px 14px;
+      }
+
+      .schedule {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+
+        .ui-date-picker {
+          width: 144px;
+        }
+
+        .ui-time-picker,
+        .ui-tolerance-picker {
+          width: 113px;
+        }
+      }
+    }
+
+    &.via {
+      padding-bottom: 32px;
+
+      .location-line {
+        margin-bottom: 14px;
+      }
+
+      .stop-time {
+        margin-top: 22px;
+      }
+    }
+
+    &.add-via {
+      padding: 11px 24px 13px 12px;
+    }
+
+    .stdcm-default-card-button {
+      color: var(--primary60);
+      line-height: 24px;
+      margin-left: 12px;
+    }
+  }
+
+  &.disabled,
+  * > .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &-via-button {
+    padding: 8px;
+  }
+}
+
+.stdcm-card:hover {
+  .stdcm-via-icons {
+    .icon-bundle {
+      display: none;
+    }
+    button {
+      display: contents;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--primary60);
+    }
+  }
+}

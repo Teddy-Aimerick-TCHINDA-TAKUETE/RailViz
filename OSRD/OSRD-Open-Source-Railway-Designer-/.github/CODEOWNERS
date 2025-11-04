@@ -1,0 +1,48 @@
+# --- CI - CODEOWNERS - Dependabot - Template ---
+/.gitattributes                                          @openrailassociation/OSRD-DevOps
+/.github                                                 @openrailassociation/OSRD-DevOps
+/.github/CODEOWNERS                                      @openrailassociation/OSRD-Admins
+/*.md                                                    @openrailassociation/OSRD-Admins
+/LICENSES                                                @openrailassociation/OSRD-Admins
+
+# -- Docker --
+/docker                                                  @openrailassociation/OSRD-DevOps
+/docker-compose.yml                                      @openrailassociation/OSRD-DevOps
+
+# -- Scripts --
+/scripts                                                 @openrailassociation/OSRD-DevOps
+
+# --- NIX ---
+/nix                                                     @openrailassociation/OSRD-DevOps
+/flake.lock                                              @openrailassociation/OSRD-DevOps
+*.nix                                                    @openrailassociation/OSRD-DevOps
+
+# --- FRONT ---
+/front                                                   @openrailassociation/OSRD-Front
+/front/src/common/api/generatedEditoastApi.ts
+/front/src/common/api/osrdMiddlewareApi.ts
+/front/src/reducers/osrdconf/infra_schema.json
+
+# --- EDITOAST ---
+/editoast                                                @openrailassociation/OSRD-Editoast
+/editoast/openapi.yaml
+/chartos                                                 @openrailassociation/OSRD-Editoast
+/python                                                  @openrailassociation/OSRD-Editoast
+
+# --- E2E TESTS  ---
+/front/tests                                             @openrailassociation/OSRD-E2E-Tests
+
+# --- INTEGRATION TESTS  ---
+/tests                                                   @openrailassociation/OSRD-Tests
+
+# --- CORE ---
+/core                                                    @openrailassociation/OSRD-Core
+
+# --- OSRDYNE ---
+/osrdyne                                                 @openrailassociation/OSRD-DevOps
+
+# --- GATEWAY ---
+/gateway                                                 @openrailassociation/OSRD-DevOps
+
+# --- CHART ---
+/chart                                                   @openrailassociation/OSRD-DevOps

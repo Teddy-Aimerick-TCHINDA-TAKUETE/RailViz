@@ -1,0 +1,142 @@
+{
+  "Editor": {
+    "directions": {
+      "BOTH": "Beide",
+      "START_TO_STOP": "Abfahrt bis Ankunft",
+      "STOP_TO_START": "Ankunft bis Abfahrt"
+    },
+    "entities": {
+      "errors-linked": "Verknüpfte Fehler"
+    },
+    "infra-errors": {
+      "corrector-modal": {
+        "create-actions": "{{creation_count}} erstellte Objekte",
+        "delete-actions": "{{deletion_count}} gelöschte Objekte",
+        "loading-loader": "Berechne mögliche Lösungen",
+        "no-fixes-found": "Keine Korrektur gefunden.",
+        "saving-loader": "Anpassung der Infrastruktur",
+        "text": "Die folgenden Maßnahmen werden angewendet, um einige der Fehler der Infrastruktur zu korrigieren:",
+        "title": "Automatische Fehlerkorrektur",
+        "update-actions": "{{update_count} bestehende Objekt-Updates"
+      },
+      "error-level": {
+        "all": "Alle",
+        "errors": "Fehler",
+        "warnings": "Warnungen"
+      },
+      "error-type": {
+        "all": "Alle",
+        "duplicated_group": {
+          "description": "Schaltertyp « {{obj_id} » enthält eine doppelte Konfiguration « {{original_group_path} »",
+          "name": "Dupliziertes Schaltmuster"
+        },
+        "empty_object": {
+          "description": "Objekt « {{obj_id} » hat das leere Feld « {{field} »",
+          "name": "Leeres Objekt"
+        },
+        "invalid_group": {
+          "description": "Der Schalter « {{obj_id} » der Route « {{group} » befindet sich in der Konfiguration « {{switch_type}», die nicht existiert",
+          "name": "Ungültige Nadelposition"
+        },
+        "invalid_reference": {
+          "description": "Das Objekt « {{obj_id} » verweist auf das Objekt « {{reference.obj_id}», das nicht existiert",
+          "name": "Ungültige Referenz"
+        },
+        "invalid_route": {
+          "description": "Route « {{obj_id} » ist ungültig, angeforderter Pfad ist nicht konsistent",
+          "name": "Invalide Route"
+        },
+        "invalid_switch_ports": {
+          "description": "Schalter « {{obj_id} » hat einen Zweig, der nicht mit seinem Typ kompatibel ist",
+          "name": "Invalides Schaltmuster"
+        },
+        "missing_buffer_stop": {
+          "description": "Endpunkt « {{endpoint} » der Strecke « {{obj_id}} » hat keinen Prellbock",
+          "name": "Fehlender Prellbock"
+        },
+        "missing_route": {
+          "name": "Fehlende Route"
+        }
+      }
+    }
+  },
+  "common": {
+    "collapse": "Einklappen",
+    "delete": "Löschen",
+    "expand": "Ausklappen",
+    "navigation": {
+      "goBack": "Zur letzten Seite",
+      "goHome": "Zur Startseite"
+    },
+    "reset": "Zurücksetzen",
+    "zoom-in": "Reinzoomen",
+    "zoom-out": "Rauszoomen"
+  },
+  "editor": "Betriebsnetz-Editor",
+  "infraManagement": {
+    "actions": {
+      "cancel": "Abbrechen",
+      "check": "Prüfen",
+      "copy": "Kopieren",
+      "delete": "Löschen",
+      "export": "Als RailJSON exportieren",
+      "lock": "Sperren",
+      "rename": "Umbenennen",
+      "unlock": "Entsperren",
+      "waiting": "Bitte warten"
+    },
+    "addInfra": "Betriebsnetz erstellen",
+    "addInfraJSON": "Ein Betriebsnetz aus einer RailJSON-Datei erstellen",
+    "addInfraJSONFile": "RailJSON-Datei hinzufügen",
+    "addInfraJSONFileRemove": "RailJSON-Import abbrechen",
+    "createInfra": "Erstellen",
+    "deleteConfirm": "Wollen Sie das Betriebsnetz löschen?",
+    "errorMessages": {
+      "noEmptyName": "Bitte geben Sie einen Namen ein",
+      "unableToRetrieveInfraList": "Betriebsnetzliste kann nicht geladen werden"
+    },
+    "goToEditionMode": "Bearbeiten",
+    "goToStandardMode": "Zurück zur Auswahl",
+    "infraChoice": "Betriebsnetze",
+    "infraDeleted": "Das Betriebsnetz „{{name}}“ wurde gelöscht.",
+    "infraManagement": "Betriebsnetzverwalter",
+    "infraName": "Betriebsnetzname",
+    "infrasFound_one": "Ein Betriebsnetz gefunden",
+    "infrasFound_other": "{{count}} Betriebsnetze gefunden",
+    "infrasFound_zero": "Kein Betriebsnetz gefunden",
+    "locked": "Gesperrt",
+    "no": "Nein",
+    "yes": "Ja"
+  },
+  "interval-editor": {
+    "add": "Hinzufügen",
+    "begin": "Start",
+    "delete": "Löschen",
+    "end": "Ende",
+    "merge": "Mit nächstem Abschnitt vereinigen",
+    "split": "Trennen",
+    "translate": "Übersetzen",
+    "value": "Wert"
+  },
+  "map": "Karte",
+  "nav-bar": {
+    "about": "Über OSRD",
+    "disconnect": "Abmelden",
+    "help": "Hilfe",
+    "informations": {
+      "application": "Anwendung",
+      "collaborations": "Kooperationen",
+      "dataSources": "Datenquellen",
+      "librairies": "Versionsinformationen",
+      "version": "Version"
+    },
+    "languages": "Spraches",
+    "safeWord": "Stichwort",
+    "safeWordHelp": "Durch das „Stichwort“ können Projekte in der Liste gefiltert werden, wenn es eingegeben wird. Es sollte einzigartig sein und kein Risiko für eine Doppelung bergen, um eine versehentliche Nutzung zu meiden. Fügen Sie es einem Projekt als Label hinzu – es wird bei Erstellung automatisch hinzugefügt, sofern das Stichwort hier eingetragen wird.",
+    "userSettings": "Benutzereinstellungen",
+    "yourSafeWord": "Stichwort eingeben"
+  },
+  "operationalStudies": "Betriebsstudien",
+  "rollingStockEditor": "Schienenfahrzeug-Editor",
+  "stdcm": "Schnellauftrag"
+}

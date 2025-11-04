@@ -1,0 +1,141 @@
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/editoast/"
+    schedule:
+      interval: "weekly"
+    groups:
+      opentelemetry:
+        patterns:
+          - "*opentelemetry*"
+    commit-message:
+      prefix: "editoast:"
+    open-pull-requests-limit: 100
+    labels:
+      - "dependencies"
+      - "area:editoast"
+  - package-ecosystem: "cargo"
+    directory: "/gateway/"
+    schedule:
+      interval: "daily"
+    groups:
+      opentelemetry:
+        patterns:
+          - "*opentelemetry*"
+    commit-message:
+      prefix: "gateway:"
+    open-pull-requests-limit: 100
+    labels:
+      - "dependencies"
+      - "area:gateway"
+  - package-ecosystem: "cargo"
+    directory: "/osrdyne/"
+    schedule:
+      interval: "daily"
+    groups:
+      opentelemetry:
+        patterns:
+          - "*opentelemetry*"
+    commit-message:
+      prefix: "osrdyne:"
+    open-pull-requests-limit: 100
+    labels:
+      - "dependencies"
+      - "area:osrdyne"
+  - package-ecosystem: "npm"
+    directory: "/front/"
+    schedule:
+      interval: "weekly"
+    groups:
+      eslint:
+        patterns:
+          - "@eslint/js"
+          - "eslint"
+      nivo:
+        patterns:
+          - "@nivo/*"
+      osrd-ui:
+        patterns:
+          - "@osrd-project/ui-*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      rjsf:
+        patterns:
+          - "@rjsf/*"
+      storybook:
+        patterns:
+          - "storybook"
+          - "@storybook/*"
+          - "eslint-plugin-storybook"
+      turf:
+        patterns:
+          - "@turf/*"
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"
+          - "typescript-eslint"
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+      patch:
+        update-types:
+          - "patch"
+    commit-message:
+      prefix: "front:"
+    open-pull-requests-limit: 100
+    labels:
+      - "dependencies"
+      - "area:front"
+    ignore:
+      # Updates for NGE don't follow SemVer and are handled manually
+      - dependency-name: "@osrd-project/netzgrafik-frontend"
+  - package-ecosystem: "uv"
+    directory: "/python/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "python:"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "area:railjson"
+  - package-ecosystem: "uv"
+    directory: "/tests/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "tests:"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "area:integration-tests"
+  - package-ecosystem: "gradle"
+    directory: "/core/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "core:"
+    open-pull-requests-limit: 100
+    labels:
+      - "dependencies"
+      - "area:core"
+    groups:
+      kotlin:
+        patterns:
+          - "kotlin"
+          - "ksp"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "actions:"
+    open-pull-requests-limit: 100
+    labels:
+      - "dependencies"
+      - "area:ci"

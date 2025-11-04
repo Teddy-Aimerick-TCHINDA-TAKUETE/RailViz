@@ -1,0 +1,20 @@
+{
+  "asu": [
+    {
+      "title": "어플리케이션 이름",
+      "value": "OSRD"
+    },
+    {
+      "title": "지원"
+    }
+  ],
+  "externalSupport": [
+    {
+      "title": "어플리케이션 이름",
+      "value": "OSRD"
+    },
+    {
+      "title": "지원"
+    }
+  ]
+}

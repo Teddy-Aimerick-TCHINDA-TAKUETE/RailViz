@@ -1,0 +1,45 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# docs
+/docs
+.parcel-cache
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.cache
+
+npm-debug.log*
+
+# sonarqube
+.scannerwork
+
+# eslint cache
+.eslintcache
+
+# .env is built from .env.local and .env.local.defaults
+/.env
+# .env.local is up to the developer
+/.env.local
+
+# e2e-tests
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# config overrides
+/overrides

@@ -1,0 +1,49 @@
+import { isInvalidName } from 'applications/operationalStudies/utils';
+import type { TrainScheduleResponse } from 'common/api/osrdEditoastApi';
+import { SMALL_TEXT_AREA_MAX_LENGTH, isInvalidString } from 'utils/strings';
+
+import type { ScenarioForm } from '../components/AddOrEditScenarioModal';
+
+/**
+ * Retrieves the datetime window of a scenario based on the provided train details.
+ * @param trainsDetails - An array of TrainScheduleResponse objects containing train details.
+ * @returns An object representing the datetime window of the scenario, with `begin` and `end` properties.
+ */
+export const getScenarioDatetimeWindow = (trainsDetails: TrainScheduleResponse[]) => {
+  if (trainsDetails.length === 0) {
+    return {
+      begin: new Date(new Date().setHours(0, 0, 0, 0)),
+      end: new Date(new Date().setHours(23, 59, 59, 999)),
+    };
+  }
+
+  const sortedDateList = trainsDetails
+    .map((train) => new Date(train.start_time))
+    .sort((a, b) => a.getTime() - b.getTime());
+
+  return {
+    begin: sortedDateList[0],
+    end: sortedDateList[sortedDateList.length - 1],
+  };
+};
+
+export const checkScenarioFields = (
+  scenario: ScenarioForm
+): {
+  name: boolean;
+  description: boolean;
+} => ({
+  name: isInvalidName(scenario.name),
+  description: isInvalidString(SMALL_TEXT_AREA_MAX_LENGTH, scenario.description),
+});
+
+/**
+ * Clean the local storage for potential store manchette
+ */
+export const cleanScenarioLocalStorage = (timetableId: number) => {
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith(timetableId.toString())) {
+      localStorage.removeItem(key);
+    }
+  });
+};

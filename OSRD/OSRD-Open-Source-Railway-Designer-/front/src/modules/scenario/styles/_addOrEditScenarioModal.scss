@@ -1,0 +1,30 @@
+.scenario-edition-modal {
+  max-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  .modal-body {
+    overflow-y: auto;
+  }
+  .scenario-edition-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    img {
+      height: 32px;
+    }
+  }
+  .scenario-edition-modal-description {
+    margin-bottom: 16px;
+    textarea {
+      min-height: auto;
+    }
+  }
+  .scenario-edition-modal-infraselector {
+    &.scenario-edition-modal-infraselector-missing {
+      padding: 8px;
+      border-radius: 4px;
+      border: 2px solid var(--red);
+    }
+  }
+}

@@ -1,0 +1,134 @@
+V200:
+  fallback_list: [V160, V140, V120, ME100, MA100, MA90, MA80]
+
+R200:
+  fallback_list: [V200, V160, V140, V120, ME100, MA100, MA90, MA80]
+
+AR200:
+  fallback_list: [V200, V160, V140, V120, ME100, MA100, MA90, MA80]
+
+V160:
+  fallback_list: [V140, V120, ME100, MA100, MA90, MA80]
+
+R160:
+  fallback_list: [V160, V140, V120, ME100, MA100, MA90, MA80]
+
+AR160:
+  fallback_list: [V160, V140, V120, ME100, MA100, MA90, MA80]
+
+V140:
+  fallback_list: [V120, ME100, MA100, MA90, MA80]
+
+R140:
+  fallback_list: [V140, V120, ME100, MA100, MA90, MA80]
+
+AR140:
+  fallback_list: [V140, V120, ME100, MA100, MA90, MA80]
+
+V120:
+  fallback_list: [ME100, MA100, MA90, MA80]
+
+R120:
+  fallback_list: [V120, ME100, MA100, MA90, MA80]
+
+AR120:
+  fallback_list: [V120, ME100, MA100, MA90, MA80]
+
+MVGV:
+  fallback_list: [MV160, ME140, ME120, ME100, MA100, MA90, MA80]
+
+MV160:
+  fallback_list: [ME140, ME120, ME100, MA100, MA90, MA80]
+
+ME140:
+  fallback_list: [ME120, ME100, MA100, MA90, MA80]
+
+ME120:
+  fallback_list: [ME100, MA100, MA90, MA80]
+
+ME100:
+  fallback_list: [MA100, MA90, MA80]
+
+HLP:
+  fallback_list: [ME100, MA100, MA90, MA80]
+
+MA100:
+  fallback_list: [MA90, MA80]
+
+MA90:
+  fallback_list: [MA80]
+
+MA80:
+  fallback_list: []
+
+E32C:
+  fallback_list: [E30C, E20C, E20N, V200, E16C, E16N, V160, E14C, E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E30C:
+  fallback_list: [E20C, E20N, V200, E16C, E16N, V160, E14C, E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E20C:
+  fallback_list: [E20N, V200, E16C, E16N, V160, E14C, E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E20N:
+  fallback_list: [V200, E16N, V160, E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E16C:
+  fallback_list: [E16N, V160, E14C, E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E16N:
+  fallback_list: [V160, E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E14F:
+  fallback_list: [E14R, E14Q, E14P, E14C, E14N, V140, E12Q, E12N, V120, ME100, MA100, MA90, MA80]
+
+E14C:
+  fallback_list: [E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E14R:
+  fallback_list: [E14Q, E14P, E14N, V140, E12Q, E12N, V120, ME100, MA100, MA90, MA80]
+
+E14Q:
+  fallback_list: [E14P, E14N, V140, E12Q, E12N, V120, ME100, MA100, MA90, MA80]
+
+E14P:
+  fallback_list: [E14N, V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E14N:
+  fallback_list: [V140, E12N, V120, ME100, MA100, MA90, MA80]
+
+E12C:
+  fallback_list: [E12N, V120, ME100, MA100, MA90, MA80]
+
+E12Q:
+  fallback_list: [E12N, V120, ME100, MA100, MA90, MA80]
+
+E12N:
+  fallback_list: [V120, ME100, MA100, MA90, MA80]
+
+E10C:
+  fallback_list: [ME100, MA100, MA90, MA80]
+
+T16C:
+  fallback_list: [V160, T14C, T14N, V140, T12C, T12N, V120, ME100, MA100, MA90, MA80]
+
+T14C:
+  fallback_list: [T14N, V140, T12C, T12N, V120, ME100, MA100, MA90, MA80]
+
+T14N:
+  fallback_list: [V140, T12N, V120, ME100, MA100, MA90, MA80]
+
+T12C:
+  fallback_list: [T12N, V120, ME100, MA100, MA90, MA80]
+
+T12N:
+  fallback_list: [V120, ME100, MA100, MA90, MA80]
+
+B16C:
+  fallback_list: [T16C, V160, T14C, T14N, V140, T12C, T12N, V120, ME100, MA100, MA90, MA80]
+
+TM:
+  fallback_list: [MA90, MA80]
+
+EVO:
+  fallback_list: [MA80]

@@ -1,0 +1,51 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ksp)
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // PLEASE ADD AND UPDATE DEPENDENCIES USING libs.versions.toml
+    implementation project(':kt-fast-collections')
+    ksp project(':kt-fast-collections-generator')
+
+    // JSON parsing
+    implementation libs.moshi
+    implementation libs.moshi.adapters
+
+    api libs.kotlinx.coroutines.core
+    implementation libs.guava
+    implementation libs.kotlin.stdlib
+    testImplementation libs.kotlin.test
+}
+
+
+// to get KSP generated-stuff to be recognised
+kotlin {
+    sourceSets {
+        main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+        test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += [
+                "-opt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.ExperimentalUnsignedTypes",
+                "-opt-in=kotlin.time.ExperimentalTime",
+                "-opt-in=kotlin.contracts.ExperimentalContracts",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        ]
+    }
+}

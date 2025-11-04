@@ -1,0 +1,51 @@
+.infra-loading-state {
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1px;
+
+  &.cached {
+    color: var(--success30);
+  }
+  &.loading {
+    color: var(--info60);
+  }
+
+  .infra-loaded {
+    width: 8px;
+    height: 8px;
+    background-color: var(--success30);
+    border-radius: 50%;
+    margin-block: 5px 3px;
+  }
+
+  .infra-loader:first-child {
+    animation: dot-flashing 0.5s infinite linear alternate;
+    animation-delay: 0s;
+  }
+
+  .infra-loader:nth-child(2) {
+    animation: dot-flashing 0.5s infinite linear alternate;
+    animation-delay: 0.25s;
+  }
+  .infra-loader:nth-child(3) {
+    animation: dot-flashing 0.5s infinite linear alternate;
+    animation-delay: 0.5s;
+  }
+
+  @keyframes dot-flashing {
+    0% {
+      color: var(--info60);
+    }
+    50%,
+    100% {
+      color: var(--info30);
+    }
+  }
+
+  .steps {
+    font-weight: 500;
+    margin-left: 4px;
+    margin-top: 1.6px;
+  }
+}

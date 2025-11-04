@@ -1,0 +1,21 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // PLEASE ADD AND UPDATE DEPENDENCIES USING libs.versions.toml
+    api project(":kt-fast-collections-annotations")
+    implementation libs.ksp.symbol.processing.api
+    implementation libs.kotlin.reflect
+}

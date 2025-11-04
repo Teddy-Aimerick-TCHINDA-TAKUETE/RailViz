@@ -1,0 +1,43 @@
+.grid-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .grid-item {
+    width: 77px;
+    padding-inline: 11px 7px;
+    padding-block: 10px;
+    border: none;
+    border-bottom: solid 1px var(--coolgray11);
+    // This font allows items to be perfectly aligned as each letters have the same width
+    font-family: monospace;
+    color: var(--coolgray11);
+    background-color: transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    white-space: nowrap;
+
+    &.filtered {
+      opacity: 0.2;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: var(--primary);
+      color: var(--white);
+      // to remove browser style on focus
+      outline: none;
+    }
+
+    &.present:focus,
+    &.present:hover {
+      background-color: transparent;
+    }
+
+    span.present {
+      opacity: 0.7;
+      color: var(--green);
+    }
+  }
+}

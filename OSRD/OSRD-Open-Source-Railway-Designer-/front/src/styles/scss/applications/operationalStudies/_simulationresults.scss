@@ -1,0 +1,146 @@
+.scenario-results {
+  .simulation-results {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    > :last-child {
+      margin-bottom: 16px;
+    }
+
+    /*
+     * Temporary style while waiting for the STD style to be updated
+    */
+    .std-container {
+      display: flex;
+      flex-direction: row;
+
+      .simulation-warped-map {
+        margin-right: 1px;
+
+        .show-warped-map-button {
+          border: none;
+          cursor: pointer;
+          color: var(--black25);
+          background-color: var(--ambientB5);
+
+          &:active,
+          &:focus {
+            outline: none;
+          }
+        }
+
+        .warped-map {
+          overflow: hidden;
+          transition: 0.2s;
+
+          .border {
+            border-radius: 0;
+            border-color: var(--black10) !important;
+            border-bottom: 0 !important;
+            border-top: 0 !important;
+            padding-left: 1px !important;
+          }
+
+          .buttons {
+            position: absolute;
+            bottom: 2em;
+            right: 2em;
+          }
+        }
+      }
+
+      .osrd-simulation-container {
+        .ui-manchette-space-time-chart-wrapper {
+          border-radius: 0;
+
+          .ui-manchette-container {
+            > :first-child {
+              box-shadow: inset 1px 0 0 var(--white);
+              background-color: var(--ambientB15);
+            }
+
+            .manchette-actions {
+              border-radius: 0;
+              background-color: var(--ambientB15);
+              box-shadow:
+                inset 1px 0 0 var(--white),
+                inset 0 1px 0 var(--white);
+            }
+          }
+        }
+      }
+    }
+
+    .osrd-simulation-container {
+      position: relative;
+      border-radius: 4px;
+    }
+
+    .simulation-map {
+      position: relative;
+      height: 720px;
+      width: 100%;
+      border-radius: 10px;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 1) inset,
+        0 4px 7px -3px rgba(255, 171, 88, 0.17),
+        0 2px 4px rgba(0, 0, 0, 0.22);
+    }
+
+    .driver-train-schedule {
+      background-color: white;
+      padding: 16px;
+      border-radius: 4px;
+      margin-inline: 38px 30px;
+    }
+
+    .simulation-sheet-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px;
+      width: 100%;
+      box-shadow: 0 1px 0 0 inset var(--black10);
+      border-radius: 0 0 8px 8px;
+      background-color: var(--ambiantB15);
+
+      button {
+        background-color: var(--black5);
+        font-weight: 500;
+        font-size: 1rem;
+      }
+      svg {
+        color: var(--primary60);
+      }
+    }
+
+    /* MAP */
+    .train-speed-label {
+      text-shadow: 0 0 3px #fff;
+      padding-bottom: 24px;
+    }
+
+    .map-pathfinding-marker {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      position: absolute;
+      font-weight: 500;
+      border-radius: 4px;
+      line-height: 11.2px;
+      padding: 2.4px 4px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      &.via-number {
+        padding: 0;
+        font-weight: bold;
+        color: white;
+      }
+      &.stdcm-via {
+        align-self: flex-start;
+        padding-top: 8px;
+        color: black;
+      }
+    }
+  }
+}

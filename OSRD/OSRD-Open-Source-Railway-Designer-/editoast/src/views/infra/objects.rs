@@ -1,0 +1,360 @@
+use std::collections::HashMap;
+use std::collections::HashSet;
+use std::sync::Arc;
+
+use authz;
+use axum::Extension;
+use axum::extract::Json;
+use axum::extract::Path;
+use axum::extract::State;
+use database::DbConnectionPoolV2;
+use editoast_derive::EditoastError;
+use schemas::primitives::ObjectType;
+use thiserror::Error;
+
+use super::InfraApiError;
+use super::InfraIdParam;
+use crate::error::Result;
+use crate::models::Infra;
+use crate::models::infra::ObjectQueryable;
+use crate::views::AuthenticationExt;
+use crate::views::AuthorizationError;
+use editoast_models::prelude::*;
+
+#[derive(Debug, Error, EditoastError)]
+#[editoast_error(base_id = "infra:objects")]
+enum GetObjectsErrors {
+    #[error("Duplicate object ids provided")]
+    DuplicateIdsProvided,
+    #[error("Object id '{object_id}' not found")]
+    ObjectIdNotFound { object_id: String },
+}
+
+/// Return whether the list of ids contains unique values or has duplicate
+fn has_unique_ids(obj_ids: &[String]) -> bool {
+    obj_ids.len() == obj_ids.iter().collect::<HashSet<_>>().len()
+}
+
+#[derive(serde::Deserialize, utoipa::IntoParams)]
+pub(in crate::views) struct ObjectTypeParam {
+    object_type: ObjectType,
+}
+
+/// Retrieves specific infra objects
+#[editoast_derive::route]
+#[utoipa::path(
+    post, path = "",
+    tag = "infra",
+    params(InfraIdParam, ObjectTypeParam),
+    request_body = Vec<String>,
+    responses(
+        (status = 200, description = "The list of objects", body = Vec<ObjectQueryable>),
+        (status = 400, description = "Duplicate object ids provided"),
+        (status = 404, description = "Object ID or infra ID invalid")
+    )
+)]
+pub(in crate::views) async fn get_objects(
+    Path(InfraIdParam { infra_id }): Path<InfraIdParam>,
+    Path(object_type_param): Path<ObjectTypeParam>,
+    State(db_pool): State<Arc<DbConnectionPoolV2>>,
+    Extension(auth): AuthenticationExt,
+    Json(obj_ids): Json<Vec<String>>,
+) -> Result<Json<Vec<ObjectQueryable>>> {
+    // Check user roles
+    let has_role = auth
+        .check_roles([authz::Role::OperationalStudies, authz::Role::Stdcm].into())
+        .await?;
+    if !has_role {
+        return Err(AuthorizationError::Forbidden.into());
+    }
+
+    if !has_unique_ids(&obj_ids) {
+        return Err(GetObjectsErrors::DuplicateIdsProvided.into());
+    }
+
+    let infra = Infra::retrieve_or_fail(db_pool.get().await?, infra_id, || {
+        InfraApiError::NotFound { infra_id }
+    })
+    .await?;
+
+    // Check user privilege on infra
+    auth.check_authorization(async |authorizer| {
+        authorizer
+            .authorize_infra(&authz::Infra(infra_id), authz::InfraPrivilege::CanRead)
+            .await
+    })
+    .await?;
+
+    let objects = infra
+        .get_objects(
+            &mut db_pool.get().await?,
+            object_type_param.object_type,
+            &obj_ids,
+        )
+        .await?;
+
+    // Build a cache to reorder the result
+    let mut objects: HashMap<_, _> = objects
+        .into_iter()
+        .map(|obj| (obj.obj_id.clone(), obj))
+        .collect();
+
+    // Check all objects exist
+    if objects.len() != obj_ids.len() {
+        let not_found_id = obj_ids
+            .iter()
+            .find(|obj_id| !objects.contains_key(*obj_id))
+            .unwrap();
+        return Err(GetObjectsErrors::ObjectIdNotFound {
+            object_id: not_found_id.clone(),
+        }
+        .into());
+    }
+
+    // Reorder the result to match the order of the input
+    let mut result = vec![];
+    obj_ids.iter().for_each(|obj_id| {
+        result.push(objects.remove(obj_id).unwrap());
+    });
+
+    Ok(Json(result))
+}
+
+#[derive(serde::Serialize, utoipa::ToSchema)]
+pub(in crate::views) struct ListObjectsResponse {
+    ids: Vec<String>,
+}
+
+#[editoast_derive::route]
+#[utoipa::path(
+    get, path = "",
+    tag = "infra",
+    params(InfraIdParam, ObjectTypeParam),
+    responses(
+        (status = 200, description = "The list of objects", body = inline(ListObjectsResponse)),
+    )
+)]
+pub(in crate::views) async fn list_objects_ids(
+    Path(InfraIdParam { infra_id }): Path<InfraIdParam>,
+    Path(ObjectTypeParam { object_type }): Path<ObjectTypeParam>,
+    State(db_pool): State<Arc<DbConnectionPoolV2>>,
+    Extension(auth): AuthenticationExt,
+) -> Result<Json<ListObjectsResponse>> {
+    // Check user roles
+    let has_role = auth
+        .check_roles([authz::Role::OperationalStudies, authz::Role::Stdcm].into())
+        .await
+        .map_err(AuthorizationError::AuthError)?;
+    if !has_role {
+        return Err(AuthorizationError::Forbidden.into());
+    }
+
+    let infra = Infra::retrieve_or_fail(db_pool.get().await?, infra_id, || {
+        InfraApiError::NotFound { infra_id }
+    })
+    .await?;
+
+    // Check user privilege on infra
+    auth.check_authorization(async |authorizer| {
+        authorizer
+            .authorize_infra(&authz::Infra(infra_id), authz::InfraPrivilege::CanRead)
+            .await
+    })
+    .await?;
+
+    let objects = infra
+        .list_objects(&mut db_pool.get().await?, object_type)
+        .await?;
+
+    Ok(Json(ListObjectsResponse { ids: objects }))
+}
+
+#[cfg(test)]
+mod tests {
+    use axum::http::StatusCode;
+    use pretty_assertions::assert_eq;
+
+    use schemas::primitives::Identifier;
+    use serde_json::Value as JsonValue;
+    use serde_json::json;
+
+    use crate::infra_cache::operation::create::apply_create_operation;
+    use crate::models::fixtures::create_empty_infra;
+    use crate::views::infra::objects::ObjectQueryable;
+    use crate::views::test_app::TestAppBuilder;
+    use schemas::infra::Switch;
+    use schemas::infra::SwitchType;
+    use schemas::primitives::OSRDIdentified;
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
+    async fn check_invalid_ids() {
+        let app = TestAppBuilder::default_app();
+        let db_pool = app.db_pool();
+        let empty_infra = create_empty_infra(&mut db_pool.get_ok()).await;
+
+        let request = app
+            .post(format!("/infra/{}/objects/TrackSection", empty_infra.id).as_str())
+            .json(&["invalid_id"]);
+
+        app.fetch(request)
+            .await
+            .assert_status(StatusCode::BAD_REQUEST);
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
+    async fn get_objects_no_ids() {
+        let app = TestAppBuilder::default_app();
+        let db_pool = app.db_pool();
+        let empty_infra = create_empty_infra(&mut db_pool.get_ok()).await;
+
+        let request = app
+            .post(format!("/infra/{}/objects/TrackSection", empty_infra.id).as_str())
+            .json(&vec![""; 0]);
+
+        app.fetch(request).await.assert_status(StatusCode::OK);
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
+    async fn get_objects_should_return_switch() {
+        // GIVEN
+        let app = TestAppBuilder::default_app();
+        let db_pool = app.db_pool();
+        let empty_infra = create_empty_infra(&mut db_pool.get_ok()).await;
+
+        let switch = Switch {
+            id: "switch_001".into(),
+            switch_type: "switch_type_001".into(),
+            ..Default::default()
+        };
+        apply_create_operation(
+            &switch.clone().into(),
+            empty_infra.id,
+            &mut db_pool.get_ok(),
+        )
+        .await
+        .expect("Failed to create switch object");
+
+        // WHEN
+        let request = app
+            .post(format!("/infra/{}/objects/Switch", empty_infra.id).as_str())
+            .json(&vec!["switch_001"]);
+
+        // THEN
+        let switch_object: Vec<ObjectQueryable> = app
+            .fetch(request)
+            .await
+            .assert_status(StatusCode::OK)
+            .json_into();
+        let expected_switch_object = vec![ObjectQueryable {
+            obj_id: switch.get_id().to_string(),
+            railjson: json!({
+                "extensions": {
+                    "sncf": JsonValue::Null
+                },
+                "group_change_delay": 0.0,
+                "id": switch.get_id().to_string(),
+                "ports": {},
+                "switch_type": switch.switch_type
+            }),
+            geographic: None,
+        }];
+        assert_eq!(switch_object, expected_switch_object);
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
+    async fn get_objects_duplicate_ids() {
+        let app = TestAppBuilder::default_app();
+        let db_pool = app.db_pool();
+        let empty_infra = create_empty_infra(&mut db_pool.get_ok()).await;
+
+        let request = app
+            .post(format!("/infra/{}/objects/TrackSection", empty_infra.id).as_str())
+            .json(&vec!["id"; 2]);
+
+        app.fetch(request)
+            .await
+            .assert_status(StatusCode::BAD_REQUEST);
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
+    async fn get_switch_types() {
+        let app = TestAppBuilder::default_app();
+        let db_pool = app.db_pool();
+        let empty_infra = create_empty_infra(&mut db_pool.get_ok()).await;
+
+        // Add a switch type
+        let switch_type = SwitchType::default();
+        apply_create_operation(
+            &switch_type.clone().into(),
+            empty_infra.id,
+            &mut db_pool.get_ok(),
+        )
+        .await
+        .expect("Failed to create switch type object");
+
+        let request = app
+            .post(format!("/infra/{}/objects/SwitchType", empty_infra.id).as_str())
+            .json(&vec![switch_type.id.clone()]);
+
+        let switch_type_object: Vec<ObjectQueryable> = app
+            .fetch(request)
+            .await
+            .assert_status(StatusCode::OK)
+            .json_into();
+        let expected_switch_type_object = vec![ObjectQueryable {
+            obj_id: switch_type.get_id().to_string(),
+            railjson: json!({
+                "id": switch_type.get_id().to_string(),
+                "ports": [],
+                "groups": {}
+            }),
+            geographic: None,
+        }];
+        assert_eq!(switch_type_object, expected_switch_type_object);
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
+    async fn test_list_ids() {
+        let app = TestAppBuilder::default_app();
+        let db_pool = app.db_pool();
+        let empty_infra = create_empty_infra(&mut db_pool.get_ok()).await;
+
+        // Add two switch types
+        let switch_type_a = SwitchType {
+            id: Identifier("A".to_string()),
+            ..Default::default()
+        };
+        apply_create_operation(&switch_type_a.into(), empty_infra.id, &mut db_pool.get_ok())
+            .await
+            .expect("Failed to create switch type object");
+
+        let switch_type_b = SwitchType {
+            id: Identifier("B".to_string()),
+            ..Default::default()
+        };
+        apply_create_operation(&switch_type_b.into(), empty_infra.id, &mut db_pool.get_ok())
+            .await
+            .expect("Failed to create switch type object");
+
+        let request = app.get(format!("/infra/{}/objects/SwitchType/ids", empty_infra.id).as_str());
+
+        let response = app
+            .fetch(request)
+            .await
+            .assert_status(StatusCode::OK)
+            .json_into::<JsonValue>();
+
+        assert!(matches!(response, JsonValue::Object(_)));
+        let mut ids = response
+            .get("ids")
+            .expect("ids isn't present in response")
+            .as_array()
+            .expect("ids isn't an array")
+            .iter()
+            .map(|id| id.as_str().expect("id isn't a string"))
+            .collect::<Vec<_>>();
+        ids.sort();
+
+        assert_eq!(ids, vec!["A", "B"]);
+    }
+}

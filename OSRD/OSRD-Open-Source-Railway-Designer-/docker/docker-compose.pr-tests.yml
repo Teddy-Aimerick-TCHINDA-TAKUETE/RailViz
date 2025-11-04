@@ -1,0 +1,232 @@
+## This Docker Compose file is used by the pr-infra-compose.sh script.
+# More explanation on its purpose can be found in the script.
+#
+# This Docker Compose file is very similar to the one used for the development
+# environment, except that no services are built (all images are pulled from DockerHub),
+# and all ports have been adjusted (by adding +1 or +2 if the +1 port was already in use)
+# so that both instances can run concurrently on the same computer.
+
+volumes:
+  psql_data:
+  valkey_data:
+  rabbitmq_data:
+
+
+networks:
+  pr-tests:
+    name: osrd_pr_tests
+
+services:
+  postgres:
+    image: ${OSRD_POSTGIS_IMAGE:-postgis/postgis:16-3.4-alpine}
+    container_name: osrd-postgres-pr-tests
+    user: postgres
+    restart: unless-stopped
+    ports: [ "5433:5433" ]
+    environment:
+      POSTGRES_PASSWORD: "password"
+    command: -c port=5433
+    volumes:
+      - "psql_data:/var/lib/postgresql/data"
+      - "../docker/init_db.sql:/docker-entrypoint-initdb.d/init.sql"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-d", "postgres://osrd:password@postgres:5433/osrd" ]
+      start_period: 4s
+      interval: 5s
+      retries: 20
+    networks:
+      - pr-tests
+
+  valkey:
+    image: valkey/valkey:alpine
+    container_name: osrd-valkey-pr-tests
+    restart: unless-stopped
+    ports: [ "6380:6380" ]
+    volumes:
+      - "valkey_data:/data"
+      - "../docker/valkey.conf:/etc/valkey.conf"
+    command: "valkey-server /etc/valkey.conf --port 6380 --save 30 1 --loglevel warning"
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "-p", "6380", "ping" ]
+      start_period: 4s
+      interval: 5s
+      retries: 20
+    networks:
+      - pr-tests
+
+  openfga-migrate:
+    depends_on:
+      postgres: { condition: service_healthy }
+    image: openfga/openfga:latest
+    container_name: osrd-openfga-migrate-pr-tests
+    command: migrate
+    environment:
+      OPENFGA_DATASTORE_ENGINE: "postgres"
+      OPENFGA_DATASTORE_URI: "postgres://osrd:password@postgres:5433/osrd?search_path=openfga"
+    networks:
+      - pr-tests
+
+  openfga:
+    depends_on:
+      openfga-migrate:
+        condition: service_completed_successfully
+    image: openfga/openfga:latest
+    container_name: osrd-openfga-pr-tests
+    environment:
+      OPENFGA_DATASTORE_ENGINE: "postgres"
+      OPENFGA_DATASTORE_URI: "postgres://osrd:password@postgres:5433/osrd?search_path=openfga"
+      OPENFGA_HTTP_ADDR: "0.0.0.0:8191"
+      OPENFGA_GRPC_ADDR: "0.0.0.0:8193"
+      OPENFGA_PLAYGROUND_PORT: 8192
+    command: run
+    ports:
+      - "8191:8191" # http
+      - "8192:8192" # playground
+    networks:
+      - pr-tests
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: osrd-rabbitmq-pr-tests
+    ports:
+      - "5673:5673"
+      - "15673:15673"
+    environment:
+      RABBITMQ_DEFAULT_USER: osrd
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DIST_PORT: 25673
+      RABBITMQ_CONFIG_FILE: "/etc/rabbitmq/rabbitmq.conf"
+    volumes:
+      - "../docker/rabbitmq.conf:/etc/rabbitmq/conf.d/99-osrd.conf"
+      - rabbitmq_data:/var/lib/rabbitmq
+      - "../docker/rabbitmq-pr-tests.conf:/etc/rabbitmq/rabbitmq.conf"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - pr-tests
+
+  core:
+    # This is a dummy container to build the core image
+    # and document/provide parameters to other compose files
+    image: ghcr.io/openrailassociation/osrd-edge/osrd-core:${PR_NB}
+    container_name: osrd-core-dummy-pr-tests
+    platform: linux/x86_64
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+    environment:
+      # Actual values in ./docker/osrdyne.yml (please maintain consistency)
+      # Provided here only for reuse in compose layers and doc
+      CORE_EDITOAST_URL: "http://editoast:8089"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/opentelemetry-javaagent.jar"
+      CORE_MONITOR_TYPE: "opentelemetry"
+      OTEL_EXPORTER_OTLP_TRACES_PROTOCOL: "grpc"
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://jaeger:4319"
+      OTEL_METRICS_EXPORTER: "none"
+      OTEL_LOGS_EXPORTER: "none"
+    restart: "no"
+    command: "true"
+    networks:
+      - pr-tests
+
+  editoast:
+    image: ghcr.io/openrailassociation/osrd-edge/osrd-editoast:${PR_NB}
+    container_name: osrd-editoast-pr-tests
+    platform: linux/x86_64
+    depends_on:
+      postgres: { condition: service_healthy }
+      valkey: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      openfga: { condition: service_started }
+    restart: unless-stopped
+    ports: [ "8089:8089" ]
+    environment:
+      EDITOAST_PORT: 8089
+      ROOT_URL: "http://localhost:4001/api"
+      VALKEY_URL: "redis://valkey:6380"
+      DATABASE_URL: "postgres://osrd:password@postgres:5433/osrd"
+      OSRDYNE_API_URL: "http://osrdyne:4243/"
+      TELEMETRY_KIND: "opentelemetry"
+      TELEMETRY_ENDPOINT: "http://jaeger:4319"
+      OSRD_MQ_URL: "amqp://osrd:password@rabbitmq:5673/%2f"
+      FGA_API_URL: "http://openfga:8191"
+      EDITOAST_ENABLE_AUTHORIZATION: ${EDITOAST_ENABLE_AUTHORIZATION:-true}
+      EDITOAST_NO_CACHE: ${EDITOAST_NO_CACHE:-false}
+    command: >
+      /bin/sh -c "
+        fga_migrations apply &&
+        diesel migration run --locked-schema &&
+        editoast user add 'mock/mocked' 'Example User' &&
+        editoast roles add 'mock/mocked' Admin &&
+        exec editoast runserver"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8089/health" ]
+      start_period: 4s
+      interval: 5s
+      retries: 6
+    networks:
+      - pr-tests
+
+  gateway:
+    image: ghcr.io/openrailassociation/osrd-edge/osrd-gateway:${PR_NB}-front
+    container_name: osrd-gateway-pr-tests
+    platform: linux/x86_64
+    volumes:
+      - "../docker/gateway.pr-tests.simple.toml:/srv/gateway.toml"
+    restart: unless-stopped
+    ports: [ "4001:4001" ]
+    networks:
+      - pr-tests
+
+  osrd-images:
+    image: ghcr.io/openrailassociation/osrd-stable/osrd-images:${TAG_IMAGES-v1.0.0}
+    container_name: osrd-images-pr-tests
+    platform: linux/x86_64
+    restart: unless-stopped
+    environment:
+      - NGINX_PORT=8076
+    ports: [ "8076:8076" ]
+    networks:
+      - pr-tests
+
+  osrdyne:
+    image: ghcr.io/openrailassociation/osrd-edge/osrd-osrdyne:${PR_NB}
+    container_name: osrd-osrdyne-pr-tests
+    platform: linux/x86_64
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+    command: osrdyne
+    volumes:
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
+      - ../docker/osrdyne-pr-tests.yml:/osrdyne.yml
+    restart: unless-stopped
+    ports: [ "4243:4243" ]
+    environment:
+      RUST_LOG: "info"
+      OSRDYNE__OPENTELEMETRY__ENDPOINT: "http://jaeger:4319"
+      OSRDYNE__WORKER_DRIVER__WORKER_IMAGE: "ghcr.io/openrailassociation/osrd-edge/osrd-core:${PR_NB}"
+    networks:
+      - pr-tests
+
+  jaeger:
+    image: jaegertracing/jaeger:latest
+    container_name: osrd-jaeger-pr-tests
+    restart: unless-stopped
+    command: --set=receivers.otlp.protocols.grpc.endpoint=0.0.0.0:4319 --set=receivers.otlp.protocols.http.endpoint=0.0.0.0:4320 --set=receivers.jaeger.protocols.grpc.endpoint=0.0.0.0:14251 --set=extensions.jaeger_query.http.endpoint=0.0.0.0:16687
+    ports:
+      - "4319:4319"
+      - "4320:4320"
+      - "16687:16687"
+    networks:
+      - pr-tests
+
+  wait-healthy:
+    depends_on:
+      editoast: { condition: service_healthy }
+    restart: "no"
+    image: alpine:latest
+    command: "true"
+    networks:
+      - pr-tests

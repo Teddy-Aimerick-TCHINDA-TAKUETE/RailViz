@@ -1,0 +1,140 @@
+@import 'tailwindcss';
+@import '../../../../index.css';
+
+.track-occupancy-manchette {
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  padding-top: 10px;
+  @apply bg-ambientB-15;
+
+  position: relative;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    left: 0;
+    height: 3px;
+    box-sizing: border-box;
+    background-color: color-mix(in oklab, var(--color-grey-50) 15%, transparent);
+    border-color: var(--color-grey-50);
+    border-style: solid;
+  }
+  &::before {
+    top: 0;
+    border-top-width: 1px;
+  }
+  &::after {
+    bottom: 0;
+    border-bottom-width: 1px;
+  }
+
+  > canvas {
+    border-radius: inherit;
+  }
+
+  .waypoint::after,
+  .waypoint-separator::after {
+    height: 0;
+  }
+  .track {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .track-line {
+      margin-right: 16px;
+      font-family: 'IBM Plex Sans';
+      font-weight: 400;
+      font-size: 12px;
+      @apply text-grey-50;
+    }
+
+    .track-name {
+      height: 24px;
+      @apply bg-grey-70;
+      border-radius: 4px;
+      box-shadow:
+        0 0 0 2px rgb(255, 255, 255),
+        0 0 0 2.5px rgb(182, 178, 175);
+      padding: 2px 6px;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      @apply text-white-100;
+    }
+
+    .track-rail {
+      align-self: center;
+      height: 9px;
+      width: 17px;
+      margin-left: 2.5px;
+      margin-right: 1px;
+      @apply bg-white-50;
+      border-top: solid 1px rgb(211, 209, 207);
+      border-bottom: solid 1px rgb(211, 209, 207);
+    }
+  }
+}
+
+.close-track-occupancy-panel {
+  position: absolute;
+  right: 0;
+  margin: 0.875rem;
+}
+
+#tracks-layer,
+#occupancy-zones-layer {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.track-occupancy-standalone {
+  width: auto;
+  overflow: hidden;
+  box-shadow:
+    0 2px 4px 0 rgba(0, 0, 0, 0.22),
+    0 4px 7px -3px rgba(255, 171, 88, 0.17),
+    inset 0 1px 0 0 rgb(255, 255, 255);
+  border-radius: 10px;
+
+  .track-occupancy-manchette::before,
+  .track-occupancy-manchette::after {
+    display: none;
+  }
+
+  .ui-manchette-space-time-chart-wrapper {
+    overflow: auto;
+    flex: 1;
+  }
+
+  .main-container-header {
+    height: 40px;
+    padding-left: 16px;
+    border-radius: 10px 10px 0 0;
+    box-shadow:
+      inset 0 1px 0 0 rgb(255, 255, 255),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .manchette {
+    height: 100%;
+  }
+  .ui-manchette-container {
+    width: 200px;
+    overflow: hidden;
+    flex-shrink: 0;
+    height: fit-content;
+  }
+  .manchette-actions {
+    position: absolute;
+    bottom: 0;
+    width: 200px;
+
+    * {
+      display: none;
+    }
+  }
+}

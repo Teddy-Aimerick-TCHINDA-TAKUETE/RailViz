@@ -1,0 +1,154 @@
+/*
+*
+*   SELECT
+*
+*/
+.select-improved {
+  .select-menu {
+    z-index: 3 !important;
+  }
+
+  .form-control {
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/*
+*
+*   DROPDOWN
+*
+*/
+.dropdown.tether-element {
+  margin-top: 10px;
+  // z-index: 1056 to be above the master header
+  z-index: 1056;
+  .dropdown-menu {
+    margin-top: 0;
+
+    &::after,
+    &::before {
+      bottom: calc(100% - 1px) !important;
+    }
+  }
+}
+
+.dropdown-menu {
+  ul.dropdown-menu-list {
+    li.dropdown-item {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      > * {
+        width: 100%;
+        padding: 0.5em 1.5em;
+      }
+    }
+  }
+}
+
+/*
+*
+*   MODALS
+*
+*/
+.modal-header.modal-header-border-bottom {
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  div {
+    width: 100%;
+    border-top: 1px solid var(--coolgray3);
+  }
+}
+
+/*
+*
+*   CHIPS
+*
+*/
+.chips-container {
+  .form-chips-container {
+    min-height: 45px;
+    text-align: center;
+    display: flex;
+    padding: 5px;
+
+    input {
+      width: 100%;
+      flex-grow: 1;
+      line-height: 1;
+      min-height: 25px;
+      padding: 0;
+    }
+  }
+
+  .chips {
+    border: none !important;
+    &.chips-label {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      height: 35.2px;
+    }
+
+    &.chips-btn {
+      min-height: 32px;
+
+      &:hover {
+        background-color: var(--secondary);
+        color: var(--white) !important;
+      }
+    }
+  }
+}
+
+/*
+*
+*   LABELS
+*
+*/
+label,
+.labels {
+  display: flex !important;
+  align-items: center !important;
+  height: 22.4px;
+  gap: 8px;
+}
+
+/*
+*
+*   BLOCKQUOTE
+*
+*/
+blockquote {
+  font-size: 0.9rem;
+  border-left: 3px solid var(--secondary);
+  background-color: var(--coolgray1);
+  padding-left: 8px;
+}
+
+/*
+*
+*   INPUT
+*
+*/
+.right-alignment {
+  text-align: right;
+}
+
+.left-alignment {
+  text-align: left;
+}
+
+input {
+  &.form-control {
+    padding-bottom: 7.2px;
+  }
+  &.form-control-sm {
+    padding-bottom: 0;
+  }
+}
+.input-group-sm input {
+  padding-bottom: 7.2px;
+}
