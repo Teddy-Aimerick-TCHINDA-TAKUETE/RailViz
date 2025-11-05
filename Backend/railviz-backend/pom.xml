@@ -8,20 +8,20 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>websocket-demo</name>
-	<description>Spring Boot WebSocket Chat Demo</description>
+	<name>railviz-application</name>
+	<description>Spring Boot railviz-application</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.5</version>
+		<version>3.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>11</java.version>
+		<java.version>21</java.version>
 	</properties>
 
 	<dependencies>
@@ -53,6 +53,28 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Lombok -->
+		<dependency>
+		  <groupId>org.projectlombok</groupId>
+		  <artifactId>lombok</artifactId>
+		  <version>1.18.34</version>
+		  <scope>provided</scope>
+		</dependency>
+
+		<!-- Swagger UI (springdoc) -->
+		<dependency>
+		  <groupId>org.springdoc</groupId>
+		  <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+		  <version>2.6.0</version>
+		</dependency>
+
+		<!-- (optionnel) Actuator pour observabilité -->
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -85,6 +107,25 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-compiler-plugin</artifactId>
+		      <version>3.14.0</version>
+		      <configuration>
+		        <source>21</source>
+		        <target>21</target>
+		        <release>21</release>
+		        <annotationProcessorPaths>
+		          <path>
+		            <groupId>org.projectlombok</groupId>
+		            <artifactId>lombok</artifactId>
+		            <version>1.18.34</version>
+		          </path>
+		        </annotationProcessorPaths>
+		      </configuration>
+		    </plugin>
+			
 		</plugins>
 	</build>
 </project>

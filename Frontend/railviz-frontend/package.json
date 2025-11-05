@@ -8,7 +8,10 @@
     "demo": "ng serve ngx-leaflet-demo",
     "build": "ng build ngx-leaflet --configuration production && copyfiles README.md LICENSE CHANGES.md ./dist/ngx-leaflet",
     "watch": "ng build ngx-leaflet --watch --configuration development",
-    "test": "ng test ngx-leaflet"
+    "test": "ng test ngx-leaflet",
+    "start": "ng serve",
+    "start:proxy": "ng serve --proxy-config proxy.conf.json",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -20,11 +23,15 @@
     "@angular/platform-browser": "^20.0.0",
     "@angular/platform-browser-dynamic": "^20.0.0",
     "@angular/router": "^20.0.0",
-    "@types/leaflet": "1",
+    "@bluehalo/ngx-leaflet": "^20.0.0",
+    "@stomp/stompjs": "^7.2.1",
+    "@types/leaflet": "^1.9.21",
     "bootstrap": "^4.6.1",
     "copyfiles": "^2.4.1",
-    "leaflet": "1",
+    "leaflet": "^1.9.4",
     "rxjs": "~7.8.1",
+    "sockjs": "^0.3.24",
+    "sockjs-client": "^1.6.1",
     "tslib": "^2.8.1",
     "zone.js": "~0.15.0"
   },
@@ -34,6 +41,8 @@
     "@angular/compiler-cli": "^20.0.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^20.0.0",
+    "@types/sockjs": "^0.3.36",
+    "@types/sockjs-client": "^1.5.4",
     "jasmine-core": "~4.0.0",
     "karma": "~6",
     "karma-chrome-launcher": "~3.1.0",

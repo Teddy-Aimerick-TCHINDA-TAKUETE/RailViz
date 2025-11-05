@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { LeafletDemoModule } from './leaflet-demo/leaflet-demo.module';
+import { LeafletModule } from '@bluehalo/ngx-leaflet';
 
 
 @NgModule({
@@ -11,7 +11,7 @@ import { LeafletDemoModule } from './leaflet-demo/leaflet-demo.module';
     ],
     imports: [
         BrowserModule,
-        LeafletDemoModule
+        LeafletModule
     ],
     providers: [],
     bootstrap: [ AppComponent ]

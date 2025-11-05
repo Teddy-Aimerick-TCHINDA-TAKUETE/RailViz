@@ -108,40 +108,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
-          }
-        }
-      }
-    },
-    "ngx-leaflet": {
-      "projectType": "library",
-      "root": "projects/ngx-leaflet",
-      "sourceRoot": "projects/ngx-leaflet/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/ngx-leaflet/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/ngx-leaflet/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/ngx-leaflet/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "main": "projects/ngx-leaflet/src/test.ts",
-            "tsConfig": "projects/ngx-leaflet/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-leaflet/karma.conf.js"
           }
         }
       }
