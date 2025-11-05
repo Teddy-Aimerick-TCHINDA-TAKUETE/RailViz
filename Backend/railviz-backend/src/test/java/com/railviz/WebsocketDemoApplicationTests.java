@@ -1,4 +1,4 @@
-package com.example.websocketdemo;
+package com.railviz;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
