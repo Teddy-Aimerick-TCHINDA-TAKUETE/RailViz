@@ -12,8 +12,10 @@
         <div class="id">{{ r.id }}</div>
         <div class="meta">{{ lengthKm(r) | number:'1.1-1' }} km · {{ r.points.length }} pts</div>
       </div>
-      <div class="actions">
+      <div class="actions" style="display:flex;gap:6px;flex-wrap:wrap">
         <button (click)="centerRoute.emit(r)">Centrer</button>
+        <button (click)="editRoute.emit(r)">Éditer</button>
+        <button (click)="deleteRoute.emit(r)">Supprimer</button>
       </div>
     </div>
   }

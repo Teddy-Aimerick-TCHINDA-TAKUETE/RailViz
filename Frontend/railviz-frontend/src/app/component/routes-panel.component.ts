@@ -26,6 +26,9 @@ export class RoutesPanelComponent {
 
   @Output() newRoute = new EventEmitter<void>();
   @Output() centerRoute = new EventEmitter<RouteDTO>();
+  @Output() editRoute = new EventEmitter<RouteDTO>();
+  @Output() deleteRoute = new EventEmitter<RouteDTO>();
+
 
   constructor(private api: RoutesService) {
     this.api.list().subscribe(r => this.routes = r);

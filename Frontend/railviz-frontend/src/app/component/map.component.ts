@@ -50,38 +50,43 @@ export class MapComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+    // Leaflet init (inchangé)
     this.map = L.map('map').setView([48.8566, 2.3522], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(this.map);
+    L.tileLayer('https://tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', { attribution: '&copy; OpenRailwayMap contributors' }).addTo(this.map);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(this.map);
+    // ROUTES: liste initiale + live
+    this.routesService.primeInitialList();
+    this.routesService.connectLive();
+    this.routesService.routes$.subscribe(rs => {
+      // MAJ du panneau
+      this.routes = rs;
 
-    L.tileLayer('https://tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenRailwayMap contributors'
-    }).addTo(this.map);
+      // MAJ des polylignes (simple: on reconstruit pour rester sûr)
+      // (Option: stratego par diff si tu préfères)
+      for (const line of this.routePolylines.values()) this.map.removeLayer(line);
+      this.routePolylines.clear();
+      const palette = ['#0ea5e9','#22c55e','#a855f7','#f59e0b','#ef4444'];
+      rs.forEach((r,i) => {
+        const line = L.polyline(r.points.map(p => [p[0], p[1]]), {
+          color: palette[i % palette.length], weight: 3, opacity: 0.8
+        }).addTo(this.map);
+        line.bringToBack();
+        this.routePolylines.set(r.id, line);
+      });
+    });
 
-    // routes + trains au chargement
-    this.routesService.list().subscribe(routes => this.drawRoutes(routes));
-    this.loadRoutes();
-    this.loadTrains();
+    // TRAINS: liste initiale (panneau) + live admin + télémétrie carte
+    this.trainsService.primeInitialList();
+    this.trainsService.connectAdmin(); // met à jour this.trains via trains$
+    this.trainsService.trains$.subscribe(ts => { this.trains = ts; });
 
-    // ✅ WebSocket: on reçoit directement TrainDTO
-    this.trainsService.connectLive((t) => {
+    this.trainsService.connectTelemetry(t => {
       this.upsertTrain(t);
       if (this.showAlertsOnly) this.applyFilterFor(t.id);
     });
-
-    this.routesService.connectLive((r) => {
-      // a) mettre à jour la collection → le panneau voit la nouvelle route
-      this.routes = [...this.routes, r];
-      // b) tracer la polyligne immédiatement
-      const line = L.polyline(r.points.map(p => [p[0], p[1]]), {
-        color: '#0ea5e9', weight: 3, opacity: .8
-      }).addTo(this.map);
-      line.bringToBack();
-      this.routePolylines.set(r.id, line);
-    });
   }
+
 
   private drawRoutes(routes: RouteDTO[]) {
     this.routes = routes;
@@ -215,6 +220,38 @@ export class MapComponent implements AfterViewInit {
     this.map.fitBounds(line.getBounds(), { animate: true, padding: [40, 40] });
   }
 
+  openEditRoute(r: RouteDTO){
+    // Variante simple: réutilise l’outil de tracé en préchargeant la polyline dans this.recorded, puis save = PUT
+    this.recording = true;
+    this.newRouteId = r.id;
+    this.recorded = r.points.map(p => [p[0], p[1]]);
+    this.tempLine = L.polyline(r.points.map(p => ({lat:p[0], lng:p[1]})), { color:'#0ea5e9', weight:3 }).addTo(this.map);
+    this.map.on('click', this.onClickRecord);
+  }
+
+  saveNewRoute(){
+    if (this.recorded.length < 2) return;
+    const id = this.newRouteId.trim();
+    if (!id) return;
+
+    const isUpdate = this.routes.some(x => x.id === id);
+    const dto = { id, points: this.recorded };
+
+    (isUpdate ? this.routesService.update(dto) : this.routesService.add(dto))
+      .subscribe({
+        next: () => this.cancelNewRoute(),
+        error: err => alert('Erreur route: '+(err?.error || err?.message))
+      });
+  }
+
+  confirmDeleteRoute(r: RouteDTO){
+    if (!confirm(`Supprimer la route ${r.id} ?`)) return;
+    this.routesService.delete(r.id).subscribe({
+      error: err => alert('Suppression échouée: '+(err?.error || err?.message))
+    });
+  }
+
+
   // ===== Création de route =====
   toggleRecord() {
     this.recording = !this.recording;
@@ -245,27 +282,6 @@ export class MapComponent implements AfterViewInit {
     this.tempLine?.setLatLngs(this.recorded.map(p => ({lat:p[0], lng:p[1]})));
   };
 
-  saveNewRoute() {
-    if (this.recorded.length < 2) return;
-    const id = this.newRouteId.trim();
-    if (!id) return;
-    const checkId = this.routes.some(r => r.id === id);
-    if (checkId) { alert('Cette route existe deja.'); return; }
-
-    this.routesService.add({ id: id, points: this.recorded })
-      .pipe(switchMap(() => this.routesService.list()))
-      .subscribe({
-        next: rs => { 
-          this.routes = rs;
-          const line = L.polyline(this.recorded, { color: '#0ea5e9', weight: 3, opacity: .8 }).addTo(this.map);
-          line.bringToBack();
-          this.routePolylines.set(id, line);
-          this.cancelNewRoute();
-        },
-        error: err => alert('Erreur création route: ' + (err?.error || err?.message))
-      });
-  }
-
   // ===== Panneau "Nouveau train" (panel droit) =====
   openNewTrainPanel() {
     this.newTrainOpen = true;
@@ -292,4 +308,28 @@ export class MapComponent implements AfterViewInit {
       error: err => alert('Erreur création: ' + (err?.error || err?.message))
     });
   }
+
+  promptSpeed(t: TrainDTO){
+    const v = prompt(`Nouvelle vitesse pour ${t.id} (km/h):`, String(Math.round(t.speedKmh)));
+    if (!v) return;
+    const num = Number(v);
+    if (isNaN(num) || num <= 0) return alert('Vitesse invalide');
+    this.trainsService.setSpeed(t.id, num).subscribe({
+      error: err => alert('Erreur vitesse: '+(err?.error || err?.message))
+    });
+  }
+
+  confirmDeleteTrain(t: TrainDTO){
+    if (!confirm(`Supprimer le train ${t.id} ?`)) return;
+    this.trainsService.delete(t.id).subscribe({
+      next: () => {
+        // côté carte: enlève marqueur + trail localement (le panneau sera maj par WS)
+        const mk = this.markers.get(t.id); if (mk) { this.map.removeLayer(mk); this.markers.delete(t.id); }
+        const tr = this.trainTrails.get(t.id); if (tr) { this.map.removeLayer(tr); this.trainTrails.delete(t.id); }
+        this.states.delete(t.id);
+      },
+      error: err => alert('Suppression échouée: '+(err?.error || err?.message))
+    });
+  }
+
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TrainStore } from '../service/train-store.service';
+import { TrainsService } from '../service/trains.service';
 import { TrainDTO } from '../service/models';
 
 @Component({
@@ -18,6 +18,7 @@ import { TrainDTO } from '../service/models';
     .id{font-weight:600}
     .meta{font-size:12px;color:#555}
     .new{padding:6px 10px;border-radius:10px;border:1px solid #ddd;background:#f8f9ff;cursor:pointer}
+    button{padding:6px 10px;border-radius:10px;border:1px solid #ddd;background:#f8f9ff;cursor:pointer}
   `]
 })
 export class TrainsPanelComponent {
@@ -25,8 +26,10 @@ export class TrainsPanelComponent {
 
   @Output() center = new EventEmitter<TrainDTO>();
   @Output() newTrain = new EventEmitter<void>();
+  @Output() changeSpeed = new EventEmitter<TrainDTO>();
+  @Output() deleteTrain = new EventEmitter<TrainDTO>();
 
-  constructor(store: TrainStore){
-    store.$.subscribe(list => this.trains = list);
+  constructor(private api: TrainsService) {
+    this.api.list().subscribe(t => this.trains = t);
   }
 }

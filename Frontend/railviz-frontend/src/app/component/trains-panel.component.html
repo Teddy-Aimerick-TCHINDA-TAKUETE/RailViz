@@ -12,6 +12,10 @@
         <div class="id">{{ t.id }}</div>
         <div class="meta">{{ t.speedKmh | number:'1.0-0' }} km/h · {{ t.signal }}</div>
       </button>
+      <div style="display:flex;gap:6px;margin:4px 0 10px 0">
+        <button (click)="changeSpeed.emit(t)">Vitesse…</button>
+        <button (click)="deleteTrain.emit(t)">Supprimer</button>
+      </div>
     </div>
   }
 </div>

@@ -92,7 +92,7 @@ public class TrainService {
 		trains.replaceAll((id, st) -> {
 			TrainState ns = advance(st);
 			// ws.convertAndSend("/topic/trains", toDTO(ns));
-			ws.convertAndSend("/topic/telemetry", TrainWsEvent.add(toDTO(ns)));
+			ws.convertAndSend("/topic/telemetry", toDTO(ns));
 			return ns;
 		});
 	}

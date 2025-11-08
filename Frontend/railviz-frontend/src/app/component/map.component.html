@@ -2,8 +2,20 @@
 <div id="map" style="height:100vh;width:100vw;"></div>
 
 <!-- panneaux overlay -->
-<app-routes-panel (newRoute)="openNewRoute()" (centerRoute)="centerRoute($event)"></app-routes-panel>
-<app-trains-panel (center)="centerOn($event)" (newTrain)="openNewTrainPanel()"></app-trains-panel>
+<app-routes-panel
+  (newRoute)="openNewRoute()"
+  (centerRoute)="centerRoute($event)"
+  (editRoute)="openEditRoute($event)"
+  (deleteRoute)="confirmDeleteRoute($event)">
+</app-routes-panel>
+
+<app-trains-panel
+  (center)="centerOn($event)"
+  (newTrain)="openNewTrainPanel()"
+  (changeSpeed)="promptSpeed($event)"
+  (deleteTrain)="confirmDeleteTrain($event)">
+</app-trains-panel>
+
 
 <!-- Légende -->
 <div class="legend-card">
