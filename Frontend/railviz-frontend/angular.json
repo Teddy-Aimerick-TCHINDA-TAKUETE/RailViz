@@ -81,7 +81,8 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ngx-leaflet-demo:build:production"
+              "buildTarget": "ngx-leaflet-demo:build:production",
+              "proxyConfig": "proxy.conf.json"
             },
             "development": {
               "buildTarget": "ngx-leaflet-demo:build:development"

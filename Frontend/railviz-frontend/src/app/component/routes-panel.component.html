@@ -1,0 +1,20 @@
+<div class="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <h3 style="margin:0">Routes</h3>
+    <button (click)="newRoute.emit()">+ Nouvelle</button>
+  </div>
+
+  @if (routes.length === 0) {
+    <div style="font-size:12px;color:#666">Aucune route. Créez-en une.</div>
+  } @else {
+    <div *ngFor="let r of routes" class="row">
+      <div class="head">
+        <div class="id">{{ r.id }}</div>
+        <div class="meta">{{ lengthKm(r) | number:'1.1-1' }} km · {{ r.points.length }} pts</div>
+      </div>
+      <div class="actions">
+        <button (click)="centerRoute.emit(r)">Centrer</button>
+      </div>
+    </div>
+  }
+</div>
