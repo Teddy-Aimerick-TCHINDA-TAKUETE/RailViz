@@ -9,19 +9,15 @@ import { TrainDTO, Sig } from '../service/models';
   imports: [CommonModule],
   templateUrl: './trains-panel.component.html',
   styles: [`
-    .panel{position:fixed; top:16px; right:16px; width:280px;
-           background:#fff; border-radius:12px; padding:12px;
-           box-shadow:0 6px 18px rgba(0,0,0,.15); 
-           font-family:system-ui; z-index:1200;}
-    .row{display:flex; gap:10px; width:100%; text-align:left; border:0; background:transparent;
-         padding:8px; border-radius:10px; cursor:pointer; align-items:flex-start}
+    .panel{position:fixed; top:16px; right:16px; width:280px; background:#fff; border-radius:12px; padding:12px; box-shadow:0 6px 18px rgba(0,0,0,.15); font-family:system-ui; z-index:1200;}
+    .row{display:flex;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer; gap:8px}
     .row:hover{background:#f4f6ff}
-    .dot{width:10px;height:10px;border-radius:50%; margin-top:6px; box-shadow:0 0 0 2px #fff, 0 0 0 3px rgba(0,0,0,.06)}
-    .id{font-weight:600}
+    .hd{display:flex;align-items:center;gap:6px}
+    .id{font-weight:600; display:flex; align-items:center; gap:8px}
     .meta{font-size:12px;color:#555}
-    .badge{display:inline-block; font-size:11px; padding:2px 6px; border-radius:999px; background:#eef2ff; color:#3730a3; margin-left:6px}
-    .hd{display:flex; align-items:center; gap:6px}
     .new{padding:6px 10px;border-radius:10px;border:1px solid #ddd;background:#f8f9ff;cursor:pointer}
+    .badge{font-size:11px;background:#eef2ff;color:#1e3a8a;padding:2px 6px;border-radius:999px}
+    .dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 2px #fff, 0 0 0 4px rgba(0,0,0,.06)}
     button{padding:6px 10px;border-radius:10px;border:1px solid #ddd;background:#f8f9ff;cursor:pointer}
   `]
 })
@@ -33,8 +29,8 @@ export class TrainsPanelComponent {
   @Output() changeSpeed = new EventEmitter<TrainDTO>();
   @Output() deleteTrain = new EventEmitter<TrainDTO>();
 
-  constructor(trainsSvc: TrainsService) {
-    trainsSvc.trains$.subscribe(list => this.trains = list);
+  constructor(private trainsSvc: TrainsService) {
+    this.trainsSvc.trains$.subscribe(t => this.trains = t);
   }
 
   signalColor(sig: Sig): string {

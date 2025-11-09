@@ -9,16 +9,13 @@ import { RouteDTO } from '../service/models';
   imports: [CommonModule],
   templateUrl: './routes-panel.component.html',
   styles: [`
-    .panel{position:fixed; top:16px; left:16px; width:260px;
-           background:#fff; border-radius:12px; padding:12px;
-           box-shadow:0 6px 18px rgba(0,0,0,.15);
-           font-family:system-ui; z-index:1200;}
-    .row{border:1px solid #eee;border-radius:10px;padding:8px;margin-bottom:8px}
+    .panel{position:fixed; top:16px; left:16px; width:280px; background:#fff; border-radius:12px; padding:12px; box-shadow:0 6px 18px rgba(0,0,0,.15); font-family:system-ui; z-index:1200;}
+    .row{display:flex;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer; gap:8px}
+    .row:hover{background:#f4f6ff}
     .head{display:flex;justify-content:space-between;align-items:baseline}
-    .id{font-weight:600}
+    .id{font-weight:600; display:flex; align-items:center; gap:8px}
     .meta{font-size:12px;color:#555}
-    .actions{margin-top:6px}
-    .chip{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;box-shadow:0 0 0 2px #fff, 0 0 0 3px rgba(0,0,0,.06)}
+    .chip{display:inline-block;width:10px;height:10px;border-radius:50%}
     button{padding:6px 10px;border-radius:10px;border:1px solid #ddd;background:#f8f9ff;cursor:pointer}
   `]
 })

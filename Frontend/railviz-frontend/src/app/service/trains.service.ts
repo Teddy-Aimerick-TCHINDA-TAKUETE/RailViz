@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Client } from '@stomp/stompjs';
-import { TrainDTO, CreateTrainCommand, TrainWsEvent } from './models';
+import { TrainDTO, CreateTrainCommand, UpdateTrainCommand, TrainWsEvent } from './models';
 
 const API = 'http://localhost:8080';
 const WS = `${API}/ws`;
@@ -15,9 +15,10 @@ export class TrainsService {
   private _trains$ = new BehaviorSubject<TrainDTO[]>([]);
   trains$ = this._trains$.asObservable();
 
-  constructor(
-    private http: HttpClient,
-  ) {}
+  constructor(private http: HttpClient) {
+    this.refresh();
+    this.connectAdmin();
+  }
 
   /** REST */
   list() {
@@ -30,8 +31,16 @@ export class TrainsService {
     return this.http.patch(`${API}/api/trains/${id}/speed`, { lineSpeedKmh });
   }
 
+  update(id: string, cmd: UpdateTrainCommand) {
+    return this.http.patch(`${API}/api/trains/${id}`, cmd);
+  }
+
   delete(id: string){ 
     return this.http.delete(`${API}/api/trains/${id}`); 
+  }
+
+  private refresh() {
+    this.list().subscribe(ts => this._trains$.next(ts));
   }
 
   connectAdmin() {
@@ -43,11 +52,25 @@ export class TrainsService {
     this.clientAdmin.onConnect = () => {
       this.clientAdmin!.subscribe('/topic/trains', msg => {
         const ev = JSON.parse(msg.body) as TrainWsEvent;
-        if (ev.type === 'DELETE') this.remove(ev.train.id);
-        else this.upsert(ev.train);
+        this.applyTrainEvent(ev);
       });
     };
     this.clientAdmin.activate();
+  }
+
+  /** Met à jour le cache local sans recharger toute la liste */
+  private applyTrainEvent(ev: TrainWsEvent) {
+    const cur = this._trains$.getValue();
+    if (ev.type === 'ADD') {
+      this.upsert(ev.train);
+      if (!cur.find(t => t.id === ev.train.id)) this._trains$.next([...cur, ev.train]);
+    } else if (ev.type === 'UPDATE') {
+      this.upsert(ev.train);
+      this._trains$.next(cur.map(t => t.id === ev.train.id ? ev.train : t));
+    } else if (ev.type === 'DELETE') {
+      this.remove(ev.train.id);
+      this._trains$.next(cur.filter(t => t.id !== ev.train.id));
+    }
   }
 
   // Télémétrie en continu (si tu veux aussi animer les marqueurs)
@@ -74,9 +97,20 @@ export class TrainsService {
   private upsert(t: TrainDTO) {
     const prev = this.map.get(t.id);
     // merge simple pour conserver champs non envoyés selon les flux
-    this.map.set(t.id, { ...prev, ...t });
+    this.map.set(t.id, t);
     this.emit();
   }
+
+  private upsertLocal(t: TrainDTO) {
+    const cur = this._trains$.getValue();
+    const i = cur.findIndex(x => x.id === t.id);
+    if (i === -1) this._trains$.next([...cur, t]);
+    else {
+      const next = cur.slice(); next[i] = t;
+      this._trains$.next(next);
+    }
+  }
+
   private remove(id: string) {
     this.map.delete(id);
     this.emit();

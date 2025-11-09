@@ -19,6 +19,15 @@ export type CreateTrainCommand = {
   startProgress?: number;
 };
 
+export type UpdateTrainCommand = {
+  routeId: string;
+  lineSpeedKmh: number;
+  startSeg?: number;
+  startProgress?: number;
+  accel?: number;
+  decel?: number;
+};
+
 export type RouteWsEvent = {
   type: 'ADD' | 'UPDATE' | 'DELETE';
   route: RouteDTO;

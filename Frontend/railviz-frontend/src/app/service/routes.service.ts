@@ -15,9 +15,10 @@ export class RoutesService {
   private _routes$ = new BehaviorSubject<RouteDTO[]>([]);
   routes$ = this._routes$.asObservable();
 
-  constructor(
-    private http: HttpClient
-  ) {}
+  constructor(private http: HttpClient) {
+    this.refresh();         // charge l’état initial
+    this.connectWs();      // écoute temps réel
+  }
 
   list() { return this.http.get<RouteDTO[]>(`${API}/api/routes`); }
 
@@ -25,8 +26,8 @@ export class RoutesService {
     return this.http.post(`${API}/api/routes`, route);
   }
 
-  update(route: RouteDTO){ 
-    return this.http.put(`${API}/api/routes/${route.id}`, route); 
+  update(id: string, route: RouteDTO){ 
+    return this.http.put(`${API}/api/routes/${id}`, route); 
   }
   delete(id: string){ 
     return this.http.delete(`${API}/api/routes/${id}`); 
@@ -56,6 +57,12 @@ export class RoutesService {
     });
   }
 
+  /** Initial load */
+  private refresh() {
+    this.list().subscribe(rs => this._routes$.next(rs));
+  }
+
+  /** WebSocket “/topic/routes”  → events CREATED/UPDATED/DELETED */
   connectWs() {
     if (this.client) return;
     this.client = new Client({
@@ -65,11 +72,25 @@ export class RoutesService {
     this.client.onConnect = () => {
       this.client!.subscribe('/topic/routes', msg => {
         const ev = JSON.parse(msg.body) as RouteWsEvent;
-        if (ev.type === 'DELETE') this.remove(ev.route.id);
-        else this.upsert(ev.route);
+        this.applyRouteEvent(ev);
       });
     };
     this.client.activate();
+  }
+
+  /** Met à jour le cache local sans recharger toute la liste */
+  private applyRouteEvent(ev: RouteWsEvent) {
+    const cur = this._routes$.getValue();
+    if (ev.type === 'ADD') {
+      this.upsert(ev.route);
+      if (!cur.find(r => r.id === ev.route.id)) this._routes$.next([...cur, ev.route]);
+    } else if (ev.type === 'UPDATE') {
+      this.upsert(ev.route);
+      this._routes$.next(cur.map(r => r.id === ev.route.id ? ev.route : r));
+    } else if (ev.type === 'DELETE') {
+      this.remove(ev.route.id);
+      this._routes$.next(cur.filter(r => r.id !== ev.route.id));
+    }
   }
 
 }
