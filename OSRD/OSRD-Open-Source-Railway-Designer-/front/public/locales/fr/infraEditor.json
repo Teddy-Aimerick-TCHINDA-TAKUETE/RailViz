@@ -1,0 +1,1038 @@
+{
+  "ApplicableDirections": {
+    "description": "Utilisé pour connaître le sens d'application de certains objets",
+    "title": "Directions applicables"
+  },
+  "ApplicableDirectionsTrackRange": {
+    "description": "Intervalle sur une section de voie avec directions associées.",
+    "properties": {
+      "applicable_directions": {
+        "description": "Direction dans laquelle l'objet correspondant est appliqué"
+      },
+      "begin": {
+        "description": "Distance par rapport au début de la section de voie correspondante (en mètres)",
+        "title": "Début"
+      },
+      "end": {
+        "description": "Décalage par rapport à la fin de la section de voie correspondante (en mètres)",
+        "title": "Fin"
+      },
+      "track": {
+        "description": "Identifiant de la section de voie",
+        "title": "Voie"
+      }
+    },
+    "title": "Section de voie orientée"
+  },
+  "BalSystem": {
+    "properties": {
+      "conditional_parameters": {
+        "description": "Paramètres des signaux BAL pour des itinéraires spécifiques",
+        "title": "Paramètres conditionnels"
+      },
+      "default_parameters": {
+        "description": "Paramètres du signal BAL"
+      },
+      "next_signaling_systems": {
+        "description": "La liste des systèmes de signalisation d'entrée autorisés",
+        "title": "Systèmes de signalisation suivants"
+      },
+      "settings": {
+        "description": "Paramètres du BAL"
+      },
+      "signaling_system": {
+        "title": "Système de signalisation"
+      }
+    },
+    "title": "Signalisation BAL"
+  },
+  "BaprSystem": {
+    "properties": {
+      "conditional_parameters": {
+        "description": "Paramètres de signal BAPR pour des itinéraires spécifiques",
+        "title": "Paramètres conditionnels"
+      },
+      "next_signaling_systems": {
+        "description": "La liste des systèmes de signalisation d'entrée autorisés",
+        "title": "Systèmes de signalisation suivants"
+      },
+      "parameters": {
+        "description": "Paramètre de signal BAPR"
+      },
+      "settings": {
+        "description": "Paramètres du BAPR"
+      },
+      "signaling_system": {
+        "title": "Système de signalisation"
+      }
+    },
+    "title": "Signalisation BAPR"
+  },
+  "BufferStop": {
+    "description": "Un heurtoir est un dispositif placé à l'extrémité d'une route en cul-de-sac pour empêcher les trains en dérive de poursuivre leur route. Il est caractérisé par son identifiant et sa voie correspondante.",
+    "properties": {
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Identifiant"
+      },
+      "position": {
+        "description": "Distance par rapport au début de la section de voie correspondante (en mètres)",
+        "title": "Position"
+      },
+      "track": {
+        "description": "Référence à la section de voie sur lequel l’objet se situe",
+        "title": "Voie"
+      }
+    },
+    "title": "Heurtoir"
+  },
+  "BufferStopExtensions": {
+    "title": "Extensions du heurtoir"
+  },
+  "BufferStopReference": {
+    "properties": {
+      "id": {
+        "description": "Identifiant du heurtoir",
+        "title": "Identifiant"
+      },
+      "type": {
+        "title": "Type"
+      }
+    },
+    "title": "Référence du heurtoir"
+  },
+  "BufferStopSncfExtension": {
+    "properties": {
+      "kp": {
+        "description": "Point kilométrique auquel se situe le heurtoir",
+        "title": "PK"
+      }
+    },
+    "title": "extension sncf du heurtoir"
+  },
+  "ConditionalParameter": {
+    "properties": {
+      "on_route": {
+        "description": "Itinéraire sur lequel les paramètres sont appliqués",
+        "title": "Sur l'itinéraire"
+      },
+      "parameters": {
+        "description": "Liste des paramètres clé valeur qui sont définis par système de signalisation",
+        "title": "Paramètres"
+      }
+    },
+    "title": "Paramètre conditionnel"
+  },
+  "Curve": {
+    "description": "Une courbe définit le rayon de courbure d'une partie spécifique de la section de voie correspondante.",
+    "properties": {
+      "begin": {
+        "description": "Distance entre le début du correspondant et le début de la courbure (en mètres). ",
+        "title": "Début"
+      },
+      "end": {
+        "description": "Distance entre la fin de la courbure et la fin de la section de voie correspondante (en mètres)",
+        "title": "Fin"
+      },
+      "radius": {
+        "description": "Rayon de courbure (en mètres)",
+        "title": "Radius"
+      }
+    },
+    "title": "Courbe"
+  },
+  "Detector": {
+    "description": "Un détecteur est caractérisé par son identifiant et sa section de voie correspondante. Il est utilisé pour détecter un train, afin de savoir si la section correspondant à ce détecteur est occupée.",
+    "properties": {
+      "applicable_directions": {
+        "description": "Direction d’application du détecteur"
+      },
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Identifiant"
+      },
+      "position": {
+        "description": "Distance depuis le début de la section de voie (en mètres)",
+        "title": "Position"
+      },
+      "track": {
+        "description": "Référence à la section de voie sur laquelle l’objet se situe",
+        "title": "Voie"
+      }
+    },
+    "title": "Détecteur"
+  },
+  "DetectorExtensions": {
+    "title": "Extensions du détecteur"
+  },
+  "DetectorReference": {
+    "properties": {
+      "id": {
+        "description": "Identifiant du détecteur",
+        "title": "Identifiant"
+      },
+      "type": {
+        "title": "Type"
+      }
+    },
+    "title": "Référence du détecteur"
+  },
+  "DetectorSncfExtension": {
+    "properties": {
+      "kp": {
+        "description": "Point kilométrique du détecteur",
+        "title": "PK"
+      }
+    },
+    "title": "Extension sncf du détecteur"
+  },
+  "Direction": {
+    "description": "Direction (profil croissant ou décroissant).",
+    "title": "Direction"
+  },
+  "DirectionalTrackRange": {
+    "description": "Un intervalle sur une section de voie est un intervalle avec une direction associée.",
+    "properties": {
+      "begin": {
+        "description": "Distance de début par rapport au début de la section de voie (en mètres)",
+        "title": "Début"
+      },
+      "direction": {
+        "description": "Description de la direction"
+      },
+      "end": {
+        "description": "Distance de fin par rapport au début de la section de voie (en mètres)",
+        "title": "Fin"
+      },
+      "track": {
+        "description": "Identifiant de la section de voie",
+        "title": "Voie"
+      }
+    },
+    "title": "Intervalle directionnel sur une section de voie"
+  },
+  "Electrification": {
+    "description": "Une caténaire est un ensemble de câbles permettant d’alimenter les trains en utilisant un pantographe.\nLa caténaire est repérable par son identifiant.",
+    "properties": {
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Identifiant"
+      },
+      "track_ranges": {
+        "description": "Liste des intervalles de section de voie où la tension est appliquée",
+        "title": "Intervalles de section de voie"
+      },
+      "voltage": {
+        "description": "Tension électrique (en Volts)",
+        "title": "Tension électrique"
+      }
+    },
+    "title": "Caténaire"
+  },
+  "Endpoint": {
+    "title": "Point de fin"
+  },
+  "EtcsLevel2System": {
+    "properties": {
+      "conditional_parameters": {
+        "description": "Paramètres du signal ETCS_LEVEL2 pour des itinéraires spécifiques",
+        "title": "Paramètres conditionnels"
+      },
+      "default_parameters": {
+        "description": "Paramètres du signal ETCS_LEVEL2"
+      },
+      "next_signaling_systems": {
+        "description": "La liste des systèmes de signalisation autorisés",
+        "title": "Prochains systèmes de signalisation"
+      },
+      "settings": {
+        "description": "Réglages du signal ETCS_LEVEL2"
+      },
+      "signaling_system": {
+        "title": "Système de signalisation"
+      }
+    },
+    "title": "Système de signalisation ETCS niveau 2"
+  },
+  "FlagSignalParameter": {
+    "title": "Paramètres du signal"
+  },
+  "LimitedLogicalSignal": {
+    "description": "Liste définie de signaux logiques. Utilisée pour générer un schéma utilisable pour le front de l’éditeur",
+    "title": "Signaux logiques définis"
+  },
+  "LineString": {
+    "description": "LineString Model",
+    "properties": {
+      "bbox": {
+        "title": "Bbox"
+      },
+      "coordinates": {
+        "title": "Coordonnées"
+      },
+      "type": {
+        "title": "Type"
+      }
+    },
+    "title": "Séquence de points"
+  },
+  "LoadingGaugeLimit": {
+    "description": "La limite de gabarit correspond à une restriction appliquée aux trains en fonction de leur gabarit et de leur type de matériel roulant.",
+    "properties": {
+      "begin": {
+        "description": "Début de la limite de gabarit par rapport au début de la section de voie (en mètres)",
+        "title": "Début"
+      },
+      "category": {
+        "description": "Catégorie de gabarit pour le matériel roulant correspondant"
+      },
+      "end": {
+        "description": "Fin de la limite de gabarit par rapport au début de la section de voie (en mètres)",
+        "title": "Fin"
+      }
+    },
+    "title": "Limite de Gabarit"
+  },
+  "LoadingGaugeType": {
+    "description": "Catégorie de gabarit.",
+    "title": "Type de gabarit"
+  },
+  "LogicalSignal": {
+    "description": "Un signal logique correspond à ce qui est affiché. Un signal physique comprend un ensemble de signaux logiques",
+    "properties": {
+      "conditional_parameters": {
+        "description": "Une liste de paramètres conditionnels qui sont définis par système de signalisation",
+        "title": "Paramètres conditionnels"
+      },
+      "default_parameters": {
+        "description": "Une liste de paramètres par défaut (en ce qui concerne les itinéraires), qui sont définis par système de signalisation",
+        "title": "Paramètres par défaut"
+      },
+      "next_signaling_systems": {
+        "description": "Liste de systèmes de signalisation autorisés en amont",
+        "title": "Systèmes de signalisations suivants"
+      },
+      "settings": {
+        "description": "Une liste de paramètres définis en fonction du système de signalisation",
+        "title": "Paramètres"
+      },
+      "signaling_system": {
+        "description": "Le système de signalisation du signal",
+        "title": "Système de signalisation"
+      }
+    },
+    "title": "Signal Logique"
+  },
+  "NeutralSection": {
+    "description": "Les zones neutres sont des intervalles de section de voie où les trains n’ont pas le droit de récupérer de l’électricité de caténaires. Ils doivent utiliser leur inertie sur ces intervalles. En pratique, les zones neutres sont délimitées par des panneaux. Dans OSRD, les zones neutres sont directionnelles, afin de prendre en compte des placements de panneaux différents en fonction de la direction. Pour plus d’information, consulter [la documentation] (https://osrd.fr/en/docs/explanation/neutral_sections/).",
+    "properties": {
+      "announcement_track_ranges": {
+        "description": "Liste des intervalles de section de voie où la NEUTRAL SECTION à venir est annoncée",
+        "title": "Intervalles de section de voie à venir"
+      },
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Identifiant"
+      },
+      "lower_pantograph": {
+        "description": "S’il faut que le train baisse ou non son pantographe sur cette section",
+        "title": "Baisser pantographe"
+      },
+      "track_ranges": {
+        "description": "Liste des intervalles de section de voie où le train ne peut pas récupérer de l’électricité de caténaires",
+        "title": "Intervalles de section de voie"
+      }
+    },
+    "title": "Zone neutre"
+  },
+  "NeutralSectionExtensions": {
+    "title": "Extensions de la section neutre"
+  },
+  "NeutralSectionNeutralSncfExtension": {
+    "properties": {
+      "announcement": {
+        "description": "Préciser qu'il existe une section neutre pb/cc",
+        "title": "Annonce"
+      },
+      "end": {
+        "description": "Fin de la section neutre pb/cc",
+        "title": "Fin"
+      },
+      "exe": {
+        "description": "Début des bp/cc zone neutre"
+      },
+      "rev": {
+        "description": "Pancarte réversibilité",
+        "title": "Rev"
+      }
+    },
+    "title": "Extension SNCF de la section neutre"
+  },
+  "OperationalPoint": {
+    "description": "Décrit les points remarquables de l’infrastructure correspondante.",
+    "properties": {
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Identifiant"
+      },
+      "parts": {
+        "title": "Parties de point remarquable"
+      },
+      "weight": {
+        "description": "représente l'importance du PR",
+        "title": "Poids"
+      }
+    },
+    "title": "Point remarquable"
+  },
+  "OperationalPointExtensions": {
+    "title": "Extensions du point remarquable"
+  },
+  "OperationalPointIdentifierExtension": {
+    "properties": {
+      "name": {
+        "description": "Nom du point remarquable",
+        "title": "Nom"
+      },
+      "uic": {
+        "description": "Code UIC",
+        "title": "Code UIC"
+      }
+    },
+    "title": "Extension de l'identifiant du point remarquable"
+  },
+  "OperationalPointPart": {
+    "description": "Une partie de point remarquable correspond à un point unique sur l’infrastructure qui fait partie du point remarquable.",
+    "properties": {
+      "position": {
+        "description": "Décalage entre le point et le début de la section de voie",
+        "title": "Position"
+      },
+      "track": {
+        "description": "Référence à la section de voie sur laquelle l’objet est situé",
+        "title": "Voie"
+      }
+    },
+    "title": "Partie de point remarquable"
+  },
+  "OperationalPointPartExtensions": {
+    "title": "Extensions du point remarquable"
+  },
+  "OperationalPointPartSncfExtension": {
+    "properties": {
+      "kp": {
+        "description": "Point kilométrique de la partie du point remarquable",
+        "title": "PK"
+      }
+    },
+    "title": "Extension SNCF d'une partie de point remarquable"
+  },
+  "OperationalPointSncfExtension": {
+    "properties": {
+      "ch": {
+        "description": "THOR site code of the operational point",
+        "title": "Ch"
+      },
+      "ch_long_label": {
+        "description": "THOR site code long label of the operational point",
+        "title": "Libellé CH long"
+      },
+      "ch_short_label": {
+        "description": "THOR site code short label of the operational point",
+        "title": "Libellé CH court"
+      },
+      "ci": {
+        "description": "THOR immutable code of the operational point",
+        "title": "Ci"
+      },
+      "trigram": {
+        "description": "Identifiant unique d’un point remarquable, composé de trois lettres et propre à la SNCF",
+        "title": "Trigramme"
+      }
+    },
+    "title": "Extension SNCF d'un point remarquable"
+  },
+  "Route": {
+    "description": "Décrit des itinéraires sur l’infrastructure.",
+    "properties": {
+      "entry_point": {
+        "title": "Point d’entrée"
+      },
+      "entry_point_direction": {
+        "description": "Sens de l’itinéraire au point d’entrée"
+      },
+      "exit_point": {
+        "title": "Point de sortie"
+      },
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Id"
+      },
+      "release_detectors": {
+        "description": "Détecteur autorisant la libération des ressources réservées depuis le début de l’itinéraire",
+        "title": "Détecteurs de libération"
+      },
+      "switches_directions": {
+        "description": "Liste des directions des aiguilles sur l’itinéraire",
+        "title": "Directions des aiguilles"
+      }
+    },
+    "title": "Itinéraire"
+  },
+  "Side": {
+    "description": "Décrit le côté de la voie où est situé le signal.",
+    "title": "Côté"
+  },
+  "Sign": {
+    "description": "Un panneau est un objet physique, ponctuel, et cosmétique.",
+    "properties": {
+      "angle": {
+        "description": "Angle (en degrés)",
+        "title": "Angle"
+      },
+      "direction": {
+        "description": "Orientation du panneau sur la voie"
+      },
+      "kp": {
+        "description": "Point kilométrique du panneau",
+        "title": "PK"
+      },
+      "position": {
+        "description": "Distance entre le point et le début de la section de voie (en mètres)",
+        "title": "Position"
+      },
+      "side": {
+        "description": "Côté de la voie où est situé le panneau"
+      },
+      "track": {
+        "description": "Référence de la section de voie sur laquelle est placé l’objet",
+        "title": "Voie"
+      },
+      "type": {
+        "description": "Précise le type de panneau",
+        "title": "Type"
+      },
+      "value": {
+        "description": "Si le panneau est une annonce, précise la valeur",
+        "title": "Valeur"
+      }
+    },
+    "title": "Panneau"
+  },
+  "Signal": {
+    "description": "Un signal est caractérisé par son identifiant et la voie qui lui est rattachée. Par défaut, un signal est situé au centre de la voie.",
+    "properties": {
+      "direction": {
+        "description": "Orientation du signal"
+      },
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Id"
+      },
+      "linked_detector": {
+        "description": "Identifiant du détecteur lié au signal",
+        "title": "Détecteur lié"
+      },
+      "logical_signals": {
+        "description": "Signaux logiques inclus dans le signal physique",
+        "title": "Signaux logiques"
+      },
+      "position": {
+        "description": "Distance entre le point et le début de la section de voie (en mètres)",
+        "title": "Position"
+      },
+      "sight_distance": {
+        "description": "Distance de visibilité du signal (en mètres)",
+        "title": "Distance de visibilité"
+      },
+      "track": {
+        "description": "Référence de la section de voie sur laquelle est placé l’objet",
+        "title": "Voie"
+      }
+    },
+    "title": "Signal"
+  },
+  "SignalExtensions": {
+    "title": "Extensions du signal"
+  },
+  "SignalSncfExtension": {
+    "properties": {
+      "kp": {
+        "description": "Point kilométrique du signal",
+        "title": "PK"
+      },
+      "label": {
+        "title": "Label"
+      },
+      "side": {
+        "description": "Côté de la voie où est situé le signal"
+      },
+      "support_type": {
+        "title": "Type de support"
+      },
+      "type_code": {
+        "title": "Type de code"
+      },
+      "value": {
+        "title": "Valeur"
+      }
+    },
+    "title": "Extension SNCF du signal"
+  },
+  "SignalingSystem": {
+    "title": "Système de signalisation"
+  },
+  "Slope": {
+    "description": "Correspond au gradient d’élévation d’une partie d’une section de voie. Le gradient peut être positif (cas d’une rampe) ou négatif (cas d’une pente)",
+    "properties": {
+      "begin": {
+        "description": "Distance correspondant au début du gradient associé par rapport au début de la section de voie (en mètres)",
+        "title": "Début"
+      },
+      "end": {
+        "description": "Distance correspondant à la fin du gradient associé par rapport au début de la section de voie (en mètres)",
+        "title": "Fin"
+      },
+      "gradient": {
+        "description": "Gradient correspondant (en mètres par kilomètres)",
+        "title": "Gradient"
+      }
+    },
+    "title": "Déclivité"
+  },
+  "SpeedSection": {
+    "description": "Les limitations de vitesse sont repérables par leurs identifiants (en mètres par seconde).",
+    "properties": {
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Id"
+      },
+      "on_routes": {
+        "description": "Liste des itinéraires sur lesquels la limitation de vitesse est appliquée.\nSi le champ est vide ou nul, la limitation de vitesse est appliquée quel que soit l'itinéraire.",
+        "title": "Sur les itinéraires"
+      },
+      "speed_limit": {
+        "description": "Vitesse limite par défaut des trains qui ne sont dans aucune catégorie spécifique (en mètres par seconde)",
+        "title": "Vitesse limite"
+      },
+      "speed_limit_by_tag": {
+        "description": "Vitesse limite des trains avec un label donné (en mètres par seconde)",
+        "title": "Vitesse limite par label"
+      },
+      "track_ranges": {
+        "description": "Liste des emplacements où la vitesse limite est appliquée",
+        "title": "Intervalles sur une section de voie"
+      }
+    },
+    "title": "Limitation de vitesse"
+  },
+  "SpeedSectionExtensions": {
+    "title": "Extensions de la vitesse limite"
+  },
+  "SpeedSectionPslSncfExtension": {
+    "properties": {
+      "announcement": {
+        "description": "Valeur(s) d’une limite permanente de vitesse",
+        "title": "Panneau d’annonce"
+      },
+      "r": {
+        "description": "Fin de la limite permanente de vitesse",
+        "title": "Panneau R"
+      },
+      "z": {
+        "description": "Début de la limite permanente de vitesse"
+      }
+    },
+    "title": "Extensions spécifiques à la SNCF"
+  },
+  "Switch": {
+    "description": "Les aiguilles sont des appareils permettant de changer de voie.",
+    "properties": {
+      "group_change_delay": {
+        "description": "Temps nécessaire pour changer la configuration d’une aiguille",
+        "title": "Délai de changement de configuration d’un groupe d’aiguilles"
+      },
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Id"
+      },
+      "ports": {
+        "description": "Emplacement des différentes branches selon des sections de voie",
+        "title": "Branches de l’aiguille"
+      },
+      "switch_type": {
+        "description": "Identifiant et type d’aiguille",
+        "title": "Type d’aiguille"
+      }
+    },
+    "title": "Aiguille"
+  },
+  "SwitchExtensions": {
+    "title": "Extensions de l'aiguille"
+  },
+  "SwitchPortConnection": {
+    "description": "Connexion entre chaque branche d’un type d’aiguille. Elle est toujours bidirectionnelle.",
+    "properties": {
+      "dst": {
+        "description": "Nom de la branche de destination de la connexion",
+        "title": "Dst"
+      },
+      "src": {
+        "description": "Nom de la branche source de la connexion",
+        "title": "Src"
+      }
+    },
+    "title": "Connexion des branches de l’aiguille"
+  },
+  "SwitchSncfExtension": {
+    "properties": {
+      "label": {
+        "description": "Identifiant de l’aiguille",
+        "title": "Label"
+      }
+    },
+    "title": "Extension spécifique à la SNCF"
+  },
+  "SwitchType": {
+    "description": "Liste de branches et groupes pouvant servir à configurer une aiguille.",
+    "properties": {
+      "groups": {
+        "description": "Groupe de connexion de branches",
+        "title": "Groupes"
+      },
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Id"
+      },
+      "ports": {
+        "description": "Liste des branches d’une aiguille. Les branches correspondent aux extrémités des aiguilles",
+        "title": "Branches de l’aiguille"
+      }
+    },
+    "title": "Type d’aiguille"
+  },
+  "TrackEndpoint": {
+    "description": "Extrémité d’une voie (début ou fin).",
+    "properties": {
+      "endpoint": {
+        "description": "Position relative de l’extrémité de la voie considérée"
+      },
+      "track": {
+        "description": "Identifiant et type de voie",
+        "title": "Voie"
+      }
+    },
+    "title": "Extrémité de voie"
+  },
+  "TrackSection": {
+    "description": "Une section de voie est un objet géographique linéaire défini par les coordonnées géographiques de ses points (extrémités et points intermédiaires). L'ensemble des sections de voie constitue le réseau ferroviaire.",
+    "properties": {
+      "curves": {
+        "description": "Liste des courbes de la section de voie",
+        "title": "Courbes"
+      },
+      "geo": {
+        "description": "Coordonnées géographiques de l'objet correspondant"
+      },
+      "id": {
+        "description": "Identifiant unique de l'objet",
+        "title": "Identifiant"
+      },
+      "length": {
+        "description": "Longueur de la section de voie (en mètres)",
+        "title": "Longueur"
+      },
+      "loading_gauge_limits": {
+        "description": "Liste des gabarits limites",
+        "title": "Gabarits limites"
+      },
+      "slopes": {
+        "description": "Liste des déclivités de la section de voie",
+        "title": "Déclivités"
+      }
+    },
+    "title": "Section de voie"
+  },
+  "TrackSectionExtensions": {
+    "title": "Extensions de la section de voie"
+  },
+  "TrackSectionSncfExtension": {
+    "properties": {
+      "line_code": {
+        "description": "Code de ligne utilisé par la section de voie correspondante",
+        "title": "Code de ligne"
+      },
+      "line_name": {
+        "description": "Nom de la ligne utilisée par la section de voie correspondante",
+        "title": "Nom de la ligne"
+      },
+      "track_name": {
+        "description": "Nom correspondant à la voie utilisée",
+        "title": "Nom de la voie"
+      },
+      "track_number": {
+        "description": "Numéro correspondant à la section de voie utilisée",
+        "title": "Numéro de la section de voie"
+      }
+    },
+    "title": "Extension SNCF de la section de voie"
+  },
+  "TrackSectionSourceExtension": {
+    "properties": {
+      "id": {
+        "description": "Identifiant de l'élément dans la source",
+        "title": "ID"
+      },
+      "name": {
+        "description": "Nom de la source",
+        "title": "Nom"
+      }
+    },
+    "title": "Extension origine de la section de voie"
+  },
+  "Tvm300System": {
+    "properties": {
+      "conditional_parameters": {
+        "description": "Paramètres du signal TVM pour des itinéraires spécifiques",
+        "title": "Paramètres conditionnels"
+      },
+      "default_parameters": {
+        "description": "Paramètres du signal TVM"
+      },
+      "next_signaling_systems": {
+        "description": "La liste des systèmes de signalisation d'entrée autorisés",
+        "title": "Systèmes de signalisation suivants"
+      },
+      "settings": {
+        "description": "Paramètres du signal TVM"
+      },
+      "signaling_system": {
+        "title": "Système de signalisation"
+      }
+    },
+    "title": "Système Tvm300"
+  },
+  "Tvm430System": {
+    "properties": {
+      "conditional_parameters": {
+        "description": "Paramètres du signal TVM pour des itinéraires spécifiques",
+        "title": "Paramètres conditionnels"
+      },
+      "default_parameters": {
+        "description": "Paramètres du signal TVM"
+      },
+      "next_signaling_systems": {
+        "description": "La liste des systèmes de signalisation d'entrée autorisés",
+        "title": "Systèmes de signalisation suivants"
+      },
+      "settings": {
+        "description": "Paramètres du signal TVM"
+      },
+      "signaling_system": {
+        "title": "Système de signalisation"
+      }
+    },
+    "title": "Système Tvm430"
+  },
+  "TvmSystem": {
+    "properties": {
+      "next_signaling_systems": {
+        "description": "Liste des inputs autorisés pour les systèmes de signalisation",
+        "title": "Prochain système de signalisation"
+      },
+      "settings": {
+        "description": "Paramètres de signaux TVM"
+      }
+    },
+    "title": "Signalisation TVM"
+  },
+  "__main____BalSystem__ConditionalParameters": {
+    "properties": {
+      "on_route": {
+        "description": "Itinéraire pour lequel ces paramètres sont actifs",
+        "title": "Itinéraire"
+      },
+      "parameters": {
+        "description": "Paramètres du signal BAL"
+      }
+    },
+    "title": "Paramètres conditionnels"
+  },
+  "__main____BalSystem__Parameters": {
+    "properties": {
+      "jaune_cli": {
+        "description": "Feu jaune clignotant"
+      }
+    },
+    "title": "Paramètres"
+  },
+  "__main____BalSystem__Settings": {
+    "properties": {
+      "Nf": {
+        "description": "Signal non franchissable"
+      }
+    },
+    "title": "Paramètres BAL"
+  },
+  "__main____BaprSystem__ConditionalParameters": {
+    "properties": {
+      "on_route": {
+        "description": "Itinéraire pour lequel ces paramètres sont actifs",
+        "title": "Itinéraire"
+      },
+      "parameters": {
+        "description": "Paramètre de signal BAPR"
+      }
+    },
+    "title": "Paramètres conditionnels"
+  },
+  "__main____BaprSystem__Parameters": {
+    "title": "Paramètres"
+  },
+  "__main____BaprSystem__Settings": {
+    "properties": {
+      "Nf": {
+        "description": "Signal non franchissable"
+      },
+      "distant": {
+        "description": "Signal distant"
+      }
+    },
+    "title": "Paramètres BAPR"
+  },
+  "__main____EtcsLevel2System__ConditionalParameters": {
+    "properties": {
+      "on_route": {
+        "description": "Itinéraire pour lequel ces paramètres sont actifs",
+        "title": "Itinéraire"
+      },
+      "parameters": {
+        "description": "Paramètres du signal ETCS_LEVEL2"
+      }
+    },
+    "title": "Paramètres conditionnels"
+  },
+  "__main____EtcsLevel2System__Parameters": {
+    "title": "Paramètres"
+  },
+  "__main____EtcsLevel2System__Settings": {
+    "properties": {
+      "Nf": {
+        "description": "Signal non franchissable"
+      }
+    },
+    "title": "Paramètres"
+  },
+  "__main____Tvm300System__ConditionalParameters": {
+    "properties": {
+      "on_route": {
+        "description": "Itinéraire pour lequel ces paramètres sont actifs",
+        "title": "Itinéraire"
+      },
+      "parameters": {
+        "description": "Paramètres du signal TVM300"
+      }
+    },
+    "title": "Paramètres conditionnels"
+  },
+  "__main____Tvm300System__Parameters": {
+    "title": "Paramètres"
+  },
+  "__main____Tvm300System__Settings": {
+    "properties": {
+      "Nf": {
+        "description": "Signal non franchissable"
+      }
+    },
+    "title": "Paramètres"
+  },
+  "__main____Tvm430System__ConditionalParameters": {
+    "properties": {
+      "on_route": {
+        "description": "Itinéraire pour lequel ces paramètres sont actifs",
+        "title": "Itinéraire"
+      },
+      "parameters": {
+        "description": "Paramètres du signal TVM430"
+      }
+    },
+    "title": "Paramètres conditionnels"
+  },
+  "__main____Tvm430System__Parameters": {
+    "title": "Paramètres par défault"
+  },
+  "__main____Tvm430System__Settings": {
+    "properties": {
+      "Nf": {
+        "description": "Le signal est-il non franchissable"
+      }
+    },
+    "title": "Paramètres"
+  },
+  "__main____TvmSystem__Settings": {
+    "properties": {
+      "is_430": {
+        "description": "TVM-430"
+      }
+    },
+    "title": "Paramètres TVM"
+  },
+  "properties": {
+    "buffer_stops": {
+      "description": "Heurtoirs de l’infrastructure",
+      "title": "Heurtoirs"
+    },
+    "detectors": {
+      "description": "Détecteurs de l’infrastructure",
+      "title": "Détecteurs"
+    },
+    "electrifications": {
+      "description": "Caténaires de l’infrastructure",
+      "title": "Caténaires"
+    },
+    "extended_switch_types": {
+      "description": "Types d'appareil de voie pouvant être ajouté par l'utilisateur",
+      "title": "Types d’aiguillages étendus"
+    },
+    "neutral_sections": {
+      "description": "Sections neutres de l’infrastructure",
+      "title": "Sections neutres"
+    },
+    "operational_points": {
+      "description": "Liste des points remarquables de l’infrastructure",
+      "title": "Points remarquables"
+    },
+    "routes": {
+      "description": "Itinéraires de l’infrastructure",
+      "title": "Itinéraires"
+    },
+    "signals": {
+      "description": "Signaux de l’infrastructure",
+      "title": "Signaux"
+    },
+    "speed_sections": {
+      "description": "Limites de vitesse de l’infrastructure",
+      "title": "Limites de vitesse"
+    },
+    "switch_types": {
+      "description": "Types d’aiguille de l’infrastructure",
+      "title": "Types d’aiguille"
+    },
+    "switches": {
+      "description": "Aiguilles de l’infrastructure",
+      "title": "Aiguilles"
+    },
+    "track_section_links": {
+      "description": "Raccordements de la section de voie de l’infrastructure",
+      "title": "Raccordements de la section de voie"
+    },
+    "track_sections": {
+      "description": "section de voie de l’infrastructure",
+      "title": "section de voie"
+    },
+    "version": {
+      "description": "Version du schéma",
+      "title": "Version"
+    }
+  }
+}

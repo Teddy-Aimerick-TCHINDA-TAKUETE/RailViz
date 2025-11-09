@@ -1,0 +1,365 @@
+@use './scenario';
+:root {
+  --header-height: 32px;
+  --board-vertical-gap: 16px;
+}
+.scenario-header-container {
+  .scenario-header {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-height);
+    box-shadow:
+      0px 1px 2px rgba(0, 0, 0, 0.16),
+      0px 2px 2px -1px rgba(255, 171, 88, 0.27);
+    background-color: var(--ambientB10);
+    min-width: 780px;
+
+    &.impersonated {
+      background-color: var(--highlight30) !important;
+
+      .navbar-breadcrumbs {
+        .text-truncate,
+        a {
+          color: var(--black50);
+
+          &:hover {
+            color: var(--black100);
+          }
+        }
+      }
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    .inactive-area {
+      min-width: 8px;
+      pointer-events: none;
+    }
+
+    .spacer {
+      min-width: 32px;
+    }
+
+    .scenario-info {
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      line-height: 20px;
+      letter-spacing: 0px;
+      position: relative;
+      height: 100%;
+      flex: 1;
+      overflow: hidden;
+
+      .close-btn {
+        padding: 8px 0px 8px 8px;
+        color: var(--black25);
+
+        &:hover {
+          color: var(--black100);
+
+          & ~ .scenario-name-container {
+            opacity: 0;
+          }
+
+          & ~ .close-label {
+            display: block;
+            color: var(--warning60);
+          }
+        }
+      }
+
+      .close-label,
+      .scenario-name-container {
+        transition: opacity 0.3s ease-in-out;
+        left: 32px;
+        font-size: 0.875rem;
+        text-align: left;
+      }
+
+      .close-label {
+        position: absolute;
+        text-transform: capitalize;
+        display: none;
+      }
+
+      .scenario-name-container {
+        display: flex;
+        align-items: center;
+        opacity: 1;
+        height: 100%;
+        color: var(--grey50);
+        min-width: 0;
+
+        .scenario-name-label {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          min-width: 0;
+        }
+
+        .chevron-btn {
+          padding: 4px;
+          color: var(--black25);
+        }
+
+        &:hover {
+          cursor: pointer;
+          .scenario-name-label,
+          .chevron-btn {
+            color: var(--black100);
+          }
+        }
+
+        &:active {
+          .scenario-name-label,
+          .chevron-btn {
+            color: var(--grey70);
+          }
+        }
+      }
+    }
+
+    .board-bar {
+      display: flex;
+      align-items: center;
+      height: 100%;
+
+      .board-btns {
+        display: flex;
+        align-items: center;
+        height: 100%;
+
+        .board-btn {
+          padding: 1px 8px 3px 8px;
+          font-size: 0.75rem;
+          line-height: 16px;
+          border-radius: 4px;
+
+          // START HANDLE BOARD STATE
+
+          // On state
+          &.on {
+            color: var(--grey80);
+            background-color: var(--ambientB5);
+
+            &:hover {
+              color: var(--black100);
+              background-color: var(--white100);
+            }
+
+            &:active {
+              color: var(--grey20);
+              background-color: var(--ambientB15);
+            }
+          }
+
+          // Off state
+          &:not(.on) {
+            color: var(--grey30);
+            background-color: var(--ambientB15);
+
+            &:hover {
+              color: var(--grey30);
+              background-color: var(--white100);
+            }
+
+            &:active {
+              color: var(--grey50);
+              background-color: var(--ambientB5);
+            }
+          }
+          // END HANDLE BOARD STATE
+        }
+      }
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      overflow: hidden;
+      flex: 1;
+      margin-right: 8px;
+      justify-content: end;
+
+      .user-name {
+        color: var(--black100);
+        font-size: 0.875rem;
+        text-align: right;
+        line-height: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+      }
+    }
+
+    // START HANDLE SCENARIO NAME AND USER NAME HOVER WHEN TRUNCATED
+    &:has(.scenario-name-container:hover .scenario-name-label.is-truncated) {
+      .scenario-info {
+        flex: 2;
+      }
+
+      .board-bar {
+        display: none;
+      }
+
+      .user-info {
+        flex: 1;
+      }
+    }
+
+    &:has(.user-name.is-truncated:hover) {
+      .scenario-info {
+        flex: 1;
+      }
+
+      .board-bar {
+        display: none;
+      }
+
+      .user-info {
+        flex: 2;
+      }
+    }
+    // END HANDLE SCENARIO NAME AND USER NAME HOVER WHEN TRUNCATED
+  }
+}
+
+.scenario-manage-timetable-item-modal {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: calc(100vh - 32px);
+  z-index: 4;
+
+  .scenario-timetable-manage-timetable-item {
+    overflow: hidden;
+    background-color: #d7d7d7aa;
+    border-radius: 4px;
+    animation: fadein 1s;
+    backdrop-filter: blur(4px);
+
+    .scenario-timetable-manage-timetable-item-header {
+      display: flex;
+      flex-direction: column;
+      padding: 8px 8px 0;
+
+      .custom-control-label {
+        padding-top: 0;
+      }
+
+      .input-icon {
+        margin-bottom: 2px;
+      }
+    }
+
+    .scenario-timetable-manage-timetable-item-body {
+      padding: 8px;
+    }
+
+    #timetable-edited-element {
+      padding: 14px 24px;
+      @include scenario.hide-train-details;
+
+      .scenario-timetable-train {
+        @extend %scenario-timetable-train;
+      }
+    }
+  }
+
+  .scenario-manage-timetable-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    padding: 8px 16px;
+    background-color: var(--coolgray1);
+    animation: fadein 1s;
+
+    &.collapsed {
+      right: 0;
+      position: absolute;
+      width: 95vw;
+      height: 100%;
+      z-index: 10;
+    }
+
+    .invalid-feedback {
+      font-size: 0.7rem;
+    }
+
+    .scenario-manage-timetable-item-content {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      background-color: var(--coolgray1);
+      animation: fadein 1s;
+      overflow: auto;
+    }
+
+    .timetable-edit-collapse-button {
+      position: absolute;
+      left: -27px;
+      top: 50%;
+      padding-bottom: 3px;
+      height: 48px;
+      width: 28px;
+      color: var(--grey40);
+      background-color: var(--white100);
+      border-radius: 5px 0px 0px 5px;
+      box-shadow: 0 1px 0 0 var(--black10);
+      clip-path: inset(-1px 1px -1px -1px);
+
+      &:hover {
+        color: var(--grey80);
+        background-color: var(--grey20);
+      }
+    }
+  }
+}
+
+.scenario-details {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ambientB10);
+  color: var(--grey80);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 1),
+    0 1px 2px rgba(0, 0, 0, 0.16),
+    0 2px 2px -1px rgba(255, 171, 88, 0.27);
+  padding: 30px 32px;
+  width: 100%;
+  font-size: 0.875rem;
+  overflow-wrap: break-word;
+
+  .scenario-description {
+    display: inline;
+    max-width: 480px;
+    margin-bottom: 28px;
+  }
+
+  .scenario-details-infra-name {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 4px;
+  }
+
+  .edit-scenario-container {
+    margin-top: 28px;
+    color: var(--primary60);
+
+    button:focus {
+      outline: none;
+    }
+  }
+}

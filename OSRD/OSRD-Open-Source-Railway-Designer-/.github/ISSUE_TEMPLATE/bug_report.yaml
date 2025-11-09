@@ -1,0 +1,80 @@
+name: "🐛 Bug Report"
+description: Report a bug encountered while operating OSRD
+labels: kind:bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        Before reporting a bug, please ensure that:
+          - Your problem is not already reported (access the list [here](https://github.com/OpenRailAssociation/osrd/issues?q=is%3Aissue+is%3Aopen+label%3Akind%3Abug)).
+          - Your problem is not already fixed on the `dev` branch, if you are able to check
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: |
+        Please provide as much information as possible. Not doing so may result in your bug not being addressed in a timely manner.
+        Screenshots and videos are very useful.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: false
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: How can we reproduce it (as minimally and precisely as possible)?
+      placeholder: |
+        💡 When trains are involved, providing train-schedule export can help a lot to reproduce quickly and precisely.
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: On which environments the bug occurs?
+      multiple: true
+      options:
+        - Local
+        - Dev (SNCF)
+        - Recette (SNCF)
+        - Integration (SNCF)
+        - Preproduction (SNCF)
+        - Production (SNCF)
+        - Custom (Docker compose)
+        - Custom (Using K8s Helm Chart)
+        - Other
+      default: 2
+
+  - type: dropdown
+    id: Browser
+    attributes:
+      label: On which browser the bug occurs?
+      multiple: true
+      options:
+        - Firefox
+        - Google Chrome
+        - Microsoft Edge
+        - Safari
+        - Opera
+        - Other
+      default: 0
+
+  - type: input
+    id: osrdVersion
+    attributes:
+      label: OSRD version (top right corner `Account` button > `Informations`)
+      placeholder: "3dbd5632"
+    validations:
+      required: true

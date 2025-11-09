@@ -1,0 +1,30 @@
+[package]
+name = "authz"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+common.workspace = true
+derive_more.workspace = true
+editoast_derive.workspace = true
+fga.workspace = true
+fga_migrations = { workspace = true, features = ["test_utilities"] }
+futures.workspace = true
+itertools.workspace = true
+serde = { workspace = true, features = ["derive"] }
+strum.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+utoipa.workspace = true
+
+[dev-dependencies]
+common.workspace = true
+fga = { workspace = true, features = ["test_utilities"] }
+pretty_assertions.workspace = true
+stdext.workspace = true
+tokio.workspace = true
+
+[lints]
+workspace = true

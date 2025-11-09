@@ -1,0 +1,129 @@
+use crate::primitives::NonBlankString;
+use educe::Educe;
+use serde::Deserialize;
+use serde::Serialize;
+use utoipa::ToSchema;
+
+use super::TrackOffset;
+use crate::primitives::Identifier;
+use crate::primitives::OSRDIdentified;
+use crate::primitives::OSRDTyped;
+use crate::primitives::ObjectType;
+
+#[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, ToSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OperationalPoint {
+    #[schema(inline)]
+    pub id: Identifier,
+    pub parts: Vec<OperationalPointPart>,
+    #[serde(default)]
+    #[schema(inline)]
+    pub extensions: OperationalPointExtensions,
+    #[serde(default)]
+    pub weight: Option<u8>,
+}
+
+#[derive(Debug, Educe, Clone, PartialEq, Deserialize, Serialize, ToSchema)]
+#[serde(deny_unknown_fields)]
+#[educe(Default)]
+pub struct OperationalPointPart {
+    #[educe(Default = "InvalidRef".into())]
+    #[schema(inline)]
+    pub track: Identifier,
+    pub position: f64,
+    #[serde(default)]
+    #[schema(inline)]
+    pub extensions: OperationalPointPartExtension,
+}
+
+#[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq, ToSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OperationalPointPartExtension {
+    #[schema(inline)]
+    pub sncf: Option<OperationalPointPartSncfExtension>,
+}
+
+#[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq, ToSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OperationalPointPartSncfExtension {
+    pub kp: String,
+}
+
+#[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq, ToSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OperationalPointExtensions {
+    #[schema(inline)]
+    pub sncf: Option<OperationalPointSncfExtension>,
+    #[schema(inline)]
+    pub identifier: Option<OperationalPointIdentifierExtension>,
+}
+
+#[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq, ToSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OperationalPointSncfExtension {
+    pub ci: i64,
+    pub ch: String,
+    #[schema(inline)]
+    pub ch_short_label: NonBlankString,
+    #[schema(inline)]
+    pub ch_long_label: NonBlankString,
+    pub trigram: String,
+}
+
+#[cfg(feature = "testing")]
+impl OperationalPointSncfExtension {
+    pub fn new(ci: i64, ch: &str, trigram: &str) -> Self {
+        Self {
+            ci,
+            ch: ch.into(),
+            ch_short_label: ch.into(),
+            ch_long_label: ch.into(),
+            trigram: trigram.into(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, ToSchema)]
+#[serde(deny_unknown_fields)]
+pub struct OperationalPointIdentifierExtension {
+    #[schema(inline)]
+    pub name: NonBlankString,
+    pub uic: u32,
+}
+
+impl OSRDTyped for OperationalPoint {
+    fn get_type() -> ObjectType {
+        ObjectType::OperationalPoint
+    }
+}
+
+impl OSRDIdentified for OperationalPoint {
+    fn get_id(&self) -> &String {
+        &self.id
+    }
+}
+
+impl OperationalPoint {
+    pub fn track_offset(&self) -> Vec<TrackOffset> {
+        self.parts
+            .clone()
+            .into_iter()
+            .map(|el| TrackOffset {
+                track: el.track,
+                offset: (el.position * 1000.0) as u64,
+            })
+            .collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::from_str;
+
+    use super::OperationalPointExtensions;
+
+    #[test]
+    fn test_op_extensions_deserialization() {
+        from_str::<OperationalPointExtensions>(r#"{}"#).unwrap();
+    }
+}

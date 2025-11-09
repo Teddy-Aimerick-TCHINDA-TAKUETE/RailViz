@@ -1,0 +1,9 @@
+/* Tooltips Leaflet colorés */
+.leaflet-tooltip.tt-green   { background:#10b981; border-color:#0ea371; color:#fff; }
+.leaflet-tooltip.tt-yellow  { background:#f59e0b; border-color:#d48806; color:#111; }
+.leaflet-tooltip.tt-red     { background:#ef4444; border-color:#dc2626; color:#fff; }
+
+/* flèche du tooltip */
+.leaflet-tooltip.tt-green:before  { border-top-color:#10b981 !important; }
+.leaflet-tooltip.tt-yellow:before { border-top-color:#f59e0b !important; }
+.leaflet-tooltip.tt-red:before    { border-top-color:#ef4444 !important; }/* You can add global styles to this file, and also import other style files */

@@ -1,0 +1,64 @@
+coverage:
+  round: down
+  precision: 2
+  status:
+    project:
+      default: off
+      core:
+        target: 75%
+        threshold: 0.5%
+        removed_code_behavior: adjust_base
+        flags:
+          - core
+      editoast:
+        target: 70%
+        threshold: 0.5%
+        removed_code_behavior: adjust_base
+        flags:
+          - editoast
+      gateway:
+        target: auto
+        threshold: 0.5%
+        removed_code_behavior: adjust_base
+        flags:
+          - gateway
+      front:
+        target: auto
+        threshold: 0.5%
+        removed_code_behavior: adjust_base
+        flags:
+          - front
+      tests:
+        target: auto
+        threshold: 0.5%
+        removed_code_behavior: adjust_base
+        flags:
+          - tests
+      railjson_generator:
+        target: auto
+        threshold: 0.5%
+        removed_code_behavior: adjust_base
+        flags:
+          - railjson_generator
+    patch:
+      default: off
+
+flags:
+  core:
+    paths:
+      - core/
+  editoast:
+    paths:
+      - editoast/
+  gateway:
+    paths:
+      - gateway/
+  front:
+    paths:
+      - front/
+  tests:
+    paths:
+      - tests/
+  railjson_generator:
+    paths:
+      - python/railjson_generator/

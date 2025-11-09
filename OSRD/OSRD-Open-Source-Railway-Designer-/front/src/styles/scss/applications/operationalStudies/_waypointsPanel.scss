@@ -1,0 +1,173 @@
+.waypoints-panel {
+  margin: 0;
+  width: 456px; // TODO switch width to 44.5rem (712px) after implementing styles columns
+  height: 100vh;
+  max-height: 100vh;
+  font-family: 'IBM Plex Sans', sans-serif;
+
+  &::backdrop {
+    background: var(--modal-osrd-overlay);
+  }
+
+  .waypoints-panel-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 52px;
+    font-size: 0.875rem;
+    color: var(--grey50);
+    background-color: var(--ambientB15);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--grey30);
+    }
+
+    .name {
+      flex-grow: 1;
+      margin-left: 118px;
+    }
+    .secondary-code {
+      margin-right: 24px;
+    }
+  }
+
+  .waypoints-panel-body {
+    height: calc(100% - 34px - 105px);
+    background-color: var(--ambientB10);
+    padding-top: calc(11px - 2px); // 2px > checkbox border
+    padding-left: calc(18px - 2px); // 2px > checkbox border
+    overflow-y: scroll;
+
+    &.with-warning {
+      padding-bottom: 144px; // height + margin of the warning message
+    }
+
+    .waypoint-item {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--black10);
+
+      &.selector-all {
+        padding-bottom: 14px;
+      }
+
+      .ui-checkbox {
+        margin-bottom: 0; // there is a weird margin-bottom on the checkbox component (probably for the checkboxes tree)
+      }
+
+      .path-offset {
+        width: 55px;
+        font-size: 0.875rem;
+        text-align: end;
+        color: var(--grey30);
+        line-height: 20px;
+        margin: 9px 16px 10px 7px;
+      }
+
+      .name {
+        font-weight: 600;
+        line-height: 24px;
+        flex-grow: 1;
+        margin-block: 6px 8px; // to align with the path offset
+      }
+
+      .ch {
+        width: 19px;
+        font-size: 0.875rem;
+        line-height: 20px;
+        color: var(--grey80);
+        margin-right: 24px;
+        margin-block: 9px 11px; // to align with the path offset
+      }
+    }
+  }
+
+  .waypoints-panel-footer {
+    position: relative;
+    height: 105px;
+    background-color: var(--white100);
+    border-top: 1px solid var(--grey30);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 32px;
+    padding-right: 36px;
+    box-shadow: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: var(--black10);
+    }
+
+    &.wizz-effect:active {
+      .warning-message {
+        animation: tilt-shaking 0.25s 0s;
+      }
+    }
+
+    @keyframes tilt-shaking {
+      0% {
+        transform: rotate(0deg);
+      }
+      12% {
+        transform: rotate(1deg);
+      }
+      24% {
+        transform: rotate(0eg);
+      }
+      36% {
+        transform: rotate(-1deg);
+      }
+      47% {
+        transform: rotate(0deg);
+      }
+      59% {
+        transform: rotate(1deg);
+      }
+      70% {
+        transform: rotate(0eg);
+      }
+      85% {
+        transform: rotate(-1deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    .warning-message {
+      position: absolute;
+      width: 366px; // TODO switch width to 466px (29.125rem) after implementing styles columns
+      height: 128px;
+      top: calc(-16px - 128px);
+      left: calc((456px - 366px) / 2); // TODO update left after implementing styles columns
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding-top: calc(16px - 4px);
+      padding-inline: 29px;
+      border: 4px solid var(--white100);
+      color: var(--warning60);
+      background-color: var(--warning5);
+      border-radius: 8px;
+      box-shadow:
+        inset 0 0 0 1px var(--warning30),
+        0 6px 21px -5px rgba(0, 0, 0, 0.25),
+        0 15px 30px -12px rgba(0, 0, 0, 1),
+        0 1px 1px rgba(0, 0, 0, 1);
+    }
+  }
+}

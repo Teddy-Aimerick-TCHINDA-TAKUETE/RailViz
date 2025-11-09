@@ -1,0 +1,15 @@
+export const electricalProfilesDesignValues = {
+  '25000V': { color: 'rgb(228, 178, 132)', heightLevel: 0 },
+  '22500V': { color: 'rgb(202, 149, 109)', heightLevel: 1 },
+  '20000V': { color: 'rgb(175, 120, 85)', heightLevel: 2 },
+  O: { color: 'rgb(171, 201, 133)', heightLevel: 0 },
+  A: { color: 'rgb(156, 184, 121)', heightLevel: 1 },
+  A1: { color: 'rgb(142, 172, 111)', heightLevel: 2 },
+  B: { color: 'rgb(125, 155, 98)', heightLevel: 3 },
+  B1: { color: 'rgb(109, 139, 86)', heightLevel: 4 },
+  C: { color: 'rgb(93, 123, 73)', heightLevel: 5 },
+  D: { color: 'rgb(79, 108, 62)', heightLevel: 6 },
+  E: { color: 'rgb(63, 92, 51)', heightLevel: 7 },
+  F: { color: 'rgb(47, 76, 38)', heightLevel: 8 },
+  G: { color: 'rgb(47, 76, 38)', heightLevel: 9 },
+};

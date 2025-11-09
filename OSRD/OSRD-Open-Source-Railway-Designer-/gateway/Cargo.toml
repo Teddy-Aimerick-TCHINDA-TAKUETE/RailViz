@@ -1,0 +1,87 @@
+[package]
+name = "osrd_gateway"
+version = "0.1.0"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[workspace]
+members = [".", "actix_auth", "actix_proxy"]
+# used for cargo test, build, fix, package, bench, doc, tree
+default-members = [".", "actix_auth", "actix_proxy"]
+
+[workspace.dependencies]
+# common utils
+dyn-clone = "1.0.20"
+either = "1"
+env_logger = "0.11"
+futures = "0.3"
+futures-util = "0.3.31"
+log = "0.4.28"
+smallvec = "1.15.1"
+thiserror = "2.0.17"
+
+# main crate
+actix-cors = "0.7.1"
+actix-files = "0.6"
+actix-session = "0.11"
+actix-web = "4.11"
+actix-web-opentelemetry = { version = "0.22.0", features = ["awc", "metrics"] }
+base64ct = "1.8"
+figment = "0.10.19"
+humantime = "2"
+humantime-serde = "1"
+opentelemetry = "0.31.0"
+opentelemetry-otlp = { version = "0.31.0", features = ["grpc-tonic"] }
+opentelemetry_sdk = { version = "0.31.0", features = [
+  "metrics",
+  "rt-tokio-current-thread",
+] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1"
+
+# reverse proxy dependencies
+actix = "0.13"
+actix-web-actors = "4.3"
+awc = { version = "3", features = ["rustls"] } # the http / ws client
+bytestring = "1"
+ipnet = "2.11"
+percent-encoding = "2.3"
+phf = "0.13"
+regex = "1.12.2"
+
+# actix_auth
+actix-web-httpauth = "0.8"
+
+openidconnect = "4.0.1"
+reqwest = { version = "0.12", default-features = false, features = [
+  "rustls-tls-native-roots",
+] }
+url = "2.5"
+
+
+[dependencies]
+either.workspace = true
+env_logger.workspace = true
+log.workspace = true
+
+# configuration parsing
+base64ct.workspace = true # to parse the session secret key
+figment = { workspace = true, features = ["env", "toml"] }
+humantime.workspace = true
+humantime-serde.workspace = true
+serde.workspace = true
+
+# web server
+actix-cors.workspace = true
+actix-files.workspace = true
+actix-session = { workspace = true, features = ["cookie-session"] }
+actix-web.workspace = true
+actix_auth = { path = "./actix_auth" }
+actix_proxy = { path = "./actix_proxy" }
+
+# tracing / metrics
+actix-web-opentelemetry.workspace = true
+opentelemetry.workspace = true
+opentelemetry-otlp.workspace = true
+opentelemetry_sdk.workspace = true

@@ -1,0 +1,36 @@
+[package]
+name = "actix_proxy"
+version = "0.1.0"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+
+[dependencies]
+# common dependencies
+dyn-clone.workspace = true
+either.workspace = true
+futures-util.workspace = true
+log.workspace = true
+regex.workspace = true
+
+# common proxying infrastructure
+actix-web.workspace = true
+awc.workspace = true # the http / ws client
+ipnet.workspace = true
+percent-encoding.workspace = true
+
+# header classifier
+phf = { workspace = true, features = ["macros"] } # static hop-by-hop header map
+smallvec.workspace = true
+
+# websocket proxy
+actix.workspace = true
+actix-web-actors.workspace = true
+bytestring.workspace = true
+
+# tracing / metrics
+actix-web-opentelemetry.workspace = true
+opentelemetry.workspace = true
+opentelemetry_sdk.workspace = true

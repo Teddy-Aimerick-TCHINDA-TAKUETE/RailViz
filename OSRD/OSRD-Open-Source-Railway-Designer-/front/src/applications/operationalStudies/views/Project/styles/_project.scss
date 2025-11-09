@@ -1,0 +1,187 @@
+@use './studyCard';
+
+.project-view {
+  .filter-selector {
+    background-color: transparent;
+    border: none;
+    color: var(--secondary);
+    transition: 0.2s;
+    padding: 4px 8px;
+    border-radius: 4px;
+    &.on {
+      color: white;
+      background-color: var(--secondary);
+    }
+    &:hover {
+      background-color: var(--secondary);
+      color: var(--white);
+      .scenario-details-modify-button-text {
+        opacity: 1;
+      }
+    }
+  }
+
+  .multiselect-delete {
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border-color: transparent;
+    background-color: rgba(var(--red-rgb), 0.75);
+    color: var(--white);
+    &.disabled {
+      background-color: rgba(var(--secondary-rgb), 0.5);
+    }
+  }
+  .project-details {
+    .project-details-title {
+      display: flex;
+      position: relative;
+      gap: 16px;
+      margin-bottom: 8px;
+      min-height: 240px;
+      .project-details-title-img {
+        overflow: hidden;
+        border-radius: 4px;
+        max-height: 30vh;
+        height: 100%;
+        img {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--coolgray7);
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        @media screen and (max-width: 768px) {
+          position: relative;
+          height: 160px;
+        }
+      }
+      .project-details-title-content {
+        .project-details-title-name {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          color: var(--purple);
+          font-size: 2rem;
+          font-weight: 500;
+          overflow: auto;
+          .project-details-title-modify-button {
+            background-color: transparent;
+            border: none;
+            color: var(--purple);
+            transition: 0.2s;
+            padding: 4px 16px;
+            font-size: 1.5rem;
+            border-radius: 4px;
+            .project-details-title-modify-button-text {
+              transition: opacity 0.2s;
+              opacity: 0;
+              font-size: 1.25rem;
+              margin-right: 16px;
+            }
+            &:hover {
+              background-color: var(--purple);
+              color: var(--white);
+              .project-details-title-modify-button-text {
+                opacity: 1;
+              }
+            }
+          }
+        }
+        h3 {
+          color: var(--coolgray9);
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          border-bottom: 1px solid var(--coolgray5);
+          padding-bottom: 2.4px;
+          margin-bottom: 4px;
+        }
+        .project-details-title-description {
+          overflow: auto;
+          max-height: 20vh;
+          margin-bottom: 16px;
+          font-size: 1.25rem;
+          white-space: break-spaces;
+        }
+        .project-details-title-objectives {
+          overflow: auto;
+          max-height: 20vh;
+        }
+      }
+    }
+    .project-details-financials {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      padding: 8px;
+      background-color: var(--purple);
+      color: var(--white);
+      .project-details-financials-infos {
+        h3 {
+          font-size: 0.9rem;
+          font-weight: bold;
+          color: var(--white);
+          margin: 0;
+          text-transform: uppercase;
+        }
+        flex-grow: 1;
+        overflow: auto;
+        margin-right: 8px;
+      }
+      .project-details-financials-amount {
+        display: flex;
+        align-items: center;
+        line-height: 32px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        background-color: var(--coolgray1);
+        color: var(--purple);
+        border-radius: 4px;
+        padding: 4px 8px;
+        .project-details-financials-amount-text {
+          line-height: 16px;
+          text-align: right;
+          width: 64px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          margin-right: 8px;
+          white-space: wrap;
+        }
+      }
+    }
+    .project-details-tags {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      .project-details-tags-tag {
+        font-size: 0.9rem;
+        color: var(--white);
+        background-color: var(--purple);
+        border-radius: 4px;
+        padding: 0 4px;
+        transition: 0.2s;
+      }
+    }
+  }
+
+  .studies-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 8px;
+    margin-top: 32px;
+  }
+
+  .studies-list {
+    overflow: auto;
+    max-height: 50vh;
+    margin-inline: -8px;
+    padding: 16px 8px 0;
+  }
+}

@@ -1,0 +1,248 @@
+package fr.sncf.osrd.stdcm.graph
+
+import fr.sncf.osrd.envelope.Envelope
+import fr.sncf.osrd.envelope_sim.allowances.LinearAllowance
+import fr.sncf.osrd.sim_infra.api.Block
+import fr.sncf.osrd.stdcm.infra_exploration.InfraExplorerWithEnvelope
+import fr.sncf.osrd.stdcm.preprocessing.interfaces.BlockAvailabilityInterface
+import fr.sncf.osrd.utils.units.Distance.Companion.fromMeters
+import fr.sncf.osrd.utils.units.Length
+import fr.sncf.osrd.utils.units.Offset
+import fr.sncf.osrd.utils.units.meters
+import kotlin.math.min
+
+/** This class handles the creation of new edges, handling the many optional parameters. */
+@ConsistentCopyVisibility
+data class STDCMEdgeBuilder
+internal constructor(
+    /** Instance used to explore the infra, contains the underlying edge */
+    private val infraExplorer: InfraExplorerWithEnvelope,
+    /** STDCM Graph, needed for most operations */
+    private val graph: STDCMGraph,
+    /** Previous node, used to compute the final path */
+    private var prevNode: STDCMNode,
+    /** Start offset on the given block */
+    private var startOffset: Offset<Block> = Offset(0.meters),
+    /** Envelope to use on the edge, if unspecified we try to go at maximum allowed speed */
+    private var envelope: Envelope? = null,
+
+    /**
+     * Infra explorer with the new envelope for the current edge. Keeping one instance is important
+     * for the resource generator caches. This is the instance that must be used for next edges
+     */
+    private var explorerWithNewEnvelope: InfraExplorerWithEnvelope? = null,
+) {
+    /**
+     * Sets the envelope to use on the edge, if unspecified we try to go at maximum allowed speed
+     */
+    fun setEnvelope(envelope: Envelope?): STDCMEdgeBuilder {
+        this.envelope = envelope
+        return this
+    }
+
+    /**
+     * Creates all edges that can be accessed on the given block, using all the parameters
+     * specified.
+     */
+    fun makeAllEdges(): Collection<STDCMEdge> {
+        return try {
+            if (getEnvelope() == null) {
+                listOf()
+            } else {
+                val delays = getDelaysPerOpening()
+                val edges = delays.mapNotNull { delayNeeded -> makeSingleEdge(delayNeeded) }
+                edges
+            }
+        } catch (_: BlockAvailabilityInterface.NotEnoughLookaheadError) {
+            // More lookahead required, extend and repeat for each new path
+            return infraExplorer.cloneAndExtendLookahead().flatMap {
+                copy(infraExplorer = it, explorerWithNewEnvelope = null).makeAllEdges()
+            }
+        }
+    }
+
+    /**
+     * Creates all the edges in the given settings, then look for one that shares the given time of
+     * next occupancy. This is used to identify the "openings" between two occupancies, it is used
+     * to ensure we use the same one when re-building edges.
+     */
+    fun findEdgeSameNextOccupancy(timeNextOccupancy: Double): STDCMEdge? {
+        // We look for an edge that uses the same opening, identified by the next occupancy
+        if (getEnvelope() == null) return null
+        // We look for the last possible delay that would start before the expected time of next
+        // occupancy
+        val delay =
+            getDelaysPerOpening()
+                .stream()
+                .filter { x: Double ->
+                    prevNode.timeData.earliestReachableTime + x <= timeNextOccupancy
+                }
+                .max { obj: Double, anotherDouble: Double? -> obj.compareTo(anotherDouble!!) }
+        return delay.map { delayNeeded: Double -> makeSingleEdge(delayNeeded) }.orElse(null)
+    }
+
+    /** Returns the envelope to be used for the new edges */
+    private fun getEnvelope(): Envelope? {
+        if (envelope == null)
+            envelope =
+                graph.stdcmSimulations.simulateBlock(
+                    graph.rawInfra,
+                    graph.rollingStock,
+                    graph.comfort,
+                    graph.timeStep,
+                    graph.tag,
+                    graph.temporarySpeedLimitManager,
+                    infraExplorer,
+                    BlockSimulationParameters(
+                        infraExplorer.getCurrentBlock(),
+                        prevNode.speed,
+                        startOffset,
+                        getNextStopOnCurrentBlock(infraExplorer),
+                    ),
+                )
+        return envelope
+    }
+
+    /**
+     * Returns the (single) explorer with the envelope of the current edge, instantiating it if
+     * needed.
+     */
+    private fun getExplorerWithNewEnvelope(): InfraExplorerWithEnvelope? {
+        if (explorerWithNewEnvelope == null) {
+            val envelope = getEnvelope() ?: return null
+            val speedRatio = graph.getStandardAllowanceSpeedRatio(envelope)
+            val scaledEnvelope =
+                if (envelope.endPos == 0.0) envelope
+                else LinearAllowance.scaleEnvelope(envelope, speedRatio)
+            val stopDuration = getEndOfEdgeStopDuration()
+            explorerWithNewEnvelope = infraExplorer.clone().addEnvelope(scaledEnvelope)
+            if (stopDuration != null) {
+                val timeData = prevNode.timeData
+                val stopData = timeData.stopTimeData.toMutableList()
+                stopData.add(
+                    StopTimeData(
+                        stopDuration,
+                        stopDuration,
+                        timeData.maxDepartureDelayingWithoutConflict,
+                    )
+                )
+                explorerWithNewEnvelope!!.updateTimeData(timeData.copy(stopTimeData = stopData))
+            }
+        }
+        return explorerWithNewEnvelope
+    }
+
+    /**
+     * Returns the set of delays to use to reach each opening. If the flag `forceMaxDelay` is set,
+     * returns the maximum delay that can be used without allowance.
+     */
+    private fun getDelaysPerOpening(): Set<Double> {
+        return graph.delayManager.minimumDelaysPerOpening(
+            getExplorerWithNewEnvelope()!!,
+            prevNode.timeData,
+            envelope!!,
+            startOffset,
+        )
+    }
+
+    /**
+     * Returns the stop duration at the end of the edge being built, or null if there's no stop. The
+     * new edge goes up to the first encountered stop on the block that hasn't been simulated yet.
+     */
+    private fun getEndOfEdgeStopDuration(): Double? {
+        return prevNode.infraExplorer
+            .getStepTracker()
+            .getStepsInLookahead()
+            .filter { it.location.edge == infraExplorer.getCurrentBlock() }
+            .firstOrNull { it.originalStep.stop }
+            ?.originalStep
+            ?.duration
+    }
+
+    /** Creates a single STDCM edge, adding the given amount of delay */
+    private fun makeSingleEdge(delayNeeded: Double): STDCMEdge? {
+        if (java.lang.Double.isInfinite(delayNeeded)) return null
+        val actualStartTime = prevNode.timeData.earliestReachableTime + delayNeeded
+
+        var maximumDelay = 0.0
+        var departureTimeShift = delayNeeded
+        val needEngineeringAllowance =
+            delayNeeded > prevNode.timeData.maxDepartureDelayingWithoutConflict
+        var allowanceData: STDCMEdge.EngineeringAllowanceData? = null
+        if (needEngineeringAllowance) {
+            // We can't just shift the departure time, we need an engineering allowance
+            // It's not computed yet, we just check that it's possible
+            val allowanceLength =
+                graph.allowanceManager.checkEngineeringAllowance(prevNode, actualStartTime)
+                    ?: return null
+            val extraTime = delayNeeded - prevNode.timeData.maxDepartureDelayingWithoutConflict
+            allowanceData = STDCMEdge.EngineeringAllowanceData(allowanceLength, extraTime)
+            // We still need to adapt the delay values
+            departureTimeShift = prevNode.timeData.maxDepartureDelayingWithoutConflict
+        } else {
+            maximumDelay =
+                min(
+                    prevNode.timeData.maxDepartureDelayingWithoutConflict - delayNeeded,
+                    graph.delayManager.findMaximumAddedDelay(
+                        getExplorerWithNewEnvelope()!!,
+                        prevNode.timeData.earliestReachableTime + delayNeeded,
+                        startOffset,
+                        envelope!!,
+                    ),
+                )
+        }
+        val endStopDuration = getEndOfEdgeStopDuration()
+        val endAtStop = endStopDuration != null
+        if (endAtStop) {
+            // We don't use the result, just making sure that there's enough lookahead to compute it
+            // (otherwise there would be an error when computing the end node for this new edge)
+            graph.delayManager.getMaxAdditionalStopDuration(
+                getExplorerWithNewEnvelope()!!,
+                prevNode.timeData.earliestReachableTime,
+            )
+        }
+        val standardAllowanceSpeedRatio = graph.getStandardAllowanceSpeedRatio(envelope!!)
+        var res: STDCMEdge? =
+            STDCMEdge(
+                prevNode.timeData.shifted(
+                    timeShift = delayNeeded,
+                    delayAddedToLastDeparture = departureTimeShift,
+                    timeOfNextConflictAtLocation =
+                        graph.delayManager.findNextOccupancy(
+                            getExplorerWithNewEnvelope()!!,
+                            prevNode.timeData.earliestReachableTime + delayNeeded,
+                            startOffset,
+                            envelope!!,
+                        ),
+                    maxDepartureDelayingWithoutConflict = maximumDelay,
+                ),
+                infraExplorer,
+                getExplorerWithNewEnvelope()!!,
+                prevNode,
+                startOffset,
+                endAtStop,
+                envelope!!.beginSpeed,
+                envelope!!.endSpeed,
+                Length(fromMeters(envelope!!.endPos)),
+                envelope!!.totalTime / standardAllowanceSpeedRatio,
+                allowanceData,
+                envelope!!,
+            )
+        return graph.backtrackingManager.backtrack(res!!, envelope!!)
+    }
+
+    companion object {
+        fun fromNode(
+            graph: STDCMGraph,
+            node: STDCMNode,
+            infraExplorer: InfraExplorerWithEnvelope,
+        ): STDCMEdgeBuilder {
+            val builder = STDCMEdgeBuilder(infraExplorer, graph, node)
+            if (node.locationOnEdge != null) {
+                builder.startOffset = node.locationOnEdge
+            }
+            builder.prevNode = node
+            return builder
+        }
+    }
+}

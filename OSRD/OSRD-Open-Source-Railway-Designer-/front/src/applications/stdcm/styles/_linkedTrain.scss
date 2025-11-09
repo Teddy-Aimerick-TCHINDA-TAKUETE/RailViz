@@ -1,0 +1,111 @@
+.stdcm-linked-train-search-container {
+  align-self: flex-end;
+
+  &.anterior-linked-train {
+    margin-bottom: 18px;
+  }
+
+  &.posterior-linked-train {
+    margin-block: 18px 32px;
+  }
+
+  button {
+    text-align: left;
+  }
+
+  button:focus {
+    outline: none;
+  }
+
+  .stdcm-card__header {
+    button {
+      font-size: 0.875rem;
+      color: var(--primary60);
+    }
+  }
+
+  .linked-train {
+    .linked-train-inputs {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 24px;
+    }
+
+    .stdcm-linked-train-button {
+      text-align: center;
+      width: 402px;
+      height: 40px;
+      background-color: var(--grey10);
+      color: var(--primary50);
+      border-radius: 6px;
+
+      &.white {
+        background-color: var(--white);
+      }
+
+      .stdcm-linked-train-loading {
+        color: var(--primary90);
+        align-self: center;
+      }
+    }
+
+    .stdcm-linked-train-button[disabled] {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    .stdcm-linked-train-results {
+      margin-top: 21px;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 450px;
+        height: 1px;
+        background-color: var(--grey20);
+        margin-left: -24px;
+      }
+
+      .linked-train-result-infos {
+        width: 100%;
+        margin-bottom: 7px;
+        padding-top: 12px;
+
+        &:not(:first-child) {
+          border-top: 1px solid var(--grey20);
+        }
+
+        .train-name {
+          font-weight: 500;
+          font-size: 1rem;
+          padding-top: 4px;
+          margin-bottom: 4px;
+          text-align: start;
+        }
+
+        .opDetails {
+          font-size: 0.875rem;
+          line-height: 20px;
+          margin-bottom: 4px;
+
+          &:not(:last-child) {
+            margin-right: 8px;
+          }
+
+          &.grey50 {
+            color: var(--grey50);
+          }
+
+          &.grey80 {
+            color: var(--grey80);
+          }
+
+          &.info60 {
+            color: var(--info60);
+          }
+        }
+      }
+    }
+  }
+}

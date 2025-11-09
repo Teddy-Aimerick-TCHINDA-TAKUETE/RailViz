@@ -1,0 +1,24 @@
+FROM alpine AS exec_as_builder
+
+RUN apk add --no-cache build-base
+COPY docker/exec-as.c .
+RUN gcc -std=c99 -static -o /exec-as exec-as.c
+
+
+FROM node:24-alpine
+
+RUN apk add --no-cache curl
+
+COPY --from=exec_as_builder /exec-as /
+
+WORKDIR /app
+
+# Fill build time values
+ARG OSRD_GIT_DESCRIBE
+ENV VITE_OSRD_GIT_DESCRIBE=${OSRD_GIT_DESCRIBE}
+ENV NODE_OPTIONS="--max_old_space_size=4096"
+
+# Start the app
+COPY docker/dev-entrypoint.sh /
+ENTRYPOINT ["/dev-entrypoint.sh"]
+CMD ["sh", "-c", "id && npm install && (npm run build-ui & npm run start-container)"]

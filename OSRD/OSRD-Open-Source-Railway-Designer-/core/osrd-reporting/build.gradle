@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    alias(libs.plugins.kotlin.jvm)
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // PLEASE ADD AND UPDATE DEPENDENCIES USING libs.versions.toml
+    api project(':kt-osrd-utils')
+
+    implementation libs.kotlin.stdlib
+
+    //moshi
+    api libs.moshi
+    api libs.moshi.adapters
+    api libs.moshi.kotlin
+
+    //class-graph
+    implementation libs.classgraph
+
+    // for linter annotations
+    compileOnly libs.jcip.annotations
+    compileOnly libs.spotbugs.annotations
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation libs.junit.jupiter.api
+    testImplementation libs.junit.jupiter.params
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly libs.junit.jupiter.engine
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'jqwik', 'junit-jupiter'
+    }
+}

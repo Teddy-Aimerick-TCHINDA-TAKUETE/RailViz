@@ -1,0 +1,50 @@
+package fr.sncf.osrd;
+
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
+import fr.sncf.osrd.cli.*;
+import java.util.HashMap;
+
+public class App {
+    /**
+     * The main entry point for OSRD.
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        var commands = new HashMap<String, CliCommand>();
+        commands.put("load-infra", new ValidateInfra());
+        commands.put("worker", new WorkerCommand());
+        commands.put("reproduce-request", new ReproduceRequest());
+
+        // prepare the command line parser
+        var argsParserBuilder = JCommander.newBuilder();
+        argsParserBuilder.defaultProvider(new EnvProvider("CORE_"));
+        for (var command : commands.entrySet()) argsParserBuilder.addCommand(command.getKey(), command.getValue());
+        var argsParser = argsParserBuilder.build();
+
+        // parse the command line arguments
+        try {
+            argsParser.parse(args);
+        } catch (ParameterException e) {
+            e.usage();
+            System.exit(1);
+        }
+
+        // get the name of the user command (help, simulate, convert, ...)
+        var commandName = argsParser.getParsedCommand();
+        if (commandName == null) {
+            argsParser.usage();
+            System.exit(1);
+        }
+
+        // run the user command
+        var statusCode = 1;
+        try {
+            statusCode = commands.get(commandName).run();
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        System.exit(statusCode);
+    }
+}

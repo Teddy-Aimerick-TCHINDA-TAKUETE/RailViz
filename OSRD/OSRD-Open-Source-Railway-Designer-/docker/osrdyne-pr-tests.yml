@@ -1,0 +1,19 @@
+worker_driver:
+  type: "DockerDriver"
+  worker_image: "ghcr.io/openrailassociation/osrd-edge/osrd-core:${PR_NB}"
+  network: "osrd_pr_tests"
+  container_prefix: "osrd-pr-tests"
+  container_command:
+    ["sh", "-c", "exec java $JAVA_OPTS -ea -jar /app/osrd_core.jar worker"]
+  default_env:
+    - "CORE_EDITOAST_URL=http://editoast:8089"
+    - "JAVA_TOOL_OPTIONS=-javaagent:/app/opentelemetry-javaagent.jar"
+    - "CORE_MONITOR_TYPE=opentelemetry"
+    - "OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=grpc"
+    - "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://jaeger:4319"
+    - "OTEL_METRICS_EXPORTER=none"
+    - "OTEL_LOGS_EXPORTER=none"
+amqp_uri: "amqp://osrd:password@rabbitmq:5673/%2f"
+management_uri: "http://osrd:password@rabbitmq:15673"
+api_address: "0.0.0.0:4243"
+managed_by_value: "osrdyne-pr-test"

@@ -1,0 +1,51 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ksp)
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // PLEASE ADD AND UPDATE DEPENDENCIES USING libs.versions.toml
+    implementation project(':kt-fast-collections')
+    implementation project(path: ':osrd-geom')
+    ksp project(':kt-fast-collections-generator')
+
+    // WARNING: this module should not depend on osrd-railjson
+    api project(":kt-osrd-utils")
+    api project(":osrd-reporting")
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlin.logging
+    testImplementation libs.kotlin.test
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation libs.junit.jupiter.api
+}
+
+// to get KSP generated-stuff to be recognised
+kotlin {
+    sourceSets {
+        main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+        test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += [
+                "-opt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.ExperimentalUnsignedTypes",
+                "-opt-in=kotlin.time.ExperimentalTime",
+                "-opt-in=kotlin.contracts.ExperimentalContracts",
+        ]
+    }
+}

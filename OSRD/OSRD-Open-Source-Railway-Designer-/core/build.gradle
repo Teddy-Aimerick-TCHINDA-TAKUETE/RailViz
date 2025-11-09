@@ -1,0 +1,223 @@
+plugins {
+    id 'base'
+    id 'java'
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ksp) apply false
+    id 'application'
+    alias(libs.plugins.spotbugs)
+    alias(libs.plugins.shadow)
+    id 'jacoco'
+    id 'jacoco-report-aggregation'
+    alias(libs.plugins.versions)
+    alias(libs.plugins.spotless)
+    alias(libs.plugins.kotlin.serialization)
+}
+
+// region DEPENDENCIES
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // PLEASE ADD AND UPDATE DEPENDENCIES USING libs.versions.toml
+
+    implementation project(':osrd-railjson')
+    implementation project(':kt-railjson-builder')
+    implementation project(':osrd-reporting')
+    implementation project(':envelope-sim')
+    implementation project(':osrd-geom')
+    implementation project(':kt-osrd-path')
+    testImplementation(testFixtures(project(":envelope-sim")))
+
+    // kotlin
+    implementation libs.kotlin.logging
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.serialization.core
+    implementation libs.kotlinx.serialization.cbor
+    testImplementation libs.kotlin.test
+    testImplementation libs.kotlinx.coroutines.test
+
+    implementation project(':kt-osrd-utils')
+    implementation project(':kt-fast-collections')
+    implementation project(':kt-osrd-signaling')
+    implementation project(":kt-osrd-sim-interlocking")
+    implementation project(":kt-osrd-sim-infra")
+    implementation project(":kt-osrd-rjs-parser")
+    implementation project(":kt-osrd-sncf-signaling")
+    implementation project(':kt-osrd-path')
+
+    // base primitives
+    implementation libs.guava
+
+    // command line parsing
+    implementation libs.jcommander
+
+    // fast primitive collections
+    implementation libs.hppc
+
+    // JSON parsing
+    implementation libs.moshi
+    implementation libs.moshi.adapters
+    implementation libs.moshi.kotlin
+
+    // HTTP server framework
+    implementation libs.takes
+    implementation libs.javax.json.api
+
+    // HTTP client
+    implementation libs.okhttp
+
+    // the logging API stub
+    implementation libs.slf4j
+    implementation libs.jansi
+
+    // the logging API implementation
+    implementation libs.logback.core
+    implementation libs.logback.classic
+
+    // OpenTelemetry
+    implementation libs.opentelemetry.api
+    implementation libs.opentelemetry.instrumentation.annotations
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation libs.junit.jupiter.api
+    testImplementation libs.junit.jupiter.params
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly libs.junit.jupiter.engine
+    // Use AssertJ for testing
+    testImplementation libs.assertj
+    // jqwik for property based testing
+    testImplementation libs.jqwik
+    // mockito for mocking
+    testImplementation libs.mockito.inline
+    testImplementation libs.mockito.junit.jupiter
+
+    // Only needed to run tests in a version of IntelliJ IDEA that bundles older versions
+    testRuntimeOnly libs.junit.platform.launcher
+
+    // for linter annotations
+    compileOnly libs.jcip.annotations
+    compileOnly libs.spotbugs.annotations
+    testCompileOnly libs.jcip.annotations
+    testCompileOnly libs.spotbugs.annotations
+
+    // rabbitmq
+    implementation libs.amqp.client
+}
+// endregion
+
+// region MAIN
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'fr.sncf.osrd.App'
+}
+
+base.archivesName = "osrd"
+
+run {
+    enableAssertions = true
+}
+
+// endregion
+
+// region TESTS
+
+test {
+    useJUnitPlatform {
+        includeEngines 'jqwik', 'junit-jupiter'
+    }
+}
+
+
+sourceSets {
+    test {
+        resources {
+            srcDirs += "../tests/data"
+        }
+    }
+}
+
+// endregion
+
+// region CODE_QUALITY
+
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
+
+allprojects {
+    apply plugin: 'com.github.spotbugs'
+    apply plugin: 'com.diffplug.spotless'
+
+    spotless {
+        java {
+            targetExclude('**/generated/**/*.*')
+            // 4 space indentation style formatter
+            palantirJavaFormat()
+        }
+        kotlin {
+            targetExclude('**/generated/**/*.*')
+            // 4 space indentation style formatter
+            ktfmt().kotlinlangStyle()
+        }
+    }
+
+    // enable all linter warnings, and error out on warnings
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs << "-Xlint:all" << "-Werror"
+        options.encoding = "UTF-8"
+    }
+
+    // Remove warning on each @Json annotation
+    kotlin {
+        compilerOptions {
+            freeCompilerArgs.add("-Xannotation-default-target=param-property")
+        }
+    }
+
+    spotbugs {
+        ignoreFailures = false
+        showStackTraces = true
+        showProgress = true
+        // can also be 'more' or 'default'
+        effort = Effort.valueOf('MAX')
+        // report all diagnosed bugs
+        reportLevel = Confidence.valueOf('LOW')
+        maxHeapSize = '1g'
+        excludeFilter = rootProject.file('config/spotbugs/exclude.xml')
+    }
+
+    tasks.withType(com.github.spotbugs.snom.SpotBugsTask).tap {
+        configureEach {
+            if (project.hasProperty("spotbugs_report_xml")) {
+                reports { xml.required = true }
+            } else {
+                reports { html.required = true }
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
+}
+
+// endregion
+
+// region KOTLIN
+
+
+// endregion
+
+tasks.register("printSettings", DefaultTask) {
+    doLast {
+        println "java.home " + System.getProperty('java.home')
+    }
+}

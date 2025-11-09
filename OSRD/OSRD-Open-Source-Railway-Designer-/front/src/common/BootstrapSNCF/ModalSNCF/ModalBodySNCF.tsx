@@ -1,0 +1,9 @@
+import { type CSSProperties, type PropsWithChildren } from 'react';
+
+const ModalBodySNCF = ({ children, style }: PropsWithChildren<{ style?: CSSProperties }>) => (
+  <div id="modal-body" className="modal-body" data-testid="modal-body" style={style}>
+    {children}
+  </div>
+);
+
+export default ModalBodySNCF;

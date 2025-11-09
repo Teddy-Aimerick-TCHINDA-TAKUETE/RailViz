@@ -1,0 +1,19 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // PLEASE ADD AND UPDATE DEPENDENCIES USING libs.versions.toml
+    api libs.kotlin.reflect
+}

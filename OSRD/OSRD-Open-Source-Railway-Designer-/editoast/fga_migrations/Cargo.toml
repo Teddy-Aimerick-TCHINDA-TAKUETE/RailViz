@@ -1,0 +1,36 @@
+[package]
+name = "fga_migrations"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+test_utilities = []
+
+[dependencies]
+clap.workspace = true
+common.workspace = true
+derive_more.workspace = true
+fga.workspace = true
+futures.workspace = true
+indexmap = "2.11.0"
+itertools.workspace = true
+opentelemetry-otlp.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha1.workspace = true
+strum = { workspace = true, features = ["strum_macros"] }
+tempfile.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+url.workspace = true
+
+[dev-dependencies]
+fga = { workspace = true, features = ["test_utilities"] }
+stdext.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true

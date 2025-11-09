@@ -1,0 +1,211 @@
+.scenario-conflicts {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  background-color: var(--ambientB10);
+
+  .scenario-conflicts-content {
+    font-family: 'IBM Plex Sans';
+    background: var(--ambientB15);
+    overflow: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.conflicts-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--ambientB10);
+  height: 100%;
+
+  .conflict-card {
+    position: relative;
+    background-color: var(--ambientB10);
+    display: flex;
+    gap: 12px;
+    height: 72px;
+    padding: 5px 8px 9px 12px;
+    flex-shrink: 0;
+
+    .conflict-info {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+
+      .conflict-type {
+        font-family: 'IBM Plex Sans';
+        color: var(--error60);
+        font-size: 14px;
+        height: 20px;
+        line-height: 20px;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      .start-and-end-time {
+        display: flex;
+        gap: 16px;
+        font-family: 'IBM Plex Mono', monospace;
+
+        .start-time {
+          color: var(--black100);
+          font-size: 0.875rem;
+          font-weight: 600;
+          line-height: 20px;
+        }
+
+        .end-time {
+          color: var(--black100);
+          font-size: 0.875rem;
+          line-height: 20px;
+        }
+      }
+
+      .departure-date {
+        color: var(--grey50);
+        font-size: 0.75rem;
+        line-height: 20px;
+        font-family: 'IBM Plex Mono', monospace;
+        transform: translateY(-2px);
+      }
+    }
+
+    .trains-name {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      --tag-gap: 4px;
+      gap: var(--tag-gap);
+      overflow: hidden;
+      max-height: 48px; // 2 rows of 20px + gaps
+      align-content: flex-start;
+      justify-content: flex-end;
+      padding-top: 4px;
+      position: relative;
+      min-width: 0;
+
+      .train-name-card {
+        box-sizing: border-box;
+        flex: 0 0 calc((100% - var(--tag-gap)) / 2); // 2 columns layout
+        max-width: calc((100% - var(--tag-gap)) / 2); // Ensure it doesn't exceed half width
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: 0.4px;
+        background-color: transparent;
+        position: relative;
+        z-index: 1;
+        // min-width: 0;
+
+        span {
+          position: relative;
+          display: block;
+          align-items: center;
+          text-align: center;
+          height: 20px;
+          padding: 3px 5px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: currentColor;
+            clip-path: polygon(
+              6px 0,
+              calc(100% - 6px) 0,
+              100% 6px,
+              100% calc(100% - 6px),
+              calc(100% - 6px) 100%,
+              6px 100%,
+              0 calc(100% - 6px),
+              0 6px
+            );
+            z-index: -1;
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: var(--ambientB10);
+            clip-path: polygon(
+              5px 0,
+              calc(100% - 5px) 0,
+              100% 5px,
+              100% calc(100% - 5px),
+              calc(100% - 5px) 100%,
+              5px 100%,
+              0 calc(100% - 5px),
+              0 5px
+            );
+            z-index: -1;
+          }
+        }
+      }
+    }
+    .conflict-separator {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      margin: 0 auto;
+      height: 2px; // 1px gap + 1px white line
+      background: none;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 1px; // 1px gap from top
+        width: 100%;
+        height: 1px;
+        background: var(--white100);
+        opacity: 1;
+      }
+    }
+  }
+
+  > .conflict-card:first-child .conflict-separator {
+    display: none;
+  }
+
+  .conflict-separator-bottom {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--black100);
+    opacity: 0.15;
+  }
+}
+
+.train-name-card.other-trains {
+  cursor: help;
+  color: var(--info60) !important;
+  position: relative;
+  z-index: 10;
+
+  span::before {
+    background: var(--info60) !important;
+  }
+
+  span::after {
+    background: var(--info5) !important;
+  }
+}

@@ -1,0 +1,31 @@
+[project]
+name = "railjson_generator"
+version = "0.4.11"
+description = ""
+authors = [{ name = "OSRD Contributors", email = "contact@osrd.fr" }]
+requires-python = ">= 3.11"
+
+dependencies = ["osrd-schemas"]
+
+[project.optional-dependencies]
+check = [
+  "pyright ~= 1.1.393",
+  "pytest ~= 7.4.3",
+  "pytest-cov ~= 4.1.0",
+  "ruff ~= 0.9.5",
+]
+
+[tool.pyright]
+include = ["railjson_generator"]
+exclude = ["**/__pycache__"]
+extraPaths = ["../osrd_schemas"]
+
+[tool.uv.sources]
+osrd-schemas = { path = "../osrd_schemas", editable = true }
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"

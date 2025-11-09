@@ -1,0 +1,241 @@
+{
+  "allowances": {
+    "gridMarginBeforeAfter": "Marge grille avant/après",
+    "standardAllowance": "Marge de régularité"
+  },
+  "arriveAt": "Arriver à {{ time }}",
+  "consist": {
+    "compositionCode": "Code de composition",
+    "consist": "Convoi",
+    "errors": {
+      "maxSpeed": {
+        "negative": "Doit être positif.",
+        "range": "La vitesse max. doit être comprise entre {{low}} et {{high}}km/h"
+      },
+      "missingValue": "Valeur manquante",
+      "totalLength": {
+        "negative": "Doit être positif.",
+        "range": "La longueur totale doit être comprise entre {{low}} et {{high}}m"
+      },
+      "totalMass": {
+        "negative": "Doit être positif.",
+        "range": "Le tonnage total doit être compris entre {{low}} et {{high}}t"
+      }
+    },
+    "info": {
+      "maxSpeed": "La vitesse maximale a été mise à jour en fonction des nouvelles données de convoi.",
+      "totalLength": "La longueur a été mise à jour en fonction des nouvelles données de convoi.",
+      "totalMass": "Le poids a été mis à jour en fonction des nouvelles données de convoi."
+    },
+    "length": "Longueur",
+    "loadingGauge": "Gabarit",
+    "maxSpeed": "Vitesse max.",
+    "tonnage": "Tonnage",
+    "towedRollingStock": "Matériel remorqué",
+    "tractionEngine": "Engin de traction"
+  },
+  "debug": {
+    "simulationSettings": "Paramètres de simulation"
+  },
+  "departureTime": "Horaire de départ",
+  "destinationTime": "Horaire de destination",
+  "find": "Trouver",
+  "form": {
+    "datePickerErrors": {
+      "invalidDate": "Renseignez une date entre le {{startDate}} et le {{endDate}}",
+      "invalidInput": "Saississez une date au format dd/mm/yy"
+    },
+    "incompleteForm": "Formulaire incomplet",
+    "viaNotDefined": "Au moins une localisation n'est pas renseignée"
+  },
+  "infrastructure": "Infra",
+  "leaveAt": "Partir à {{ time }}",
+  "linkedTrainDefaultCard": {
+    "anterior": "Indiquer le sillon antérieur",
+    "posterior": "Indiquer le sillon postérieur"
+  },
+  "mailFeedback": {
+    "body": "Nous vous invitons à nous envoyer un message.\nDès que vous avez une gêne ou une remarque,\nmême si vous n'y mettez pas la forme.\n\nMerci à vous par avance,\nL'équipe du projet {{stdcmName}}\n\n(vous pouvez effacer ce message)",
+    "description": "Aidez-nous à améliorer {{stdcmName}} en transmettant vos critiques et propositions à l’équipe.",
+    "simulationDetails": "Détails de la simulation",
+    "subject": "{{stdcmName}} - remarques, suggestions",
+    "title": "Une remarque, une suggestion ?",
+    "writeButton": "Écrire"
+  },
+  "noConfigurationFound": {
+    "text": "Veuillez contacter l'équipe de maintenance pour qu'elle puisse vous remettre sur les rails.",
+    "title": "Un problème de configuration vous empêche de faire une recherche"
+  },
+  "noCorrespondingResults": "Aucun résultat ne correspond à votre recherche.",
+  "pathfindingStatus": {
+    "calculating": "Validation de l'itinéraire en cours…",
+    "success": "L'itinéraire demandé est valide."
+  },
+  "reportSheet": {
+    "applicationDate": "Date d'application",
+    "asap": "au plus tôt",
+    "code": "CH",
+    "consist": "convoi",
+    "conventionalSign": "signe conv.",
+    "crossedATE": "ATE croisé",
+    "endStop": "arrivée",
+    "for": "pour",
+    "formattedDate": "le {{date}} à {{time}}",
+    "formattedDateScenario": "Fiche de simulation générée le {{date}} à {{time}}",
+    "from": "du",
+    "length": "longueur",
+    "loadingGauge": "gabarit",
+    "maxLength": "longueur max.",
+    "maxSpeed": "vitesse max.",
+    "maxWeight": "tonnage max.",
+    "notFound": "Non trouvé",
+    "operationalPoint": "jalon",
+    "passageStop": "passage",
+    "refEngine": "Engin de réf.",
+    "referenceEngine": "engin de référence",
+    "requestedRoute": "parcours demandé",
+    "scheduledArrival": "arrivée prévue le {{date}} à {{time}}",
+    "scheduledDeparture": "départ prévu le {{date}} à {{time}}",
+    "serviceStop": "Arrêt de service",
+    "similarTrainsToDuplicate": "sillons à dupliquer",
+    "simulation": "Simulation",
+    "simulationStopType": "type d'arrêt",
+    "speedLimitByTag": "code de composition",
+    "startStop": "départ",
+    "stdcm": "LMR",
+    "stdcmCreation": "Création de sillon de dernière minute",
+    "stopTime": "arrêt",
+    "stopType": "motif",
+    "towedMaterial": "matériel remorqué",
+    "track": "voie",
+    "unknown": "Aucun",
+    "viewSimulation": "voir la simulation sur la carte",
+    "warningMessage": "Cette fiche a été générée par un outil de simulation. Elle ne dispense pas l’horairiste des vérifications inhérentes au tracé de SDM.",
+    "weight": "tonnage",
+    "withoutWarranty": "Simulation de sillon sans garantie de disponibilité"
+  },
+  "scenario": "Scénario",
+  "scenarioExplorer": {
+    "infraLegend": "infra",
+    "noScenarioSelected": "Cliquez ici pour sélectionner un scénario afin de déterminer une infrastructure et une grille horaire.",
+    "projectLegend": "projet",
+    "projects": "Projets",
+    "scenarioExplorator": "Navigateur de scénarios",
+    "scenarioLegend": "scénario",
+    "scenarios": "Scénarios",
+    "studies": "Études",
+    "studyLegend": "étude"
+  },
+  "simulation": {
+    "additionalResults": "Pas de résultat pour votre demande, d’autres possibilités sont en cours de calcul.",
+    "calculatingSimulation": "Calcul en cours…",
+    "getSimulation": "Obtenir la simulation",
+    "infoMessage": "Cette simulation n'offre pas la garantie de disponibilité du sillon.",
+    "results": {
+      "changeSearchCriteria": "Vous pouvez modifier vos critères de recherche pour trouver une solution.",
+      "displayAll": "Afficher tous les jalons",
+      "displayMain": "Afficher les jalons principaux",
+      "downloadSimulationSheet": "Télécharger la fiche de simulation",
+      "gesicoRequest": "et joignez ce document à votre demande GESICO.",
+      "notFound": "Aucun passage n'a été trouvé pour cette configuration",
+      "pathNotFound": "Incompatibilité avec des sillons et/ou planches travaux existants.",
+      "retainThisSimulation": "Retenir cette simulation",
+      "simulationDownstream": "Simulation lancée automatiquement en raison de l’absence de capacité avec les paramètres demandés : la tolérance <underline>avant</underline> l’heure de départ a été augmentée.",
+      "simulationName": {
+        "withOutputs": "Simulation n°{{id}}",
+        "withoutOutputs": "Pas de capacité"
+      },
+      "simulationSelected": "Vous avez retenu cette simulation",
+      "simulationUpstream": "Simulation lancée automatiquement en raison de l’absence de capacité avec les paramètres demandés : la tolérance <underline>après</underline> l’heure de départ a été augmentée.",
+      "simulationsWithConflicts": "Deux autres simulations ont été calculées automatiquement sur la base de cette configuration.",
+      "startNewQuery": "Démarrez une nouvelle requête",
+      "startNewQueryFromCurrent": "Démarrez une nouvelle requête à partir de celle-ci",
+      "status": {
+        "completed": "Calcul terminé",
+        "errorMessage": "Nous sommes désolés de ne pas avoir pu traiter votre demande. L’équipe LMR a été notifiée et prendra connaissance de la situation dès que possible.",
+        "failed": "Un problème technique est survenu"
+      },
+      "upgrade": {
+        "arrivalIncompatible": "Heure arrivée incompatible",
+        "helpUs": "Aidez-nous à améliorer {{stdcmName}}",
+        "other": "Autre",
+        "reason": "Cette simulation ne répond pas à vos besoin car…",
+        "startIncompatible": "Heure départ incompatible",
+        "unqualifiedDriver": "Conducteur non habilité"
+      }
+    },
+    "stopCalculation": "Arrêter"
+  },
+  "simulationSheet": "Fiche de simulation",
+  "spaceTimeGraphic": "Graphique Espace-Temps",
+  "stdcmErrors": {
+    "incompatibleConstraintsDetails": {
+      "incompatibleElectrical_one": "- {{count}} erreur d'électrification",
+      "incompatibleElectrical_other": "- {{count}} erreurs d'électrification",
+      "incompatibleLoadingGauge_one": "- {{count}} incompatibilité du gabarit",
+      "incompatibleLoadingGauge_other": "- {{count}} incompatibilités du gabarit",
+      "incompatibleSignalingSystem_one": "- {{count}} erreur de signalisation",
+      "incompatibleSignalingSystem_other": "- {{count}} erreurs de signalisation"
+    },
+    "incompatibleConstraints_one": "Le parcours demandé contient l'erreur suivante :",
+    "incompatibleConstraints_other": "Le parcours demandé contient les erreurs suivantes :",
+    "incompatibleConstraints_zero": "Erreur de contrainte sur le chemin demandé",
+    "infraNotLoaded": "Infrastructure en cours de chargement",
+    "invalidFields": {
+      "maxSpeed": "la vitesse maximale du convoi",
+      "totalLength": "la longueur totale du convoi",
+      "totalMass": "le poids total du convoi"
+    },
+    "invalidInformations": "Informations invalides pour le calcul :",
+    "missingFields": {
+      "destination": "la destination",
+      "maxSpeed": "la vitesse maximale du convoi",
+      "origin": "l'origine",
+      "timeDestination": "l'heure d'arrivée à la destination",
+      "timeOrigin": "l'heure de départ à l'origine",
+      "totalLength": "la longueur totale du convoi",
+      "totalMass": "le poids total du convoi",
+      "tractionEngine": "l'engin de traction",
+      "vias": "au moins un PR intermédiaire"
+    },
+    "missingInformations": "Informations manquantes pour le calcul :",
+    "noPaths": "Incompatibilité avec d'autres sillons.",
+    "noResults": "Aucun sillon trouvé",
+    "pathfindingFailed": "Aucun chemin n'a été trouvé pour ces points de jalonnement.",
+    "requestFailed": "Erreur de calcul Sillon de dernière minute",
+    "routeErrors": {
+      "bothPointAreScheduled": "Le calcul ne peut pas prendre en compte à la fois un horaire d'origine et un horaire de destination. Il faut choisir l'un ou l'autre :",
+      "global": "Veuillez vérifier les erreurs suivantes liées au trajet :",
+      "noScheduledPoint": "Le calcul a besoin de l'horaire d'origine ou de celui de la destination.",
+      "viaStopDurationMissing": "Le temps d'arrêt pour le PR intermédiaire.",
+      "viaStopDurationTooShort": "Le temps d'arrêt d'une relève conducteur est d'au moins 3 minutes.",
+      "zeroLengthPath": "Origine et destination ne peuvent pas être identiques."
+    }
+  },
+  "trainPath": {
+    "addVia": "Ajouter un PR intermédiaire",
+    "asSoonAsPossible": "dès que possible",
+    "ch": "CH",
+    "ci": "CI",
+    "date": "Date",
+    "destination": "Destination",
+    "linkedTrain": {
+      "anterior": "Sillon antérieur",
+      "posterior": "Sillon postérieur"
+    },
+    "origin": "Origine",
+    "preciseTime": "horaire précis",
+    "respectDestinationSchedule": "respecter l'horaire de la destination",
+    "stopFor": "Temps d'arrêt minimum",
+    "stopType": {
+      "driverSwitch": "relève conducteur",
+      "overtake": "dépassement",
+      "passageTime": "passage",
+      "serviceStop": "arrêt de service"
+    },
+    "time": "Heure",
+    "tolerance": "Tolérance",
+    "type": "Type",
+    "vias": "PR intermédiaire"
+  }
+}

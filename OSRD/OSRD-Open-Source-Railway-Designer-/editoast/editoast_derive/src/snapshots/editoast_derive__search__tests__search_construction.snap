@@ -1,0 +1,68 @@
+---
+source: editoast_derive/src/search.rs
+---
+// Source
+// -----------------------------------------------------------------------------
+
+#[search(
+    table = "search_track",
+    column(name = "infra_id", data_type = "INT"),
+    column(name = "line_code", data_type = "INT"),
+    column(name = "line_name", data_type = "TEXT")
+)]
+pub struct Track {
+    #[search(sql = "search_track.infra_id")]
+    infra_id: i64,
+    #[search(sql = "search_track.unprocessed_line_name")]
+    line_name: std::string::String,
+    #[search(sql = "search_track.line_code", rename = "code")]
+    line_code: i64,
+}
+
+// Macro expansion
+// -----------------------------------------------------------------------------
+
+impl search::SearchObject for Track {
+    fn search_config() -> search::SearchConfig {
+        search::SearchConfig {
+            table: "search_track".to_owned(),
+            distinct_on: None,
+            joins: None,
+            criterias: Vec::from([
+                search::Criteria {
+                    name: "infra_id".to_owned(),
+                    data_type: search::TypeSpec::Type(search::AstType::Integer),
+                    migration: None,
+                },
+                search::Criteria {
+                    name: "line_code".to_owned(),
+                    data_type: search::TypeSpec::Type(search::AstType::Integer),
+                    migration: None,
+                },
+                search::Criteria {
+                    name: "line_name".to_owned(),
+                    data_type: search::TypeSpec::Type(search::AstType::String),
+                    migration: None,
+                },
+            ]),
+            properties: Vec::from([
+                search::Property {
+                    name: "infra_id".to_owned(),
+                    sql: "search_track.infra_id".to_owned(),
+                    data_type: None,
+                },
+                search::Property {
+                    name: "line_name".to_owned(),
+                    sql: "search_track.unprocessed_line_name".to_owned(),
+                    data_type: Some(search::TypeSpec::Type(search::AstType::String)),
+                },
+                search::Property {
+                    name: "code".to_owned(),
+                    sql: "search_track.line_code".to_owned(),
+                    data_type: None,
+                },
+            ]),
+            migration: None,
+        }
+    }
+}

@@ -1,0 +1,330 @@
+.itinerary-modal {
+  --header-height: 164px;
+  --footer-height: 96px;
+  --footer-box-shadow-height: 1px;
+  --path-step-row-gap: 8px;
+  --path-step-wrapper-padding-right: 10px;
+  --path-step-secondary-code-width: 60px;
+  --path-step-track-name-width: 76px;
+  --map-interactions-width: 58px;
+  --map-interactions-margin-left: 7px;
+
+  margin: 16px;
+  width: 100%;
+  height: calc(100vh - 16px);
+  // The next 2 styles overrides the default max-width and max-height in browsers of the <dialog> element
+  max-width: calc(100% - 32px);
+  max-height: calc(100vh - 32px);
+  font-family: 'IBM Plex Sans', sans-serif;
+  display: flex;
+  border-radius: 8px;
+  border: 1px solid var(--black5);
+  box-shadow: 0 0 0 2px var(--black10);
+
+  &::backdrop {
+    background: var(--grey30);
+  }
+
+  .itinerary-modal-form {
+    min-width: 628px;
+    width: 50%;
+    height: 100%;
+    flex-shrink: 0;
+    flex-grow: 1;
+
+    .itinerary-modal-form-header {
+      display: flex;
+      flex-direction: column;
+      height: var(--header-height);
+      border-bottom: 1px solid var(--gray-30);
+
+      .category-row {
+        display: flex;
+        align-items: center;
+        margin-top: 32px;
+        margin-left: 22px;
+
+        .category-color {
+          width: 6px;
+          height: 16px;
+          border-radius: 4px;
+          margin-right: 12px;
+        }
+        .category-select {
+          width: 217px;
+          height: 32px;
+        }
+      }
+
+      .rolling-stock-cc-name-row {
+        display: flex;
+        align-items: center;
+        margin-top: 17px;
+        margin-left: 40px;
+        gap: 32px;
+
+        .rolling-stock-combobox {
+          min-width: 217px;
+          // Fix osrd-ui styles
+          label {
+            margin-bottom: 0;
+          }
+        }
+
+        .composition-code-select {
+          min-width: 120px;
+          // Fix osrd-ui styles
+          label {
+            margin-bottom: 0;
+          }
+        }
+
+        .train-name-input {
+          min-width: 148px;
+          margin-right: 40px;
+          flex: 1 1 auto;
+          // Fix osrd-ui styles
+          label {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+
+    .itinerary-modal-form-body {
+      height: calc(
+        100% - var(--header-height) - var(--footer-height) - var(--footer-box-shadow-height)
+      );
+      overflow-y: auto;
+      background-color: var(--ambientB10);
+      box-shadow: 0 calc(-1 * var(--footer-box-shadow-height)) 0 0 var(--black10);
+
+      .alert-box {
+        margin-top: -1px;
+      }
+
+      .path-step-list {
+        background-color: var(--ambientB15);
+        border-radius: 8px;
+        margin-top: 12px;
+        margin-inline: 8px;
+        padding-top: 16px;
+
+        .itinerary-icons {
+          display: flex;
+          justify-content: end;
+          align-items: center;
+          padding-inline: 16px;
+
+          .frame-all span {
+            display: flex;
+            align-items: center;
+            color: var(--grey30);
+
+            &:hover {
+              color: var(--black100);
+            }
+          }
+        }
+
+        .path-step-list-header {
+          display: grid;
+          grid-template-columns: minmax(184px, 1fr) 60px 76px;
+          gap: 8px;
+
+          font-size: 0.875rem;
+          color: var(--grey30);
+          padding-block: 9px 1px;
+          padding-inline: 49px
+            calc(
+              var(--map-interactions-width) + var(--map-interactions-margin-left) +
+                var(--path-step-row-gap) + var(--path-step-wrapper-padding-right)
+            );
+
+          span {
+            margin-left: 1px;
+          }
+        }
+
+        // this wrapper is being used to display the "adding location on map" style
+        .path-step-wrapper {
+          padding-inline: 12px var(--path-step-wrapper-padding-right);
+          border-radius: 6px;
+          padding-bottom: 4px;
+
+          &:last-child {
+            padding-bottom: 14px;
+          }
+
+          .path-step {
+            display: grid;
+            grid-template-columns:
+              24px minmax(184px, 1fr) var(--path-step-secondary-code-width)
+              var(--path-step-track-name-width) auto;
+            align-items: center;
+            gap: 8px;
+            padding-block: 8px;
+
+            &.requested-point {
+              grid-template-columns:
+                24px minmax(184px, 1fr) calc(
+                  var(--path-step-secondary-code-width) + var(--path-step-track-name-width) +
+                    var(--path-step-row-gap)
+                )
+                auto;
+            }
+
+            .path-step-counter {
+              position: relative;
+              width: 24px;
+              height: 24px;
+              border-width: 1px;
+              border-style: solid;
+              border-radius: 50%;
+              opacity: 0.5;
+              background-color: var(--white100);
+              margin-right: 4px;
+
+              &.pathfinding-line::before {
+                content: '';
+                position: absolute;
+                top: -1px; // relative element border width
+                left: 50%;
+                transform: translateX(-50%) translateY(-100%);
+                width: 4px;
+                height: 28px;
+                background-color: var(--pathBackground);
+              }
+
+              &.origin::before {
+                height: 16px;
+                opacity: 0.2;
+                border-radius: 2px 2px 0px 0px;
+              }
+
+              &.empty::before {
+                opacity: 0.2;
+              }
+
+              &.index {
+                font-size: 0.75rem;
+                font-weight: 600;
+                text-align: center;
+                padding-top: 1px;
+                width: 24px;
+                height: 24px;
+                border-width: 2px;
+                border-style: solid;
+                background-color: var(--pathBackground);
+                color: var(--white100);
+                opacity: 1;
+
+                &::before {
+                  top: -2px; // relative element border width
+                }
+              }
+            }
+
+            .path-step-op-name {
+              margin-left: 4px;
+            }
+
+            .requested-point-block {
+              height: 28px;
+              background-color: var(--ambientB5);
+              border-radius: 4px;
+            }
+
+            .map-interactions {
+              margin-left: 7px;
+              color: var(--primary60);
+
+              .added-location-icon svg {
+                fill: var(--grey60);
+
+                &:hover {
+                  fill: var(--black100);
+                }
+              }
+
+              .focus-map-icon {
+                margin-left: 10px;
+
+                &:not(.empty):hover {
+                  color: var(--primary80);
+                }
+
+                &.empty {
+                  color: var(--primary20);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .itinerary-modal-form-footer {
+      height: 96px;
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      padding-right: 34px;
+      margin-top: var(--footer-box-shadow-height);
+      box-shadow: 0 calc(-1 * var(--footer-box-shadow-height)) 0 0 var(--black10);
+    }
+  }
+
+  .itinerary-modal-map {
+    width: 50%;
+    box-shadow: inset (var(--footer-box-shadow-height)) 0 0 0 var(--black25);
+    padding-left: 1px;
+
+    .layers-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--white100);
+      border-radius: 7px;
+      border: 1px solid var(--black25);
+    }
+
+    .path-step-marker {
+      display: flex;
+      justify-content: center;
+      font-family: 'IBM Plex Sans';
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--white100);
+
+      .indicator {
+        position: absolute;
+        top: 12px;
+      }
+
+      .label {
+        position: absolute;
+        top: 10px;
+        left: 44px;
+        display: flex;
+        align-items: center;
+        height: 24px;
+        font-size: 0.875rem;
+        outline: 3px solid rgba(246, 245, 241, 0.8);
+        border-radius: 4px;
+        color: var(--white100);
+        background-color: var(--grey90);
+        padding-inline: 8px;
+        padding-bottom: 1px;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+@media (max-width: 1028px) {
+  .itinerary-modal-form {
+    width: 100%;
+  }
+}

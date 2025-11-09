@@ -1,0 +1,36 @@
+{
+  "name": "@osrd-project/storybook",
+  "private": true,
+  "devDependencies": {
+    "@chromatic-com/storybook": "^4.1.2",
+    "@storybook/addon-docs": "^9.1.15",
+    "@storybook/addon-links": "^9.1.15",
+    "@storybook/addon-onboarding": "^9.1.15",
+    "@storybook/react-vite": "^9.1.15",
+    "storybook": "^9.0.5",
+    "storybook-addon-run-script": "^0.1.4",
+    "vite": "^7.1.12",
+    "vite-plugin-checker": "^0.11.0"
+  },
+  "scripts": {
+    "clean": "rimraf storybook-static",
+    "start": "storybook dev -p 6006",
+    "build": "storybook build",
+    "lint": "eslint stories .storybook --max-warnings 0 && prettier '**/*.{css,json}' --check --ignore-path ../.prettierignore",
+    "lint:fix": "eslint stories .storybook --fix && prettier '**/*.{css,json}' --write --ignore-path ../.prettierignore"
+  },
+  "dependencies": {
+    "@osrd-project/ui-charts": "0.0.1-dev",
+    "@osrd-project/ui-core": "0.0.1-dev",
+    "@osrd-project/ui-icons": "0.0.1-dev",
+    "@osrd-project/ui-warped-map": "0.0.1-dev",
+    "@turf/helpers": "^7.2.0",
+    "classnames": "^2.5.1",
+    "file-saver": "^2.0.5",
+    "lodash": "^4.17.21",
+    "maplibre-gl": "^5.10.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-map-gl": "^8.1.0"
+  }
+}

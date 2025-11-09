@@ -1,0 +1,27 @@
+<div class="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <h3 style="margin:0">Trains</h3>
+    <button class="new" (click)="newTrain.emit()">+ Nouveau</button>
+  </div>
+
+  @if (trains.length === 0) {
+    <div style="font-size:12px;color:#666">Aucun train pour l’instant.</div>
+  } @else {
+    <div *ngFor="let t of trains">
+      <button class="row" (click)="center.emit(t)">
+        <span class="dot" [style.background]="signalColor(t.signal)"></span>
+        <div style="flex:1">
+          <div class="hd">
+            <div class="id">{{ t.id }}</div>
+            <span class="badge">Route {{ t.routeId }}</span>
+          </div>
+          <div class="meta">{{ r(t.speedKmh) | number:'1.0-0' }} km/h · {{ t.signal }}</div>
+        </div>
+      </button>
+      <div style="display:flex;gap:6px;margin:4px 0 10px 0">
+        <button (click)="changeSpeed.emit(t)">Vitesse…</button>
+        <button (click)="deleteTrain.emit(t)">Supprimer</button>
+      </div>
+    </div>
+  }
+</div>

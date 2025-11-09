@@ -1,0 +1,43 @@
+.informations-modal {
+  position: relative;
+  max-height: 75vh;
+  &-version {
+    font-size: small;
+  }
+
+  .informations-modal-container {
+    position: relative;
+    height: 560px;
+
+    img {
+      min-height: 192px;
+    }
+
+    .license-attributions {
+      background-color: var(--coolgray1);
+      padding: 8px;
+      border-radius: 4px;
+      word-break: break-all;
+
+      &.licenses {
+        flex-grow: 1;
+        overflow: auto;
+      }
+
+      a[href^='http'] {
+        h3,
+        i,
+        .small {
+          color: var(--primary);
+        }
+        &:hover {
+          h3,
+          i,
+          .small {
+            color: var(--purple);
+          }
+        }
+      }
+    }
+  }
+}

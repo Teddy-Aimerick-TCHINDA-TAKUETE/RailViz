@@ -1,0 +1,9 @@
+.selection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  height: 48px;
+  color: var(--purple);
+  font-weight: 500;
+}
