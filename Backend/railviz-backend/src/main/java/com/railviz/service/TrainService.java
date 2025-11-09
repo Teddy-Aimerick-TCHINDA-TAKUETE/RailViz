@@ -84,7 +84,7 @@ public class TrainService {
 	/** Paramètres globaux (peuvent être mis par train si tu veux) */
 	private static final long DWELL_MS = 5000; // arrêt à chaque extrémité
 	private static final double DEFAULT_A = 0.5; // m/s²
-	private static final double DEFAULT_D = 0.7; // m/s² (freine un peu plus fort)
+	private static final double DEFAULT_D = 0.9; // m/s² (freine un peu plus fort)
 
 	/** Utilitaires géométrie */
 	private static double hav(double lat1, double lon1, double lat2, double lon2) {
@@ -404,6 +404,19 @@ public class TrainService {
 		case ACCEL, DECEL -> "YELLOW";
 		case CRUISE -> "GREEN";
 		}, st.routeId);
+	}
+
+	public long countTrainsOnRoute(String routeId) {
+		return trains.values().stream().filter(t -> t.routeId.equals(routeId)).count();
+	}
+
+	public boolean hasTrainsOnRoute(String routeId) {
+		return countTrainsOnRoute(routeId) > 0;
+	}
+
+	public TrainDTO findDto(String id) {
+		var st = trains.get(id);
+		return (st == null) ? null : toDTO(st);
 	}
 
 }

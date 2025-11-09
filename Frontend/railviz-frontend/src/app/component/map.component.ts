@@ -1,7 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { switchMap } from 'rxjs/operators';
 import * as L from 'leaflet';
 
 import { TrainsPanelComponent } from './trains-panel.component';
@@ -211,14 +210,30 @@ export class MapComponent implements AfterViewInit {
     this.map.fitBounds(line.getBounds(), { animate: true, padding: [40, 40] });
   }
 
-  openEditRoute(r: RouteDTO){
-    // Variante simple: réutilise l’outil de tracé en préchargeant la polyline dans this.recorded, puis save = PUT
-    this.recording = true;
-    this.newRouteId = r.id;
-    this.recorded = r.points.map(p => [p[0], p[1]]);
-    this.tempLine = L.polyline(r.points.map(p => ({lat:p[0], lng:p[1]})), { color:'#0ea5e9', weight:3 }).addTo(this.map);
-    this.map.on('click', this.onClickRecord);
-    this.routesService.update({id: r.id, points: this.recorded}).subscribe();
+  // openEditRoute(r: RouteDTO){
+  //   // Variante simple: réutilise l’outil de tracé en préchargeant la polyline dans this.recorded, puis save = PUT
+  //   this.recording = true;
+  //   this.newRouteId = r.id;
+  //   this.recorded = r.points.map(p => [p[0], p[1]]);
+  //   this.tempLine = L.polyline(r.points.map(p => ({lat:p[0], lng:p[1]})), { color:'#0ea5e9', weight:3 }).addTo(this.map);
+  //   this.map.on('click', this.onClickRecord);
+  //   this.routesService.update({id: r.id, points: this.recorded}).subscribe();
+  // }
+
+  openEditRoute(r: RouteDTO) {
+    // mini-éditeur: on laisse l’utilisateur renvoyer un “json” simple comme preuve de concept
+    const json = prompt('Édite les points (JSON [[lat,lon], ...])', JSON.stringify(r.points));
+    if (!json) return;
+    try {
+      const points = JSON.parse(json) as [number,number][];
+      const updated: RouteDTO = { id: r.id, points };
+      this.routesService.update(r.id, updated).subscribe({
+        next: () => {/* le WS mettra à jour la carte & le panneau automatiquement */},
+        error: err => alert(err?.error || err?.message || 'Erreur update route')
+      });
+    } catch {
+      alert('JSON invalide');
+    }
   }
 
   saveNewRoute() {
@@ -241,7 +256,10 @@ export class MapComponent implements AfterViewInit {
   confirmDeleteRoute(r: RouteDTO){
     if (!confirm(`Supprimer la route ${r.id} ?`)) return;
     this.routesService.delete(r.id).subscribe({
-      error: err => alert('Suppression échouée: '+(err?.error || err?.message))
+      error: err => {
+        if (err?.status === 409) alert('Impossible: au moins un train circule sur cette route.');
+        else alert(err?.error || err?.message || 'Erreur suppression route');
+      }
     });
   }
 
