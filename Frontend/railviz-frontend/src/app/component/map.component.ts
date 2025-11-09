@@ -21,10 +21,15 @@ type Sig = 'GREEN'|'YELLOW'|'RED';
 })
 export class MapComponent implements AfterViewInit {
   private map!: L.Map;
-  private trainTrails = new Map<string, L.Polyline>();
   private routePolylines = new Map<string, L.Polyline>();
+  private routeColors    = new Map<string, string>();
   private markers = new Map<string, L.Marker>();
   private states  = new Map<string, Sig>();
+
+  private routePalette = [
+    '#0ea5e9', '#22c55e', '#a855f7', '#f59e0b', '#ef4444',
+    '#14b8a6', '#e11d48', '#64748b', '#16a34a', '#f97316'
+  ];
 
   routes: RouteDTO[] = [];
   showAlertsOnly = false;
@@ -57,23 +62,40 @@ export class MapComponent implements AfterViewInit {
 
     // ROUTES: liste initiale + live
     this.routesService.primeInitialList();
-    this.routesService.connectLive();
+    this.routesService.connectWs();
+    // s'abonner pour dessiner *immédiatement* les nouvelles routes
     this.routesService.routes$.subscribe(rs => {
-      // MAJ du panneau
       this.routes = rs;
 
-      // MAJ des polylignes (simple: on reconstruit pour rester sûr)
-      // (Option: stratego par diff si tu préfères)
-      for (const line of this.routePolylines.values()) this.map.removeLayer(line);
-      this.routePolylines.clear();
-      const palette = ['#0ea5e9','#22c55e','#a855f7','#f59e0b','#ef4444'];
-      rs.forEach((r,i) => {
-        const line = L.polyline(r.points.map(p => [p[0], p[1]]), {
-          color: palette[i % palette.length], weight: 3, opacity: 0.8
-        }).addTo(this.map);
-        line.bringToBack();
-        this.routePolylines.set(r.id, line);
-      });
+      // ajouter / mettre à jour
+      for (const r of rs) {
+        // couleur mémorisée (ou calculée la 1re fois)
+        if (!this.routeColors.has(r.id)) {
+          this.routeColors.set(r.id, this.colorForRoute(r.id));
+        }
+        const color = this.routeColors.get(r.id)!;
+
+        let line = this.routePolylines.get(r.id);
+        if (!line) {
+          line = L.polyline(r.points.map(p => [p[0], p[1]]), {
+            color, weight: 3, opacity: 0.85
+          }).addTo(this.map);
+          line.bringToBack();
+          this.routePolylines.set(r.id, line);
+        } else {
+          line.setLatLngs(r.points.map(p => ({lat: p[0], lng: p[1]})));
+          (line as any).setStyle?.({ color });
+        }
+      }
+
+      // retirer celles qui n’existent plus
+      for (const [id, line] of this.routePolylines) {
+        if (!rs.some(r => r.id === id)) {
+          this.map.removeLayer(line);
+          this.routePolylines.delete(id);
+          this.routeColors.delete(id); // <-- libère la couleur
+        }
+      }
     });
 
     // TRAINS: liste initiale (panneau) + live admin + télémétrie carte
@@ -84,19 +106,6 @@ export class MapComponent implements AfterViewInit {
     this.trainsService.connectTelemetry(t => {
       this.upsertTrain(t);
       if (this.showAlertsOnly) this.applyFilterFor(t.id);
-    });
-  }
-
-
-  private drawRoutes(routes: RouteDTO[]) {
-    this.routes = routes;
-    const palette = ['#0ea5e9', '#22c55e', '#a855f7', '#f59e0b', '#ef4444'];
-    routes.forEach((r, i) => {
-      const line = L.polyline(r.points.map(p => [p[0], p[1]]), {
-        color: palette[i % palette.length], weight: 3, opacity: 0.8
-      }).addTo(this.map);
-      line.bringToBack();
-      this.routePolylines.set(r.id, line);
     });
   }
 
@@ -132,10 +141,10 @@ export class MapComponent implements AfterViewInit {
          : 'tt-red';
   }
 
-  private colorForTrain(id: string): string {
-    const colors = ['#0ea5e9','#22c55e','#a855f7','#f59e0b','#ef4444','#14b8a6','#e11d48'];
-    let h = 0; for (let i=0;i<id.length;i++) h = (h*31 + id.charCodeAt(i)) >>> 0;
-    return colors[h % colors.length];
+  private colorForRoute(id: string): string {
+    let h = 0;
+    for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+    return this.routePalette[h % this.routePalette.length];
   }
 
   // ✅ TrainDTO au lieu de TrainEvent
@@ -152,23 +161,12 @@ export class MapComponent implements AfterViewInit {
         .addTo(this.map)
         .bindTooltip(htmlInfo, { className: ttClass, direction:'top' });
       this.markers.set(ev.id, mk);
-
-      // trail
-      const trail = L.polyline([], { color: this.colorForTrain(ev.id), weight: 4, opacity: .6 }).addTo(this.map);
-      trail.bringToBack();
-      this.trainTrails.set(ev.id, trail);
     } else {
       mk.setLatLng([ev.lat, ev.lon]);
       mk.setIcon(this.iconFor(state));
       const tt = (mk as any).getTooltip?.();
       if (tt) { tt.setContent(htmlInfo); tt.options.className = ttClass; tt.update(); }
     }
-
-    // trail append
-    const trail = this.trainTrails.get(ev.id)!;
-    const pts = (trail.getLatLngs() as L.LatLngLiteral[]).slice();
-    pts.push({lat: ev.lat, lng: ev.lon}); if (pts.length>250) pts.shift();
-    trail.setLatLngs(pts);
 
     if (this.showAlertsOnly) this.applyFilterFor(ev.id);
   }
@@ -188,13 +186,6 @@ export class MapComponent implements AfterViewInit {
 
     if (shouldShow && !onMap) mk.addTo(this.map);
     if (!shouldShow && onMap) this.map.removeLayer(mk);
-
-    const trail = this.trainTrails.get(id);
-    if (trail) {
-      const on = this.map.hasLayer(trail);
-      if (shouldShow && !on) trail.addTo(this.map);
-      if (!shouldShow && on) this.map.removeLayer(trail);
-    }
   }
 
   // appelé par le panneau (clic sur un train)
@@ -227,22 +218,25 @@ export class MapComponent implements AfterViewInit {
     this.recorded = r.points.map(p => [p[0], p[1]]);
     this.tempLine = L.polyline(r.points.map(p => ({lat:p[0], lng:p[1]})), { color:'#0ea5e9', weight:3 }).addTo(this.map);
     this.map.on('click', this.onClickRecord);
+    this.routesService.update({id: r.id, points: this.recorded}).subscribe();
   }
 
-  saveNewRoute(){
+  saveNewRoute() {
     if (this.recorded.length < 2) return;
     const id = this.newRouteId.trim();
     if (!id) return;
 
-    const isUpdate = this.routes.some(x => x.id === id);
-    const dto = { id, points: this.recorded };
+    if (this.routesService.exists(id)) { alert('Cette route existe déjà.'); return; }
 
-    (isUpdate ? this.routesService.update(dto) : this.routesService.add(dto))
+    this.routesService.add({ id, points: this.recorded })
       .subscribe({
-        next: () => this.cancelNewRoute(),
-        error: err => alert('Erreur route: '+(err?.error || err?.message))
+        next: () => {
+          this.cancelNewRoute();
+        },
+        error: err => alert('Erreur création route: ' + (err?.error || err?.message))
       });
   }
+
 
   confirmDeleteRoute(r: RouteDTO){
     if (!confirm(`Supprimer la route ${r.id} ?`)) return;
@@ -304,7 +298,7 @@ export class MapComponent implements AfterViewInit {
       trainId: id, routeId: this.nt_routeId, lineSpeedKmh: this.nt_lineSpeedKmh,
       startSeg: this.nt_startSeg, startProgress: this.nt_startProgress
     }).subscribe({
-      next: () => { this.newTrainOpen = false; this.loadTrains(); },
+      next: () => { this.newTrainOpen = false;},
       error: err => alert('Erreur création: ' + (err?.error || err?.message))
     });
   }
@@ -325,7 +319,6 @@ export class MapComponent implements AfterViewInit {
       next: () => {
         // côté carte: enlève marqueur + trail localement (le panneau sera maj par WS)
         const mk = this.markers.get(t.id); if (mk) { this.map.removeLayer(mk); this.markers.delete(t.id); }
-        const tr = this.trainTrails.get(t.id); if (tr) { this.map.removeLayer(tr); this.trainTrails.delete(t.id); }
         this.states.delete(t.id);
       },
       error: err => alert('Suppression échouée: '+(err?.error || err?.message))

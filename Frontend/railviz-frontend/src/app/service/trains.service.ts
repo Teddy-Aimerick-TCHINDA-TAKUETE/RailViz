@@ -9,10 +9,9 @@ const WS = `${API}/ws`;
 
 @Injectable({ providedIn: 'root' })
 export class TrainsService {
-  private liveConnected = false;
-  private client!: Client;
   private clientAdmin?: Client; // flux admin (CRUD)
   private clientTelem?: Client; // flux télémétrie
+  private map = new Map<string, TrainDTO>();
   private _trains$ = new BehaviorSubject<TrainDTO[]>([]);
   trains$ = this._trains$.asObservable();
 
@@ -35,8 +34,7 @@ export class TrainsService {
     return this.http.delete(`${API}/api/trains/${id}`); 
   }
 
-  // WebSocket admin (ADD/UPDATE/DELETE)
-  connectAdmin(){
+  connectAdmin() {
     if (this.clientAdmin) return;
     this.clientAdmin = new Client({
       webSocketFactory: () => new WebSocket('ws://localhost:8080/ws'),
@@ -45,18 +43,8 @@ export class TrainsService {
     this.clientAdmin.onConnect = () => {
       this.clientAdmin!.subscribe('/topic/trains', msg => {
         const ev = JSON.parse(msg.body) as TrainWsEvent;
-        const curr = this._trains$.value.slice();
-        if (ev.type === 'ADD'){
-          const i = curr.findIndex(t => t.id===ev.train.id);
-          if (i<0) curr.push(ev.train); else curr[i] = ev.train;
-        } else if (ev.type === 'UPDATE'){
-          const i = curr.findIndex(t => t.id===ev.train.id);
-          if (i>=0) curr[i] = ev.train;
-        } else if (ev.type === 'DELETE'){
-          const i = curr.findIndex(t => t.id===ev.train.id);
-          if (i>=0) curr.splice(i,1);
-        }
-        this._trains$.next(curr);
+        if (ev.type === 'DELETE') this.remove(ev.train.id);
+        else this.upsert(ev.train);
       });
     };
     this.clientAdmin.activate();
@@ -72,13 +60,43 @@ export class TrainsService {
     this.clientTelem.onConnect = () => {
       this.clientTelem!.subscribe('/topic/telemetry', msg => {
         const t = JSON.parse(msg.body) as TrainDTO;
+        this.upsert(t);
         onTelem(t);
       });
     };
     this.clientTelem.activate();
   }
 
-  primeInitialList(){
-    this.list().subscribe(ts => this._trains$.next(ts));
+  /** --------- Store helpers --------- */
+  private emit() {
+    this._trains$.next(Array.from(this.map.values()));
   }
+  private upsert(t: TrainDTO) {
+    const prev = this.map.get(t.id);
+    // merge simple pour conserver champs non envoyés selon les flux
+    this.map.set(t.id, { ...prev, ...t });
+    this.emit();
+  }
+  private remove(id: string) {
+    this.map.delete(id);
+    this.emit();
+  }
+
+  /** Snapshot utile pour les vérifs (ex: doublon d'ID côté UI) */
+  getSnapshot(): TrainDTO[] { return Array.from(this.map.values()); }
+  exists(id: string): boolean { return this.map.has(id); }
+
+  /** --------- Bootstrap initial --------- */
+  primeInitialList() {
+    this.list().subscribe(ts => {
+      this.map.clear();
+      ts.forEach(t => this.map.set(t.id, t));
+      this.emit();
+    });
+  }
+
+
+  // primeInitialList(){
+  //   this.list().subscribe(ts => this._trains$.next(ts));
+  // }
 }

@@ -1,3 +1,4 @@
+<!-- routes-panel.component.html -->
 <div class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
     <h3 style="margin:0">Routes</h3>
@@ -9,10 +10,13 @@
   } @else {
     <div *ngFor="let r of routes" class="row">
       <div class="head">
-        <div class="id">{{ r.id }}</div>
-        <div class="meta">{{ lengthKm(r) | number:'1.1-1' }} km · {{ r.points.length }} pts</div>
+        <div class="id">
+          <span class="chip" [style.background]="routeColor(r.id)"></span>
+          {{ r.id }}
+        </div>
+        <div class="meta">{{lengthKm(r) | number:'1.1-1'}} km · {{r.points.length}} pts</div>
       </div>
-      <div class="actions" style="display:flex;gap:6px;flex-wrap:wrap">
+      <div class="actions" style="display:flex; gap:6px; margin-top:6px">
         <button (click)="centerRoute.emit(r)">Centrer</button>
         <button (click)="editRoute.emit(r)">Éditer</button>
         <button (click)="deleteRoute.emit(r)">Supprimer</button>

@@ -24,10 +24,10 @@ public class RouteService {
 		if (!store.isEmpty()) {
 			return;
 		}
-		store.put("T1", List.of(new double[] { 48.8829, 2.3335 }, new double[] { 48.8710, 2.3339 },
-				new double[] { 48.8612, 2.3466 }, new double[] { 48.8530, 2.3499 }, new double[] { 48.8403, 2.3606 }));
-		store.put("T2", List.of(new double[] { 48.9000, 2.2900 }, new double[] { 48.8900, 2.3100 },
+		store.put("T1", List.of(new double[] { 48.9000, 2.2900 }, new double[] { 48.8900, 2.3100 },
 				new double[] { 48.8750, 2.3400 }, new double[] { 48.8650, 2.3700 }, new double[] { 48.8550, 2.4000 }));
+		store.put("T2", List.of(new double[] { 48.8829, 2.3335 }, new double[] { 48.8710, 2.3339 },
+				new double[] { 48.8612, 2.3466 }, new double[] { 48.8530, 2.3499 }, new double[] { 48.8403, 2.3606 }));
 		store.put("T3", List.of(new double[] { 48.8700, 2.3700 }, new double[] { 48.8600, 2.3550 },
 				new double[] { 48.8500, 2.3400 }, new double[] { 48.8400, 2.3300 }));
 	}

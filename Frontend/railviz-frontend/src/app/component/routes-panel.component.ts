@@ -18,6 +18,7 @@ import { RouteDTO } from '../service/models';
     .id{font-weight:600}
     .meta{font-size:12px;color:#555}
     .actions{margin-top:6px}
+    .chip{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;box-shadow:0 0 0 2px #fff, 0 0 0 3px rgba(0,0,0,.06)}
     button{padding:6px 10px;border-radius:10px;border:1px solid #ddd;background:#f8f9ff;cursor:pointer}
   `]
 })
@@ -31,7 +32,14 @@ export class RoutesPanelComponent {
 
 
   constructor(private api: RoutesService) {
-    this.api.list().subscribe(r => this.routes = r);
+    this.api.routes$.subscribe(r => this.routes = r);
+  }
+
+  private palette = ['#0ea5e9','#22c55e','#a855f7','#f59e0b','#ef4444','#14b8a6','#e11d48','#64748b','#16a34a','#f97316'];
+
+  routeColor(id: string): string {
+    let h = 0; for (let i=0;i<id.length;i++) h = (h*31 + id.charCodeAt(i)) >>> 0;
+    return this.palette[h % this.palette.length];
   }
 
   lengthKm(r: RouteDTO): number {
@@ -39,7 +47,7 @@ export class RoutesPanelComponent {
     for (let i=0;i<r.points.length-1;i++){
       d += this.hav(r.points[i], r.points[i+1]);
     }
-    return d/1000;
+    return d / 1000;
   }
   private hav(a:[number,number], b:[number,number]) {
     const R=6371e3, p1=a[0]*Math.PI/180, p2=b[0]*Math.PI/180, dp=(b[0]-a[0])*Math.PI/180, dl=(b[1]-a[1])*Math.PI/180;

@@ -10,8 +10,8 @@ const WS = `${API}/ws`;
 
 @Injectable({ providedIn: 'root' })
 export class RoutesService {
-  private liveConnected = false;
   private client!: Client;
+  private map = new Map<string, RouteDTO>();
   private _routes$ = new BehaviorSubject<RouteDTO[]>([]);
   routes$ = this._routes$.asObservable();
 
@@ -32,7 +32,31 @@ export class RoutesService {
     return this.http.delete(`${API}/api/routes/${id}`); 
   }
 
-  connectLive(){
+  /** Store */
+  private emit() {
+    this._routes$.next(Array.from(this.map.values()));
+  }
+  private upsert(r: RouteDTO) {
+    this.map.set(r.id, r);
+    this.emit();
+  }
+  private remove(id: string) {
+    this.map.delete(id);
+    this.emit();
+  }
+  getSnapshot(): RouteDTO[] { return Array.from(this.map.values()); }
+  exists(id: string): boolean { return this.map.has(id); }
+
+  /** Init + WS */
+  primeInitialList() {
+    this.list().subscribe(rs => {
+      this.map.clear();
+      rs.forEach(r => this.map.set(r.id, r));
+      this.emit();
+    });
+  }
+
+  connectWs() {
     if (this.client) return;
     this.client = new Client({
       webSocketFactory: () => new WebSocket('ws://localhost:8080/ws'),
@@ -41,26 +65,11 @@ export class RoutesService {
     this.client.onConnect = () => {
       this.client!.subscribe('/topic/routes', msg => {
         const ev = JSON.parse(msg.body) as RouteWsEvent;
-        const curr = this._routes$.value.slice();
-        if (ev.type === 'ADD'){
-          // éviter doublons si GET initial déjà présent
-          if (!curr.some(r => r.id === ev.route.id)) curr.push(ev.route);
-        } else if (ev.type === 'UPDATE'){
-          const i = curr.findIndex(r => r.id === ev.route.id);
-          if (i>=0) curr[i] = ev.route;
-        } else if (ev.type === 'DELETE'){
-          const i = curr.findIndex(r => r.id === ev.route.id);
-          if (i>=0) curr.splice(i,1);
-        }
-        this._routes$.next(curr);
+        if (ev.type === 'DELETE') this.remove(ev.route.id);
+        else this.upsert(ev.route);
       });
     };
     this.client.activate();
-  }
-
-  // à appeler une fois au bootstrap (MapComponent)
-  primeInitialList(){
-    this.list().subscribe(rs => this._routes$.next(rs));
   }
 
 }

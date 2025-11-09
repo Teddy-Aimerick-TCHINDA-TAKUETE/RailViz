@@ -32,7 +32,7 @@ public class TrainController {
 
 	@GetMapping
 	public List<TrainDTO> list() {
-		return trainService.list().stream().toList();
+		return trainService.list().stream().map(TrainService::toDto).toList();
 	}
 
 	@PostMapping

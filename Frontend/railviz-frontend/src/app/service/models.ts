@@ -1,11 +1,14 @@
 export type RouteDTO = { id: string; points: [number, number][] };
 
+export type Sig = 'GREEN'|'YELLOW'|'RED';
+
 export type TrainDTO = {
   id: string;
   lat: number;
   lon: number;
   speedKmh: number;
-  signal: 'GREEN'|'YELLOW'|'RED';
+  signal: Sig;
+  routeId: String;
 };
 
 export type CreateTrainCommand = {
